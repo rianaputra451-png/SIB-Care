@@ -29,14 +29,10 @@
 
 body{
     margin:0;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
     background:var(--bg);
     color:#1f2937;
 }
-
-/* =========================
-   LOGIN
-========================= */
 
 .login-screen{
     min-height:100vh;
@@ -79,10 +75,6 @@ body{
 .login-box p{
     color:var(--muted);
 }
-
-/* =========================
-   APP
-========================= */
 
 .app{
     display:none;
@@ -147,10 +139,6 @@ body{
     padding:25px;
 }
 
-/* =========================
-   NAVIGATION
-========================= */
-
 .nav{
     background:white;
     border-bottom:1px solid var(--border);
@@ -174,10 +162,6 @@ body{
     color:var(--primary);
     border-bottom:3px solid var(--primary);
 }
-
-/* =========================
-   BUTTON
-========================= */
 
 button{
     font-family:inherit;
@@ -230,10 +214,6 @@ button{
     cursor:not-allowed;
 }
 
-/* =========================
-   PAGE
-========================= */
-
 .page{
     display:none;
 }
@@ -260,10 +240,6 @@ button{
     margin:5px 0 0;
 }
 
-/* =========================
-   HERO
-========================= */
-
 .hero{
     background:linear-gradient(135deg,#1769aa,#0d4775);
     color:white;
@@ -285,10 +261,6 @@ button{
 .hero-actions{
     margin-top:20px;
 }
-
-/* =========================
-   CARDS
-========================= */
 
 .grid{
     display:grid;
@@ -347,10 +319,6 @@ button{
     font-size:22px;
 }
 
-/* =========================
-   TABLE
-========================= */
-
 .table-wrapper{
     background:white;
     border-radius:var(--radius);
@@ -384,11 +352,8 @@ td{
 .actions{
     display:flex;
     gap:5px;
+    flex-wrap:wrap;
 }
-
-/* =========================
-   BADGE
-========================= */
 
 .badge{
     display:inline-block;
@@ -422,10 +387,6 @@ td{
     background:#e5e7eb;
     color:#374151;
 }
-
-/* =========================
-   FORM
-========================= */
 
 .form-grid{
     display:grid;
@@ -482,10 +443,6 @@ textarea:focus{
     display:none;
 }
 
-/* =========================
-   MODAL
-========================= */
-
 .modal{
     display:none;
     position:fixed;
@@ -505,7 +462,7 @@ textarea:focus{
 .modal-box{
     background:white;
     width:100%;
-    max-width:650px;
+    max-width:700px;
     border-radius:18px;
     padding:25px;
     max-height:90vh;
@@ -536,10 +493,6 @@ textarea:focus{
     margin-top:20px;
 }
 
-/* =========================
-   REPORT DETAIL
-========================= */
-
 .detail-row{
     display:grid;
     grid-template-columns:160px 1fr;
@@ -555,15 +508,11 @@ textarea:focus{
 
 .report-photo{
     width:100%;
-    max-height:300px;
+    max-height:350px;
     object-fit:cover;
     border-radius:12px;
     margin-top:15px;
 }
-
-/* =========================
-   TIMELINE
-========================= */
 
 .timeline{
     position:relative;
@@ -588,9 +537,82 @@ textarea:focus{
     border:3px solid white;
 }
 
-/* =========================
-   FOOTER
-========================= */
+.progress-box{
+    background:#f8fafc;
+    border:1px solid var(--border);
+    padding:15px;
+    border-radius:12px;
+    margin-top:15px;
+}
+
+.progress-current{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.gallery-card{
+    overflow:hidden;
+    padding:0;
+}
+
+.gallery-card img{
+    width:100%;
+    height:210px;
+    object-fit:cover;
+    display:block;
+}
+
+.gallery-card-content{
+    padding:15px;
+}
+
+.gallery-empty{
+    text-align:center;
+    padding:45px 20px;
+    color:var(--muted);
+}
+
+.filter-card{
+    margin-bottom:20px;
+}
+
+.filter-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    align-items:end;
+}
+
+.summary-number{
+    font-size:26px;
+    font-weight:bold;
+    color:var(--primary);
+}
+
+.recap-status{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:15px;
+}
+
+.recap-mini{
+    background:#f8fafc;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 15px;
+    min-width:130px;
+}
+
+.notice{
+    padding:14px 16px;
+    background:#eef6fc;
+    border-left:4px solid var(--primary);
+    border-radius:8px;
+    margin-bottom:18px;
+}
 
 footer{
     text-align:center;
@@ -598,10 +620,6 @@ footer{
     color:var(--muted);
     font-size:13px;
 }
-
-/* =========================
-   TOAST
-========================= */
 
 .toast{
     position:fixed;
@@ -620,15 +638,17 @@ footer{
     display:block;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media(max-width:900px){
+@media(max-width:1000px){
     .grid-4{
         grid-template-columns:repeat(2,1fr);
     }
 
+    .filter-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:900px){
     .grid-3{
         grid-template-columns:1fr;
     }
@@ -654,6 +674,10 @@ footer{
 
     .grid-4{
         grid-template-columns:1fr 1fr;
+    }
+
+    .filter-grid{
+        grid-template-columns:1fr;
     }
 
     .hero{
@@ -691,9 +715,7 @@ LOGIN
 
     <div class="login-box">
 
-        <div class="logo-circle">
-            SC
-        </div>
+        <div class="logo-circle">SC</div>
 
         <h1>SIB CARE</h1>
 
@@ -739,15 +761,11 @@ APPLICATION
 
     <div class="brand">
 
-        <div class="brand-logo">
-            SC
-        </div>
+        <div class="brand-logo">SC</div>
 
         <div>
             <h2>SIB CARE</h2>
-            <small>
-                Sekolah Indonesia Bangkok
-            </small>
+            <small>Sekolah Indonesia Bangkok</small>
         </div>
 
     </div>
@@ -758,9 +776,7 @@ APPLICATION
             Admin Sarpras
         </div>
 
-        <button
-            class="btn btn-light"
-            onclick="logout()">
+        <button class="btn btn-light" onclick="logout()">
             Keluar
         </button>
 
@@ -775,67 +791,47 @@ NAVIGATION
 
 <nav class="nav">
 
-    <button
-        data-page="home"
-        onclick="showPage('home')">
+    <button data-page="home" onclick="showPage('home')">
         🏠 Beranda
     </button>
 
-    <button
-        data-page="condition"
-        onclick="showPage('condition')">
+    <button data-page="condition" onclick="showPage('condition')">
         🏫 Kondisi Sekolah
     </button>
 
-    <button
-        data-page="report"
-        onclick="openReportModal()">
-        📝 Lapor Kondisi
-    </button>
-
-    <button
-        data-page="myreports"
-        onclick="showPage('myreports')">
+    <button data-page="myreports" onclick="showPage('myreports')">
         📋 Laporan Saya
     </button>
 
-    <button
-        data-page="dashboard"
-        class="admin-only"
-        onclick="showPage('dashboard')">
+    <button data-page="dashboard"
+            class="admin-only"
+            onclick="showPage('dashboard')">
         📊 Dashboard
     </button>
 
-    <button
-        data-page="master"
-        class="admin-only"
-        onclick="showPage('master')">
+    <button data-page="master"
+            class="admin-only"
+            onclick="showPage('master')">
         ⚙️ Data Master
     </button>
 
-    <button
-        data-page="recap"
-        class="admin-only"
-        onclick="showPage('recap')">
+    <button data-page="recap"
+            class="admin-only"
+            onclick="showPage('recap')">
         📑 Rekap
     </button>
 
-    <button
-        data-page="statistics"
-        class="admin-only"
-        onclick="showPage('statistics')">
+    <button data-page="statistics"
+            class="admin-only"
+            onclick="showPage('statistics')">
         📈 Statistik
     </button>
 
-    <button
-        data-page="timeline"
-        onclick="showPage('timeline')">
+    <button data-page="timeline" onclick="showPage('timeline')">
         🕒 Timeline
     </button>
 
-    <button
-        data-page="gallery"
-        onclick="showPage('gallery')">
+    <button data-page="gallery" onclick="showPage('gallery')">
         🖼️ Galeri
     </button>
 
@@ -853,9 +849,7 @@ HOME
 
     <div class="hero">
 
-        <h1>
-            SIB CARE
-        </h1>
+        <h1>SIB CARE</h1>
 
         <p>
             Sistem Informasi Kondisi, Aduan, Respons, dan Evaluasi
@@ -881,78 +875,35 @@ HOME
     <div class="grid grid-4">
 
         <div class="card stat-card">
-
             <div>
-                <div class="stat-number" id="homeTotalReports">
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Total Laporan
-                </div>
+                <div class="stat-number" id="homeTotalReports">0</div>
+                <div class="stat-label">Total Laporan</div>
             </div>
-
-            <div class="stat-icon">
-                📋
-            </div>
-
+            <div class="stat-icon">📋</div>
         </div>
 
-
         <div class="card stat-card">
-
             <div>
-                <div class="stat-number" id="homeProcessReports">
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Dalam Penanganan
-                </div>
+                <div class="stat-number" id="homeProcessReports">0</div>
+                <div class="stat-label">Dalam Penanganan</div>
             </div>
-
-            <div class="stat-icon">
-                🛠️
-            </div>
-
+            <div class="stat-icon">🛠️</div>
         </div>
 
-
         <div class="card stat-card">
-
             <div>
-                <div class="stat-number" id="homeDoneReports">
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Selesai
-                </div>
+                <div class="stat-number" id="homeDoneReports">0</div>
+                <div class="stat-label">Selesai</div>
             </div>
-
-            <div class="stat-icon">
-                ✅
-            </div>
-
+            <div class="stat-icon">✅</div>
         </div>
 
-
         <div class="card stat-card">
-
             <div>
-                <div class="stat-number" id="homeRooms">
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Ruangan
-                </div>
+                <div class="stat-number" id="homeRooms">0</div>
+                <div class="stat-label">Ruangan</div>
             </div>
-
-            <div class="stat-icon">
-                🏫
-            </div>
-
+            <div class="stat-icon">🏫</div>
         </div>
 
     </div>
@@ -960,10 +911,7 @@ HOME
     <br>
 
     <div class="card">
-
-        <h3>
-            Alur SIB CARE
-        </h3>
+        <h3>Alur SIB CARE</h3>
 
         <p>
             Pelaporan → Verifikasi → Penanganan →
@@ -985,6 +933,7 @@ CONDITION
 
         <div>
             <h1>Kondisi Sekolah</h1>
+
             <p>
                 Informasi kondisi sarana dan prasarana sekolah.
             </p>
@@ -992,10 +941,7 @@ CONDITION
 
     </div>
 
-    <div
-        id="conditionGrid"
-        class="grid grid-3">
-    </div>
+    <div id="conditionGrid" class="grid grid-3"></div>
 
 </section>
 
@@ -1010,8 +956,9 @@ MY REPORTS
 
         <div>
             <h1>Laporan Saya</h1>
+
             <p>
-                Riwayat laporan yang telah dibuat.
+                Riwayat laporan dan perkembangan penanganannya.
             </p>
         </div>
 
@@ -1021,6 +968,13 @@ MY REPORTS
             + Laporan Baru
         </button>
 
+    </div>
+
+    <div class="notice">
+        <strong>Informasi:</strong>
+        Status laporan akan diperbarui oleh Admin Sarpras.
+        Buka <strong>Detail</strong> untuk melihat perkembangan
+        dan catatan penanganan.
     </div>
 
     <div class="table-wrapper">
@@ -1060,6 +1014,7 @@ ADMIN DASHBOARD
 
         <div>
             <h1>Dashboard Admin Sarpras</h1>
+
             <p>
                 Pemantauan laporan kondisi sarana sekolah.
             </p>
@@ -1067,8 +1022,8 @@ ADMIN DASHBOARD
 
         <button
             class="btn btn-primary"
-            onclick="showPage('master')">
-            ⚙️ Kelola Data Master
+            onclick="showPage('recap')">
+            📑 Lihat Rekap
         </button>
 
     </div>
@@ -1077,78 +1032,35 @@ ADMIN DASHBOARD
     <div class="grid grid-4">
 
         <div class="card stat-card">
-
             <div>
-                <div class="stat-number" id="adminTotal">
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Total Laporan
-                </div>
+                <div class="stat-number" id="adminTotal">0</div>
+                <div class="stat-label">Total Laporan</div>
             </div>
-
-            <div class="stat-icon">
-                📋
-            </div>
-
+            <div class="stat-icon">📋</div>
         </div>
 
-
         <div class="card stat-card">
-
             <div>
-                <div class="stat-number" id="adminNew">
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Dilaporkan
-                </div>
+                <div class="stat-number" id="adminNew">0</div>
+                <div class="stat-label">Dilaporkan</div>
             </div>
-
-            <div class="stat-icon">
-                🆕
-            </div>
-
+            <div class="stat-icon">🆕</div>
         </div>
 
-
         <div class="card stat-card">
-
             <div>
-                <div class="stat-number" id="adminProcess">
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Penanganan
-                </div>
+                <div class="stat-number" id="adminProcess">0</div>
+                <div class="stat-label">Penanganan</div>
             </div>
-
-            <div class="stat-icon">
-                🛠️
-            </div>
-
+            <div class="stat-icon">🛠️</div>
         </div>
 
-
         <div class="card stat-card">
-
             <div>
-                <div class="stat-number" id="adminDone">
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Selesai
-                </div>
+                <div class="stat-number" id="adminDone">0</div>
+                <div class="stat-label">Selesai</div>
             </div>
-
-            <div class="stat-icon">
-                ✅
-            </div>
-
+            <div class="stat-icon">✅</div>
         </div>
 
     </div>
@@ -1255,21 +1167,15 @@ MASTER DATA
 
     </div>
 
-
     <br>
-
 
     <div class="card">
 
-        <h3>
-            Informasi Data Master
-        </h3>
+        <h3>Informasi Data Master</h3>
 
         <p>
             Data yang dikelola di sini akan otomatis digunakan
-            pada formulir pelaporan. Misalnya ketika Admin
-            menambahkan ruangan baru, ruangan tersebut langsung
-            tersedia pada pilihan lokasi laporan.
+            pada formulir pelaporan.
         </p>
 
     </div>
@@ -1289,29 +1195,174 @@ RECAP
             <h1>Rekap Laporan</h1>
 
             <p>
-                Rekap kondisi sarana dan tindak lanjut.
+                Rekap laporan harian, bulanan, dan tahunan.
             </p>
+        </div>
+
+        <button
+            class="btn btn-primary"
+            onclick="renderRecap()">
+            🔄 Perbarui Rekap
+        </button>
+
+    </div>
+
+
+    <div class="card filter-card">
+
+        <h3>🔎 Pilih Periode Rekap</h3>
+
+        <div class="filter-grid">
+
+            <div class="form-group">
+                <label>Jenis Rekap</label>
+
+                <select id="recapPeriod"
+                        onchange="changeRecapPeriod()">
+
+                    <option value="daily">
+                        Harian
+                    </option>
+
+                    <option value="monthly">
+                        Bulanan
+                    </option>
+
+                    <option value="yearly">
+                        Tahunan
+                    </option>
+
+                </select>
+            </div>
+
+
+            <div class="form-group" id="dailyFilter">
+
+                <label>Tanggal</label>
+
+                <input
+                    type="date"
+                    id="recapDate"
+                    onchange="renderRecap()">
+
+            </div>
+
+
+            <div class="form-group"
+                 id="monthlyFilter"
+                 style="display:none">
+
+                <label>Bulan</label>
+
+                <input
+                    type="month"
+                    id="recapMonth"
+                    onchange="renderRecap()">
+
+            </div>
+
+
+            <div class="form-group"
+                 id="yearlyFilter"
+                 style="display:none">
+
+                <label>Tahun</label>
+
+                <select
+                    id="recapYear"
+                    onchange="renderRecap()">
+                </select>
+
+            </div>
+
         </div>
 
     </div>
 
 
-    <div class="table-wrapper">
+    <div class="grid grid-4">
 
-        <table>
+        <div class="card">
+            <div class="stat-label">Total Periode</div>
+            <div class="summary-number"
+                 id="recapTotal">
+                0
+            </div>
+        </div>
 
-            <thead>
+        <div class="card">
+            <div class="stat-label">Prioritas Tinggi/Darurat</div>
+            <div class="summary-number"
+                 id="recapHigh">
+                0
+            </div>
+        </div>
 
-                <tr>
-                    <th>Status</th>
-                    <th>Jumlah</th>
-                </tr>
+        <div class="card">
+            <div class="stat-label">Dalam Penanganan</div>
+            <div class="summary-number"
+                 id="recapProcess">
+                0
+            </div>
+        </div>
 
-            </thead>
+        <div class="card">
+            <div class="stat-label">Selesai</div>
+            <div class="summary-number"
+                 id="recapDone">
+                0
+            </div>
+        </div>
 
-            <tbody id="recapTable"></tbody>
+    </div>
 
-        </table>
+    <br>
+
+    <div class="card">
+
+        <h3>Distribusi Status</h3>
+
+        <div id="recapStatusCards"
+             class="recap-status">
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h3>Rekap Laporan</h3>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Status</th>
+                        <th>Jumlah</th>
+                        <th>Persentase</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="recapTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h3>Rekap Berdasarkan Kategori</h3>
+
+        <div id="recapCategory"></div>
 
     </div>
 
@@ -1330,13 +1381,12 @@ STATISTICS
             <h1>Statistik</h1>
 
             <p>
-                Gambaran sederhana kondisi laporan SIB CARE.
+                Gambaran kondisi laporan SIB CARE.
             </p>
 
         </div>
 
     </div>
-
 
     <div id="statisticsContent"></div>
 
@@ -1371,18 +1421,14 @@ TIMELINE
 
                 <div class="timeline-dot"></div>
 
-                <h3>
-                    SIB CARE V2 dikembangkan
-                </h3>
+                <h3>SIB CARE V2 dikembangkan</h3>
 
                 <p>
                     Sistem mulai menggunakan Firebase Firestore
                     sebagai basis data terpusat.
                 </p>
 
-                <small>
-                    September 2026
-                </small>
+                <small>September 2026</small>
 
             </div>
 
@@ -1391,9 +1437,7 @@ TIMELINE
 
                 <div class="timeline-dot"></div>
 
-                <h3>
-                    Digitalisasi Pelaporan Sarpras
-                </h3>
+                <h3>Digitalisasi Pelaporan Sarpras</h3>
 
                 <p>
                     Pelaporan kondisi sarana mulai diarahkan
@@ -1407,13 +1451,11 @@ TIMELINE
 
                 <div class="timeline-dot"></div>
 
-                <h3>
-                    Evaluasi dan Pengembangan
-                </h3>
+                <h3>Pengembangan Monitoring Progres</h3>
 
                 <p>
-                    Sistem akan dikembangkan menuju integrasi
-                    database dan akses multi-pengguna.
+                    Pelapor dapat memantau perkembangan
+                    tindak lanjut laporan secara digital.
                 </p>
 
             </div>
@@ -1434,40 +1476,33 @@ GALLERY
     <div class="page-title">
 
         <div>
-            <h1>Galeri</h1>
+
+            <h1>Galeri SIB CARE</h1>
 
             <p>
-                Dokumentasi kegiatan dan sarana sekolah.
+                Dokumentasi kondisi sarana dan kegiatan
+                penanganan sarana sekolah.
             </p>
 
         </div>
+
+        <button
+            class="btn btn-primary"
+            onclick="renderGallery()">
+            🔄 Muat Galeri
+        </button>
 
     </div>
 
 
-    <div class="grid grid-3">
+    <div class="notice">
+        Foto yang dilampirkan pada laporan akan otomatis
+        terdokumentasi di Galeri SIB CARE.
+    </div>
 
-        <div class="card">
-            <h3>🏫 Sarana Sekolah</h3>
-            <p>
-                Dokumentasi sarana dan prasarana SIB.
-            </p>
-        </div>
 
-        <div class="card">
-            <h3>🛠️ Pemeliharaan</h3>
-            <p>
-                Dokumentasi kegiatan perbaikan.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>📸 Kegiatan</h3>
-            <p>
-                Dokumentasi kegiatan sekolah.
-            </p>
-        </div>
-
+    <div id="galleryGrid"
+         class="grid grid-3">
     </div>
 
 </section>
@@ -1500,9 +1535,7 @@ REPORT MODAL
 
         <div class="modal-header">
 
-            <h2>
-                Lapor Kondisi Sarana
-            </h2>
+            <h2>Lapor Kondisi Sarana</h2>
 
             <button
                 class="close"
@@ -1519,9 +1552,7 @@ REPORT MODAL
 
                 <div class="form-group">
 
-                    <label>
-                        Ruangan
-                    </label>
+                    <label>Ruangan</label>
 
                     <select
                         id="reportRoom"
@@ -1533,9 +1564,7 @@ REPORT MODAL
 
                 <div class="form-group">
 
-                    <label>
-                        Lokasi
-                    </label>
+                    <label>Lokasi</label>
 
                     <select
                         id="reportLocation"
@@ -1547,9 +1576,7 @@ REPORT MODAL
 
                 <div class="form-group">
 
-                    <label>
-                        Kategori
-                    </label>
+                    <label>Kategori</label>
 
                     <select
                         id="reportCategory"
@@ -1561,9 +1588,7 @@ REPORT MODAL
 
                 <div class="form-group">
 
-                    <label>
-                        Prioritas
-                    </label>
+                    <label>Prioritas</label>
 
                     <select
                         id="reportPriority"
@@ -1593,24 +1618,19 @@ REPORT MODAL
 
                 <div class="form-group full">
 
-                    <label>
-                        Deskripsi Kondisi
-                    </label>
+                    <label>Deskripsi Kondisi</label>
 
                     <textarea
                         id="reportDescription"
                         placeholder="Jelaskan kondisi atau kerusakan..."
-                        required>
-                    </textarea>
+                        required></textarea>
 
                 </div>
 
 
                 <div class="form-group full">
 
-                    <label>
-                        Foto Kondisi
-                    </label>
+                    <label>Foto Kondisi</label>
 
                     <input
                         type="file"
@@ -1683,7 +1703,7 @@ MASTER MODAL
 
 
 <!-- =====================================================
-FORM MASTER MODAL
+MASTER FORM MODAL
 ===================================================== -->
 
 <div id="masterFormModal" class="modal">
@@ -1743,9 +1763,7 @@ DETAIL REPORT MODAL
 
         <div class="modal-header">
 
-            <h2>
-                Detail Laporan
-            </h2>
+            <h2>Detail Laporan</h2>
 
             <button
                 class="close"
@@ -1763,18 +1781,47 @@ DETAIL REPORT MODAL
 </div>
 
 
+<!-- =====================================================
+GALLERY DETAIL MODAL
+===================================================== -->
+
+<div id="galleryModal" class="modal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>Dokumentasi</h2>
+
+            <button
+                class="close"
+                onclick="closeModal('galleryModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div id="galleryDetailContent"></div>
+
+    </div>
+
+</div>
+
+
 <div id="toast" class="toast"></div>
 
 
-<!-- =========================================
-     FIREBASE SIB CARE V2
-     ========================================= -->
+<!-- =====================================================
+FIREBASE
+===================================================== -->
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
+
 <script>
+
 const firebaseConfig = {
     apiKey: "AIzaSyCoyWIYpu4eh_PEUJ_AchV56w2AEUaHmDM",
     authDomain: "sekolah-care.firebaseapp.com",
@@ -1789,22 +1836,26 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const firebaseAuth = firebase.auth();
 
-/* Login Firebase dibuat otomatis tanpa password (anonim) */
-const firebaseReady = firebaseAuth.signInAnonymously()
-    .then(function () {
-        console.log("SIB CARE V2 terhubung ke Firebase");
+const firebaseReady =
+    firebaseAuth.signInAnonymously()
+    .then(function(){
+        console.log("SIB CARE terhubung ke Firebase");
     })
-    .catch(function (error) {
-        console.error("Firebase Authentication gagal:", error);
+    .catch(function(error){
+        console.error(
+            "Firebase Authentication gagal:",
+            error
+        );
         throw error;
     });
+
 </script>
 
 
 <script>
 
 /* =====================================================
-   DATA DEFAULT (dipakai untuk seeding awal Firestore)
+DEFAULT DATA
 ===================================================== */
 
 const DEFAULT_ROOMS = [
@@ -1879,21 +1930,21 @@ const DEFAULT_LOCATIONS = [
 
 const DEFAULT_CATEGORIES = [
 
-    { id:"CAT001", name:"Listrik" },
-    { id:"CAT002", name:"Lampu" },
-    { id:"CAT003", name:"AC" },
-    { id:"CAT004", name:"Air" },
-    { id:"CAT005", name:"Toilet" },
-    { id:"CAT006", name:"Meja" },
-    { id:"CAT007", name:"Kursi" },
-    { id:"CAT008", name:"Pintu" },
-    { id:"CAT009", name:"Jendela" },
-    { id:"CAT010", name:"Komputer" },
-    { id:"CAT011", name:"Internet" },
-    { id:"CAT012", name:"Kebersihan" },
-    { id:"CAT013", name:"Bangunan" },
-    { id:"CAT014", name:"Keamanan" },
-    { id:"CAT015", name:"Fasilitas Lainnya" }
+    {id:"CAT001",name:"Listrik"},
+    {id:"CAT002",name:"Lampu"},
+    {id:"CAT003",name:"AC"},
+    {id:"CAT004",name:"Air"},
+    {id:"CAT005",name:"Toilet"},
+    {id:"CAT006",name:"Meja"},
+    {id:"CAT007",name:"Kursi"},
+    {id:"CAT008",name:"Pintu"},
+    {id:"CAT009",name:"Jendela"},
+    {id:"CAT010",name:"Komputer"},
+    {id:"CAT011",name:"Internet"},
+    {id:"CAT012",name:"Kebersihan"},
+    {id:"CAT013",name:"Bangunan"},
+    {id:"CAT014",name:"Keamanan"},
+    {id:"CAT015",name:"Fasilitas Lainnya"}
 
 ];
 
@@ -1903,6 +1954,7 @@ const DEFAULT_REPORTS = [
     {
         id:"SC-2026-0001",
         reporter:"Riana Dwi Putra",
+        reporterUid:"",
         room:"R112",
         location:"Lantai 2",
         category:"AC",
@@ -1910,12 +1962,28 @@ const DEFAULT_REPORTS = [
         description:"AC tidak berfungsi dengan baik.",
         status:"Dalam Penanganan",
         date:"2026-09-15",
-        photoURL:null
+        createdAt:"2026-09-15T08:00:00",
+        photoURL:null,
+        progressHistory:[
+            {
+                status:"Dilaporkan",
+                note:"Laporan diterima oleh sistem.",
+                date:"2026-09-15T08:00:00",
+                by:"Guru / Staf"
+            },
+            {
+                status:"Dalam Penanganan",
+                note:"Laporan sedang ditindaklanjuti oleh Admin Sarpras.",
+                date:"2026-09-15T09:00:00",
+                by:"Admin Sarpras"
+            }
+        ]
     },
 
     {
         id:"SC-2026-0002",
         reporter:"Guru / Staf",
+        reporterUid:"",
         room:"R106",
         location:"Lantai 1",
         category:"Lampu",
@@ -1923,12 +1991,28 @@ const DEFAULT_REPORTS = [
         description:"Lampu ruangan mati.",
         status:"Diverifikasi",
         date:"2026-09-15",
-        photoURL:null
+        createdAt:"2026-09-15T09:00:00",
+        photoURL:null,
+        progressHistory:[
+            {
+                status:"Dilaporkan",
+                note:"Laporan diterima oleh sistem.",
+                date:"2026-09-15T09:00:00",
+                by:"Guru / Staf"
+            },
+            {
+                status:"Diverifikasi",
+                note:"Laporan telah diverifikasi.",
+                date:"2026-09-15T10:00:00",
+                by:"Admin Sarpras"
+            }
+        ]
     },
 
     {
         id:"SC-2026-0003",
         reporter:"Siswa",
+        reporterUid:"",
         room:"R101",
         location:"Lantai 1",
         category:"Kursi",
@@ -1936,50 +2020,68 @@ const DEFAULT_REPORTS = [
         description:"Kursi mengalami kerusakan.",
         status:"Selesai",
         date:"2026-09-14",
-        photoURL:null
+        createdAt:"2026-09-14T08:00:00",
+        photoURL:null,
+        progressHistory:[
+            {
+                status:"Dilaporkan",
+                note:"Laporan diterima oleh sistem.",
+                date:"2026-09-14T08:00:00",
+                by:"Siswa"
+            },
+            {
+                status:"Selesai",
+                note:"Perbaikan telah diselesaikan.",
+                date:"2026-09-14T13:00:00",
+                by:"Admin Sarpras"
+            }
+        ]
     }
 
 ];
 
 
 /* =====================================================
-   GLOBAL DATA (disinkronkan dari Firestore secara realtime)
+GLOBAL
 ===================================================== */
 
-let rooms = [];
-let locations = [];
-let categories = [];
-let reports = [];
+let rooms=[];
+let locations=[];
+let categories=[];
+let reports=[];
 
-let currentUser = null;
-let masterType = null;
-let editingId = null;
-let selectedPhotoFile = null;
+let currentUser=null;
+let masterType=null;
+let editingId=null;
+let selectedPhotoFile=null;
 
-let listenersStarted = false;
+let listenersStarted=false;
 
 
 /* =====================================================
-   SEEDING AWAL (hanya berjalan kalau koleksi masih kosong)
+SEEDING
 ===================================================== */
 
-function seedCollectionIfEmpty(collectionName, defaultData){
+function seedCollectionIfEmpty(collectionName,defaultData){
 
-    return db.collection(collectionName).limit(1).get()
+    return db.collection(collectionName)
+        .limit(1)
+        .get()
         .then(function(snapshot){
 
             if(!snapshot.empty){
                 return;
             }
 
-            const batch = db.batch();
+            const batch=db.batch();
 
             defaultData.forEach(function(item){
 
-                const ref =
-                    db.collection(collectionName).doc(item.id);
+                const ref=
+                    db.collection(collectionName)
+                    .doc(item.id);
 
-                batch.set(ref, item);
+                batch.set(ref,item);
 
             });
 
@@ -1989,7 +2091,8 @@ function seedCollectionIfEmpty(collectionName, defaultData){
         .catch(function(error){
 
             console.error(
-                "Gagal seeding " + collectionName + ":",
+                "Gagal seeding "+
+                collectionName,
                 error
             );
 
@@ -2002,10 +2105,25 @@ function seedAllIfEmpty(){
 
     return Promise.all([
 
-        seedCollectionIfEmpty("rooms", DEFAULT_ROOMS),
-        seedCollectionIfEmpty("locations", DEFAULT_LOCATIONS),
-        seedCollectionIfEmpty("categories", DEFAULT_CATEGORIES),
-        seedCollectionIfEmpty("reports", DEFAULT_REPORTS)
+        seedCollectionIfEmpty(
+            "rooms",
+            DEFAULT_ROOMS
+        ),
+
+        seedCollectionIfEmpty(
+            "locations",
+            DEFAULT_LOCATIONS
+        ),
+
+        seedCollectionIfEmpty(
+            "categories",
+            DEFAULT_CATEGORIES
+        ),
+
+        seedCollectionIfEmpty(
+            "reports",
+            DEFAULT_REPORTS
+        )
 
     ]);
 
@@ -2013,7 +2131,7 @@ function seedAllIfEmpty(){
 
 
 /* =====================================================
-   REALTIME LISTENERS FIRESTORE
+REALTIME LISTENERS
 ===================================================== */
 
 function startFirestoreListeners(){
@@ -2022,96 +2140,119 @@ function startFirestoreListeners(){
         return;
     }
 
-    listenersStarted = true;
+    listenersStarted=true;
 
-    db.collection("rooms").onSnapshot(function(snapshot){
 
-        rooms = snapshot.docs.map(function(doc){
-            return doc.data();
+    db.collection("rooms")
+        .onSnapshot(function(snapshot){
+
+            rooms=
+                snapshot.docs.map(
+                    doc=>doc.data()
+                );
+
+            populateReportForm();
+            refreshAll();
+
         });
 
-        populateReportForm();
-        refreshAll();
 
-    }, function(error){
-        console.error("Listener rooms gagal:", error);
-    });
+    db.collection("locations")
+        .onSnapshot(function(snapshot){
 
+            locations=
+                snapshot.docs.map(
+                    doc=>doc.data()
+                );
 
-    db.collection("locations").onSnapshot(function(snapshot){
+            populateReportForm();
+            refreshAll();
 
-        locations = snapshot.docs.map(function(doc){
-            return doc.data();
         });
 
-        populateReportForm();
-        refreshAll();
 
-    }, function(error){
-        console.error("Listener locations gagal:", error);
-    });
+    db.collection("categories")
+        .onSnapshot(function(snapshot){
 
+            categories=
+                snapshot.docs.map(
+                    doc=>doc.data()
+                );
 
-    db.collection("categories").onSnapshot(function(snapshot){
+            populateReportForm();
+            refreshAll();
 
-        categories = snapshot.docs.map(function(doc){
-            return doc.data();
         });
-
-        populateReportForm();
-        refreshAll();
-
-    }, function(error){
-        console.error("Listener categories gagal:", error);
-    });
 
 
     db.collection("reports")
-        .orderBy("date", "desc")
         .onSnapshot(function(snapshot){
 
-            reports = snapshot.docs.map(function(doc){
-                return doc.data();
-            });
+            reports=
+                snapshot.docs
+                .map(doc=>doc.data())
+                .sort(function(a,b){
+
+                    const da=
+                        new Date(
+                            a.createdAt ||
+                            a.date ||
+                            0
+                        );
+
+                    const dbb=
+                        new Date(
+                            b.createdAt ||
+                            b.date ||
+                            0
+                        );
+
+                    return dbb-da;
+
+                });
 
             refreshAll();
 
-        }, function(error){
-            console.error("Listener reports gagal:", error);
         });
 
 }
 
 
 /* =====================================================
-   BOOTSTRAP FIREBASE
+BOOTSTRAP
 ===================================================== */
 
-const loginBtn = document.getElementById("loginBtn");
-const loginStatus = document.getElementById("loginStatus");
+const loginBtn=
+    document.getElementById("loginBtn");
 
-loginBtn.disabled = true;
+const loginStatus=
+    document.getElementById("loginStatus");
+
+loginBtn.disabled=true;
 
 firebaseReady
+
     .then(function(){
 
         return seedAllIfEmpty();
 
     })
+
     .then(function(){
 
         startFirestoreListeners();
 
-        loginBtn.disabled = false;
+        loginBtn.disabled=false;
 
-        loginStatus.innerText =
-            "Prototype V2 • Data tersimpan di Firebase Firestore";
+        loginStatus.innerText=
+            "Terhubung ke Firebase Firestore";
 
     })
+
     .catch(function(error){
 
-        loginStatus.innerText =
-            "Gagal terhubung ke Firebase. Periksa konfigurasi/API key.";
+        loginStatus.innerText=
+            "Gagal terhubung ke Firebase.";
 
         console.error(error);
 
@@ -2119,15 +2260,18 @@ firebaseReady
 
 
 /* =====================================================
-   LOGIN
+LOGIN
 ===================================================== */
 
 function login(){
 
-    const role =
-        document.getElementById("loginUser").value;
+    const role=
+        document
+        .getElementById("loginUser")
+        .value;
 
-    const users = {
+
+    const users={
 
         admin:{
             name:"Admin Sarpras",
@@ -2146,21 +2290,31 @@ function login(){
 
     };
 
-    currentUser =
-        users[role];
+
+    currentUser={
+        ...users[role],
+        uid:
+            firebaseAuth.currentUser
+            ? firebaseAuth.currentUser.uid
+            : ""
+    };
+
 
     document
         .getElementById("loginScreen")
         .style.display="none";
 
+
     document
         .getElementById("app")
         .style.display="block";
 
+
     document
         .getElementById("userBadge")
-        .innerText =
+        .innerText=
         currentUser.name;
+
 
     configureRole();
 
@@ -2168,16 +2322,10 @@ function login(){
 
     refreshAll();
 
-    toast(
-        "Selamat datang di SIB CARE"
-    );
+    toast("Selamat datang di SIB CARE");
 
 }
 
-
-/* =====================================================
-   LOGOUT
-===================================================== */
 
 function logout(){
 
@@ -2187,6 +2335,7 @@ function logout(){
         .getElementById("app")
         .style.display="none";
 
+
     document
         .getElementById("loginScreen")
         .style.display="flex";
@@ -2195,20 +2344,21 @@ function logout(){
 
 
 /* =====================================================
-   ROLE
+ROLE
 ===================================================== */
 
 function configureRole(){
 
-    const admin =
+    const admin=
         currentUser.role==="ADMIN_SARPRAS";
+
 
     document
         .querySelectorAll(".admin-only")
-        .forEach(el=>{
+        .forEach(function(el){
 
-            el.style.display =
-                admin ? "block" : "none";
+            el.style.display=
+                admin ? "" : "none";
 
         });
 
@@ -2216,70 +2366,95 @@ function configureRole(){
 
 
 /* =====================================================
-   PAGE
+PAGE
 ===================================================== */
 
 function showPage(page){
 
     document
         .querySelectorAll(".page")
-        .forEach(el=>{
+        .forEach(function(el){
+
             el.classList.remove("active");
+
         });
 
-    const target =
+
+    const target=
         document.getElementById(
             "page-"+page
         );
+
 
     if(target){
         target.classList.add("active");
     }
 
+
     document
         .querySelectorAll(".nav button")
-        .forEach(btn=>{
+        .forEach(function(btn){
+
             btn.classList.remove("active");
+
         });
 
-    const nav =
+
+    const nav=
         document.querySelector(
             `[data-page="${page}"]`
         );
+
 
     if(nav){
         nav.classList.add("active");
     }
 
+
     refreshAll();
+
+
+    if(page==="gallery"){
+        renderGallery();
+    }
+
+    if(page==="recap"){
+        renderRecap();
+    }
 
 }
 
 
 /* =====================================================
-   MODAL
+MODAL
 ===================================================== */
 
 function openModal(id){
 
-    document
-        .getElementById(id)
-        .classList.add("show");
+    const el=
+        document.getElementById(id);
+
+    if(el){
+        el.classList.add("show");
+    }
 
 }
 
 
 function closeModal(id){
 
-    document
-        .getElementById(id)
-        .classList.remove("show");
+    const el=
+        document.getElementById(id);
+
+    if(el){
+        el.classList.remove("show");
+    }
 
 }
 
 
 /* =====================================================
-   REPORT MODAL
+REPORT MODAL
 ===================================================== */
 
 function openReportModal(){
@@ -2290,11 +2465,13 @@ function openReportModal(){
         .getElementById("reportForm")
         .reset();
 
+
     document
         .getElementById("photoPreview")
         .style.display="none";
 
-    selectedPhotoFile = null;
+
+    selectedPhotoFile=null;
 
     openModal("reportModal");
 
@@ -2303,157 +2480,190 @@ function openReportModal(){
 
 function populateReportForm(){
 
-    const roomSelect =
+    const roomSelect=
         document.getElementById("reportRoom");
 
     if(!roomSelect){
         return;
     }
 
-    const prevRoom = roomSelect.value;
 
-    roomSelect.innerHTML =
+    roomSelect.innerHTML=
         `<option value="">Pilih Ruangan</option>`;
 
-    rooms.forEach(room=>{
 
-        roomSelect.innerHTML +=
-            `<option value="${room.code}">
-                ${room.code} - ${room.name}
-            </option>`;
+    rooms
+        .sort((a,b)=>
+            String(a.code)
+            .localeCompare(String(b.code))
+        )
+        .forEach(function(room){
 
-    });
+            roomSelect.innerHTML+=
+                `<option value="${escapeHTML(room.code)}">
+                    ${escapeHTML(room.code)}
+                    - ${escapeHTML(room.name)}
+                </option>`;
 
-    roomSelect.value = prevRoom;
+        });
 
 
-    const locSelect =
+    const locSelect=
         document.getElementById("reportLocation");
 
-    const prevLoc = locSelect.value;
 
-    locSelect.innerHTML =
+    locSelect.innerHTML=
         `<option value="">Pilih Lokasi</option>`;
 
-    locations.forEach(location=>{
 
-        locSelect.innerHTML +=
-            `<option value="${location.name}">
-                ${location.name}
+    locations.forEach(function(location){
+
+        locSelect.innerHTML+=
+            `<option value="${escapeHTML(location.name)}">
+                ${escapeHTML(location.name)}
             </option>`;
 
     });
 
-    locSelect.value = prevLoc;
 
-
-    const catSelect =
+    const catSelect=
         document.getElementById("reportCategory");
 
-    const prevCat = catSelect.value;
 
-    catSelect.innerHTML =
+    catSelect.innerHTML=
         `<option value="">Pilih Kategori</option>`;
 
-    categories.forEach(category=>{
 
-        catSelect.innerHTML +=
-            `<option value="${category.name}">
-                ${category.name}
+    categories.forEach(function(category){
+
+        catSelect.innerHTML+=
+            `<option value="${escapeHTML(category.name)}">
+                ${escapeHTML(category.name)}
             </option>`;
 
     });
-
-    catSelect.value = prevCat;
 
 }
 
 
 /* =====================================================
-   PHOTO PREVIEW + KOMPRESI (disimpan sbg base64 di Firestore,
-   supaya tidak perlu Firebase Storage berbayar)
+PHOTO
 ===================================================== */
 
-const PHOTO_MAX_WIDTH = 900;
-const PHOTO_JPEG_QUALITY = 0.6;
+const PHOTO_MAX_WIDTH=900;
+const PHOTO_JPEG_QUALITY=.6;
+
 
 function previewPhoto(event){
 
-    const file =
+    const file=
         event.target.files[0];
 
+
     if(!file){
-        selectedPhotoFile = null;
+
+        selectedPhotoFile=null;
+
         return;
+
     }
 
-    const reader =
-        new FileReader();
+
+    const reader=new FileReader();
+
 
     reader.onload=function(e){
 
-        const image = new Image();
+        const image=new Image();
 
-        image.onload = function(){
 
-            const canvas =
+        image.onload=function(){
+
+            const canvas=
                 document.createElement("canvas");
 
-            let width = image.width;
-            let height = image.height;
 
-            if(width > PHOTO_MAX_WIDTH){
+            let width=image.width;
+            let height=image.height;
 
-                height =
+
+            if(width>PHOTO_MAX_WIDTH){
+
+                height=
                     Math.round(
-                        height * (PHOTO_MAX_WIDTH / width)
+                        height*
+                        (
+                            PHOTO_MAX_WIDTH/
+                            width
+                        )
                     );
 
-                width = PHOTO_MAX_WIDTH;
+                width=PHOTO_MAX_WIDTH;
 
             }
 
-            canvas.width = width;
-            canvas.height = height;
 
-            const ctx = canvas.getContext("2d");
+            canvas.width=width;
+            canvas.height=height;
 
-            ctx.drawImage(image, 0, 0, width, height);
 
-            const compressed =
+            const ctx=
+                canvas.getContext("2d");
+
+
+            ctx.drawImage(
+                image,
+                0,
+                0,
+                width,
+                height
+            );
+
+
+            const compressed=
                 canvas.toDataURL(
                     "image/jpeg",
                     PHOTO_JPEG_QUALITY
                 );
 
-            selectedPhotoFile = compressed;
 
-            const img =
+            selectedPhotoFile=compressed;
+
+
+            const img=
                 document.getElementById(
                     "photoPreview"
                 );
 
-            img.src = compressed;
+
+            img.src=compressed;
 
             img.style.display="block";
 
-            const sizeKB =
-                Math.round(compressed.length * 0.75 / 1024);
 
-            if(sizeKB > 700){
+            const sizeKB=
+                Math.round(
+                    compressed.length*
+                    .75/
+                    1024
+                );
+
+
+            if(sizeKB>700){
 
                 toast(
-                    "Foto masih besar (~" + sizeKB +
-                    " KB). Pertimbangkan foto lain agar laporan tidak gagal tersimpan."
+                    "Foto masih cukup besar. Gunakan foto dengan ukuran lebih kecil jika laporan gagal disimpan."
                 );
 
             }
 
         };
 
-        image.src = e.target.result;
+
+        image.src=e.target.result;
 
     };
+
 
     reader.readAsDataURL(file);
 
@@ -2461,145 +2671,228 @@ function previewPhoto(event){
 
 
 /* =====================================================
-   SUBMIT REPORT
+GENERATE REPORT ID
 ===================================================== */
 
-document
-    .getElementById("reportForm")
-    .addEventListener(
-        "submit",
-        function(e){
+function generateReportId(){
 
-            e.preventDefault();
-
-            const room =
-                document
-                .getElementById("reportRoom")
-                .value;
-
-            const location =
-                document
-                .getElementById("reportLocation")
-                .value;
-
-            const category =
-                document
-                .getElementById("reportCategory")
-                .value;
-
-            const priority =
-                document
-                .getElementById("reportPriority")
-                .value;
-
-            const description =
-                document
-                .getElementById("reportDescription")
-                .value;
-
-            const now =
-                new Date();
-
-            const year =
-                now.getFullYear();
-
-            const number =
-                String(
-                    reports.length+1
-                ).padStart(4,"0");
-
-            const id =
-                `SC-${year}-${number}`;
+    const year=
+        new Date().getFullYear();
 
 
-            const submitBtn =
-                document.getElementById("reportSubmitBtn");
+    const nums=
+        reports
+        .map(function(r){
 
-            submitBtn.disabled = true;
+            const match=
+                String(r.id || "")
+                .match(/^SC-\d{4}-(\d+)$/);
 
-            submitBtn.innerText = "Mengirim...";
+            return match
+                ? parseInt(match[1],10)
+                : 0;
 
-
-            const report = {
-
-                id:id,
-
-                reporter:
-                    currentUser
-                    ? currentUser.name
-                    : "Pengguna",
-
-                room:room,
-
-                location:location,
-
-                category:category,
-
-                priority:priority,
-
-                description:description,
-
-                status:"Dilaporkan",
-
-                date:
-                    now.toISOString()
-                    .split("T")[0],
-
-                photoURL:null
-
-            };
+        });
 
 
-            if(selectedPhotoFile){
-                report.photoURL = selectedPhotoFile;
-            }
+    const max=
+        nums.length
+        ? Math.max(...nums)
+        : 0;
 
 
-            db.collection("reports")
-                .doc(id)
-                .set(report)
-                .then(function(){
+    return `SC-${year}-${String(max+1).padStart(4,"0")}`;
 
-                    closeModal("reportModal");
-
-                    toast(
-                        `Laporan ${id} berhasil dikirim`
-                    );
-
-                })
-                .catch(function(error){
-
-                    console.error(
-                        "Gagal mengirim laporan:",
-                        error
-                    );
-
-                    toast(
-                        "Gagal mengirim laporan. Coba lagi."
-                    );
-
-                })
-                .finally(function(){
-
-                    submitBtn.disabled = false;
-
-                    submitBtn.innerText = "Kirim Laporan";
-
-                    selectedPhotoFile = null;
-
-                });
-
-        }
-    );
+}
 
 
 /* =====================================================
-   MASTER DATA
+SUBMIT REPORT
+===================================================== */
+
+document
+.getElementById("reportForm")
+.addEventListener(
+    "submit",
+    function(e){
+
+        e.preventDefault();
+
+
+        if(!currentUser){
+
+            toast("Silakan masuk terlebih dahulu.");
+
+            return;
+
+        }
+
+
+        const room=
+            document
+            .getElementById("reportRoom")
+            .value;
+
+
+        const location=
+            document
+            .getElementById("reportLocation")
+            .value;
+
+
+        const category=
+            document
+            .getElementById("reportCategory")
+            .value;
+
+
+        const priority=
+            document
+            .getElementById("reportPriority")
+            .value;
+
+
+        const description=
+            document
+            .getElementById("reportDescription")
+            .value
+            .trim();
+
+
+        const now=new Date();
+
+        const id=generateReportId();
+
+
+        const submitBtn=
+            document.getElementById(
+                "reportSubmitBtn"
+            );
+
+
+        submitBtn.disabled=true;
+        submitBtn.innerText="Mengirim...";
+
+
+        const report={
+
+            id:id,
+
+            reporter:
+                currentUser.name,
+
+            reporterRole:
+                currentUser.role,
+
+            reporterUid:
+                currentUser.uid || "",
+
+            room:room,
+
+            location:location,
+
+            category:category,
+
+            priority:priority,
+
+            description:description,
+
+            status:"Dilaporkan",
+
+            date:
+                now.toISOString()
+                .split("T")[0],
+
+            createdAt:
+                now.toISOString(),
+
+            photoURL:
+                selectedPhotoFile || null,
+
+            progressHistory:[
+
+                {
+                    status:"Dilaporkan",
+
+                    note:
+                        "Laporan telah diterima oleh sistem SIB CARE.",
+
+                    date:
+                        now.toISOString(),
+
+                    by:
+                        currentUser.name
+                }
+
+            ]
+
+        };
+
+
+        db.collection("reports")
+            .doc(id)
+            .set(report)
+
+            .then(function(){
+
+                closeModal("reportModal");
+
+                toast(
+                    `Laporan ${id} berhasil dikirim`
+                );
+
+                showPage("myreports");
+
+            })
+
+            .catch(function(error){
+
+                console.error(
+                    "Gagal mengirim laporan:",
+                    error
+                );
+
+                toast(
+                    "Gagal mengirim laporan. Coba lagi."
+                );
+
+            })
+
+            .finally(function(){
+
+                submitBtn.disabled=false;
+
+                submitBtn.innerText=
+                    "Kirim Laporan";
+
+                selectedPhotoFile=null;
+
+            });
+
+    }
+);
+
+
+/* =====================================================
+MASTER DATA
 ===================================================== */
 
 function openMasterModal(type){
 
+    if(
+        !currentUser ||
+        currentUser.role!=="ADMIN_SARPRAS"
+    ){
+
+        toast("Akses hanya untuk Admin Sarpras.");
+
+        return;
+
+    }
+
+
     masterType=type;
+
 
     const titles={
 
@@ -2611,10 +2904,9 @@ function openMasterModal(type){
 
     };
 
+
     document
-        .getElementById(
-            "masterModalTitle"
-        )
+        .getElementById("masterModalTitle")
         .innerText=titles[type];
 
 
@@ -2627,7 +2919,7 @@ function openMasterModal(type){
 
 function renderMasterTable(){
 
-    const content =
+    const content=
         document.getElementById(
             "masterContent"
         );
@@ -2688,46 +2980,35 @@ function renderMasterTable(){
     if(masterType==="rooms"){
 
         html+=`
-                    <th>Kode</th>
-                    <th>Nama Ruangan</th>
-                    <th>Lokasi</th>
-                    <th>Aksi</th>
+            <th>Kode</th>
+            <th>Nama Ruangan</th>
+            <th>Lokasi</th>
+            <th>Aksi</th>
         `;
 
     }
-
-
-    if(masterType==="locations"){
+    else{
 
         html+=`
-                    <th>ID</th>
-                    <th>Nama Lokasi</th>
-                    <th>Aksi</th>
-        `;
-
-    }
-
-
-    if(masterType==="categories"){
-
-        html+=`
-                    <th>ID</th>
-                    <th>Nama Kategori</th>
-                    <th>Aksi</th>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Aksi</th>
         `;
 
     }
 
 
     html+=`
+
                 </tr>
             </thead>
 
             <tbody>
+
     `;
 
 
-    data.forEach(item=>{
+    data.forEach(function(item){
 
         html+="<tr>";
 
@@ -2736,17 +3017,11 @@ function renderMasterTable(){
 
             html+=`
 
-                <td>
-                    ${item.code}
-                </td>
+                <td>${escapeHTML(item.code)}</td>
 
-                <td>
-                    ${item.name}
-                </td>
+                <td>${escapeHTML(item.name)}</td>
 
-                <td>
-                    ${item.location}
-                </td>
+                <td>${escapeHTML(item.location)}</td>
 
             `;
 
@@ -2755,13 +3030,9 @@ function renderMasterTable(){
 
             html+=`
 
-                <td>
-                    ${item.id}
-                </td>
+                <td>${escapeHTML(item.id)}</td>
 
-                <td>
-                    ${item.name}
-                </td>
+                <td>${escapeHTML(item.name)}</td>
 
             `;
 
@@ -2833,28 +3104,20 @@ function renderMasterTable(){
 }
 
 
-/* =====================================================
-   MASTER FORM
-===================================================== */
-
 function openMasterForm(id=null){
 
     editingId=id;
 
-    const title =
+
+    document
+        .getElementById("masterFormTitle")
+        .innerText=
         id
         ? "Edit Data"
         : "Tambah Data";
 
 
-    document
-        .getElementById(
-            "masterFormTitle"
-        )
-        .innerText=title;
-
-
-    const fields =
+    const fields=
         document.getElementById(
             "masterFormFields"
         );
@@ -2866,15 +3129,24 @@ function openMasterForm(id=null){
     if(id){
 
         if(masterType==="rooms"){
-            item=rooms.find(x=>x.id===id);
+            item=
+                rooms.find(
+                    x=>x.id===id
+                );
         }
 
         if(masterType==="locations"){
-            item=locations.find(x=>x.id===id);
+            item=
+                locations.find(
+                    x=>x.id===id
+                );
         }
 
         if(masterType==="categories"){
-            item=categories.find(x=>x.id===id);
+            item=
+                categories.find(
+                    x=>x.id===id
+                );
         }
 
     }
@@ -2889,14 +3161,12 @@ function openMasterForm(id=null){
 
             <div class="form-group">
 
-                <label>
-                    Kode Ruangan
-                </label>
+                <label>Kode Ruangan</label>
 
                 <input
                     id="masterCode"
                     required
-                    value="${item ? item.code : ""}"
+                    value="${item ? escapeHTML(item.code) : ""}"
                     placeholder="Contoh: R125">
 
             </div>
@@ -2904,14 +3174,12 @@ function openMasterForm(id=null){
 
             <div class="form-group">
 
-                <label>
-                    Nama Ruangan
-                </label>
+                <label>Nama Ruangan</label>
 
                 <input
                     id="masterName"
                     required
-                    value="${item ? item.name : ""}"
+                    value="${item ? escapeHTML(item.name) : ""}"
                     placeholder="Contoh: Ruang UKS">
 
             </div>
@@ -2919,14 +3187,12 @@ function openMasterForm(id=null){
 
             <div class="form-group">
 
-                <label>
-                    Lokasi
-                </label>
+                <label>Lokasi</label>
 
                 <input
                     id="masterLocation"
                     required
-                    value="${item ? item.location : ""}"
+                    value="${item ? escapeHTML(item.location) : ""}"
                     placeholder="Contoh: Lantai 2">
 
             </div>
@@ -2940,14 +3206,12 @@ function openMasterForm(id=null){
 
             <div class="form-group">
 
-                <label>
-                    Nama
-                </label>
+                <label>Nama</label>
 
                 <input
                     id="masterName"
                     required
-                    value="${item ? item.name : ""}"
+                    value="${item ? escapeHTML(item.name) : ""}"
                     placeholder="Masukkan nama">
 
             </div>
@@ -2964,10 +3228,6 @@ function openMasterForm(id=null){
 }
 
 
-/* =====================================================
-   EDIT MASTER
-===================================================== */
-
 function editMaster(id){
 
     openMasterForm(id);
@@ -2975,198 +3235,202 @@ function editMaster(id){
 }
 
 
-/* =====================================================
-   SAVE MASTER
-===================================================== */
-
 document
-    .getElementById("masterForm")
-    .addEventListener(
-        "submit",
-        function(e){
+.getElementById("masterForm")
+.addEventListener(
+    "submit",
+    function(e){
 
-            e.preventDefault();
+        e.preventDefault();
 
 
-            const name =
+        const name=
+            document
+            .getElementById("masterName")
+            .value
+            .trim();
+
+
+        if(!name){
+
+            toast("Nama wajib diisi.");
+
+            return;
+
+        }
+
+
+        const saveBtn=
+            e.target.querySelector(
+                "button[type=submit]"
+            );
+
+
+        saveBtn.disabled=true;
+
+
+        let writePromise;
+
+
+        if(masterType==="rooms"){
+
+            const code=
                 document
-                .getElementById("masterName")
+                .getElementById("masterCode")
                 .value
                 .trim();
 
 
-            if(!name){
+            const location=
+                document
+                .getElementById("masterLocation")
+                .value
+                .trim();
+
+
+            if(!code || !location){
 
                 toast(
-                    "Nama wajib diisi"
+                    "Lengkapi data ruangan."
                 );
+
+                saveBtn.disabled=false;
 
                 return;
 
             }
 
 
-            const saveBtn =
-                e.target.querySelector(
-                    "button[type=submit]"
-                );
+            if(editingId){
 
-            saveBtn.disabled = true;
-
-
-            let writePromise;
-
-
-            if(masterType==="rooms"){
-
-                const code =
-                    document
-                    .getElementById("masterCode")
-                    .value
-                    .trim();
-
-                const location =
-                    document
-                    .getElementById(
-                        "masterLocation"
-                    )
-                    .value
-                    .trim();
-
-
-                if(!code || !location){
-
-                    toast(
-                        "Lengkapi data ruangan"
-                    );
-
-                    saveBtn.disabled = false;
-
-                    return;
-
-                }
-
-
-                if(editingId){
-
-                    writePromise =
-                        db.collection("rooms")
-                        .doc(editingId)
-                        .update({
-                            code:code,
-                            name:name,
-                            location:location
-                        });
-
-                }
-                else{
-
-                    writePromise =
-                        db.collection("rooms")
-                        .doc(code)
-                        .set({
-                            id:code,
-                            code:code,
-                            name:name,
-                            location:location
-                        });
-
-                }
+                writePromise=
+                    db.collection("rooms")
+                    .doc(editingId)
+                    .update({
+                        code:code,
+                        name:name,
+                        location:location
+                    });
 
             }
+            else{
 
-
-            if(masterType==="locations"){
-
-                if(editingId){
-
-                    writePromise =
-                        db.collection("locations")
-                        .doc(editingId)
-                        .update({ name:name });
-
-                }
-                else{
-
-                    const newId = "LOC"+Date.now();
-
-                    writePromise =
-                        db.collection("locations")
-                        .doc(newId)
-                        .set({ id:newId, name:name });
-
-                }
+                writePromise=
+                    db.collection("rooms")
+                    .doc(code)
+                    .set({
+                        id:code,
+                        code:code,
+                        name:name,
+                        location:location
+                    });
 
             }
-
-
-            if(masterType==="categories"){
-
-                if(editingId){
-
-                    writePromise =
-                        db.collection("categories")
-                        .doc(editingId)
-                        .update({ name:name });
-
-                }
-                else{
-
-                    const newId = "CAT"+Date.now();
-
-                    writePromise =
-                        db.collection("categories")
-                        .doc(newId)
-                        .set({ id:newId, name:name });
-
-                }
-
-            }
-
-
-            writePromise
-                .then(function(){
-
-                    closeModal(
-                        "masterFormModal"
-                    );
-
-                    renderMasterTable();
-
-                    toast(
-                        editingId
-                        ? "Data berhasil diperbarui"
-                        : "Data berhasil ditambahkan"
-                    );
-
-                    editingId=null;
-
-                })
-                .catch(function(error){
-
-                    console.error(
-                        "Gagal menyimpan data master:",
-                        error
-                    );
-
-                    toast(
-                        "Gagal menyimpan data. Coba lagi."
-                    );
-
-                })
-                .finally(function(){
-
-                    saveBtn.disabled = false;
-
-                });
 
         }
-    );
 
 
-/* =====================================================
-   DELETE MASTER
-===================================================== */
+        if(masterType==="locations"){
+
+            if(editingId){
+
+                writePromise=
+                    db.collection("locations")
+                    .doc(editingId)
+                    .update({
+                        name:name
+                    });
+
+            }
+            else{
+
+                const newId=
+                    "LOC"+Date.now();
+
+
+                writePromise=
+                    db.collection("locations")
+                    .doc(newId)
+                    .set({
+                        id:newId,
+                        name:name
+                    });
+
+            }
+
+        }
+
+
+        if(masterType==="categories"){
+
+            if(editingId){
+
+                writePromise=
+                    db.collection("categories")
+                    .doc(editingId)
+                    .update({
+                        name:name
+                    });
+
+            }
+            else{
+
+                const newId=
+                    "CAT"+Date.now();
+
+
+                writePromise=
+                    db.collection("categories")
+                    .doc(newId)
+                    .set({
+                        id:newId,
+                        name:name
+                    });
+
+            }
+
+        }
+
+
+        writePromise
+
+            .then(function(){
+
+                closeModal(
+                    "masterFormModal"
+                );
+
+                renderMasterTable();
+
+                toast(
+                    editingId
+                    ? "Data berhasil diperbarui."
+                    : "Data berhasil ditambahkan."
+                );
+
+                editingId=null;
+
+            })
+
+            .catch(function(error){
+
+                console.error(error);
+
+                toast(
+                    "Gagal menyimpan data."
+                );
+
+            })
+
+            .finally(function(){
+
+                saveBtn.disabled=false;
+
+            });
+
+    }
+);
+
 
 function deleteMaster(id){
 
@@ -3176,29 +3440,34 @@ function deleteMaster(id){
 
     if(masterType==="rooms"){
 
-        item=rooms.find(
-            x=>x.id===id
-        );
+        item=
+            rooms.find(
+                x=>x.id===id
+            );
 
         collectionName="rooms";
 
     }
 
+
     if(masterType==="locations"){
 
-        item=locations.find(
-            x=>x.id===id
-        );
+        item=
+            locations.find(
+                x=>x.id===id
+            );
 
         collectionName="locations";
 
     }
 
+
     if(masterType==="categories"){
 
-        item=categories.find(
-            x=>x.id===id
-        );
+        item=
+            categories.find(
+                x=>x.id===id
+            );
 
         collectionName="categories";
 
@@ -3210,38 +3479,37 @@ function deleteMaster(id){
     }
 
 
-    const confirmDelete =
-        confirm(
+    if(
+        !confirm(
             `Hapus data "${item.name}"?`
-        );
+        )
+    ){
 
-
-    if(!confirmDelete){
         return;
+
     }
 
 
     db.collection(collectionName)
         .doc(id)
         .delete()
+
         .then(function(){
 
             renderMasterTable();
 
             toast(
-                "Data berhasil dihapus"
+                "Data berhasil dihapus."
             );
 
         })
+
         .catch(function(error){
 
-            console.error(
-                "Gagal menghapus data:",
-                error
-            );
+            console.error(error);
 
             toast(
-                "Gagal menghapus data. Coba lagi."
+                "Gagal menghapus data."
             );
 
         });
@@ -3250,12 +3518,45 @@ function deleteMaster(id){
 
 
 /* =====================================================
-   REPORT TABLE
+REPORT TABLE
 ===================================================== */
+
+function getMyReports(){
+
+    if(!currentUser){
+        return [];
+    }
+
+
+    const uid=
+        currentUser.uid || "";
+
+
+    return reports.filter(function(report){
+
+        /*
+         * Laporan baru menggunakan reporterUid.
+         * Data lama yang belum mempunyai reporterUid
+         * tetap dicocokkan berdasarkan nama pelapor.
+         */
+
+        if(report.reporterUid){
+
+            return report.reporterUid===uid;
+
+        }
+
+
+        return report.reporter===currentUser.name;
+
+    });
+
+}
+
 
 function renderReports(){
 
-    const myTable =
+    const myTable=
         document.getElementById(
             "myReportsTable"
         );
@@ -3264,9 +3565,13 @@ function renderReports(){
     myTable.innerHTML="";
 
 
-    reports.forEach(report=>{
+    const myReports=
+        getMyReports();
 
-        const row =
+
+    myReports.forEach(function(report){
+
+        const row=
             document.createElement("tr");
 
 
@@ -3274,41 +3579,47 @@ function renderReports(){
 
             <td>
                 <strong>
-                    ${report.id}
+                    ${escapeHTML(report.id)}
                 </strong>
             </td>
 
             <td>
-                ${report.room}
+                ${escapeHTML(report.room)}
             </td>
 
             <td>
-                ${report.category}
+                ${escapeHTML(report.category)}
             </td>
 
             <td>
-                ${priorityBadge(
-                    report.priority
-                )}
+                ${priorityBadge(report.priority)}
             </td>
 
             <td>
-                ${statusBadge(
-                    report.status
-                )}
+                ${statusBadge(report.status)}
             </td>
 
             <td>
-                ${report.date}
+                ${formatDate(report.date)}
             </td>
 
             <td>
 
-                <button
-                    class="btn btn-light btn-sm"
-                    onclick="showReportDetail('${report.id}')">
-                    Detail
-                </button>
+                <div class="actions">
+
+                    <button
+                        class="btn btn-light btn-sm"
+                        onclick="showReportDetail('${report.id}')">
+                        Detail
+                    </button>
+
+                    <button
+                        class="btn btn-danger btn-sm"
+                        onclick="deleteMyReport('${report.id}')">
+                        🗑️ Hapus
+                    </button>
+
+                </div>
 
             </td>
 
@@ -3320,7 +3631,28 @@ function renderReports(){
     });
 
 
-    const adminTable =
+    if(myReports.length===0){
+
+        myTable.innerHTML=`
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    style="text-align:center;padding:30px">
+
+                    Belum ada laporan yang Anda buat.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    const adminTable=
         document.getElementById(
             "adminReportsTable"
         );
@@ -3329,40 +3661,36 @@ function renderReports(){
     adminTable.innerHTML="";
 
 
-    reports.forEach(report=>{
+    reports.forEach(function(report){
 
-        const row =
+        const row=
             document.createElement("tr");
 
 
         row.innerHTML=`
 
             <td>
-                ${report.id}
+                ${escapeHTML(report.id)}
             </td>
 
             <td>
-                ${report.reporter}
+                ${escapeHTML(report.reporter)}
             </td>
 
             <td>
-                ${report.room}
+                ${escapeHTML(report.room)}
             </td>
 
             <td>
-                ${report.category}
+                ${escapeHTML(report.category)}
             </td>
 
             <td>
-                ${priorityBadge(
-                    report.priority
-                )}
+                ${priorityBadge(report.priority)}
             </td>
 
             <td>
-                ${statusBadge(
-                    report.status
-                )}
+                ${statusBadge(report.status)}
             </td>
 
             <td>
@@ -3382,42 +3710,155 @@ function renderReports(){
 
     });
 
+
+    if(reports.length===0){
+
+        adminTable.innerHTML=`
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    style="text-align:center;padding:30px">
+
+                    Belum ada laporan.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
 }
 
 
 /* =====================================================
-   BADGES
+DELETE MY REPORT
+===================================================== */
+
+function deleteMyReport(id){
+
+    const report=
+        reports.find(
+            x=>x.id===id
+        );
+
+
+    if(!report){
+        return;
+    }
+
+
+    if(!isMyReport(report)){
+
+        toast(
+            "Anda hanya dapat menghapus laporan milik sendiri."
+        );
+
+        return;
+
+    }
+
+
+    const ok=
+        confirm(
+            `Hapus laporan ${report.id}?\n\nData laporan ini akan dihapus dari riwayat SIB CARE.`
+        );
+
+
+    if(!ok){
+        return;
+    }
+
+
+    db.collection("reports")
+        .doc(id)
+        .delete()
+
+        .then(function(){
+
+            toast(
+                `Laporan ${id} berhasil dihapus.`
+            );
+
+        })
+
+        .catch(function(error){
+
+            console.error(
+                "Gagal menghapus laporan:",
+                error
+            );
+
+            toast(
+                "Gagal menghapus laporan."
+            );
+
+        });
+
+}
+
+
+function isMyReport(report){
+
+    if(!currentUser){
+        return false;
+    }
+
+
+    if(report.reporterUid){
+
+        return (
+            report.reporterUid===
+            currentUser.uid
+        );
+
+    }
+
+
+    return (
+        report.reporter===
+        currentUser.name
+    );
+
+}
+
+
+/* =====================================================
+BADGES
 ===================================================== */
 
 function statusBadge(status){
 
     const map={
 
-        "Dilaporkan":
-            "badge-blue",
+        "Dilaporkan":"badge-blue",
 
-        "Diverifikasi":
-            "badge-yellow",
+        "Diverifikasi":"badge-yellow",
 
-        "Dalam Penanganan":
-            "badge-yellow",
+        "Dalam Penanganan":"badge-yellow",
 
-        "Selesai":
-            "badge-green",
+        "Selesai":"badge-green",
 
-        "Ditutup":
-            "badge-gray",
+        "Ditutup":"badge-gray",
 
-        "Ditolak":
-            "badge-red"
+        "Ditolak":"badge-red"
 
     };
 
 
     return `
-        <span class="badge ${map[status] || "badge-gray"}">
-            ${status}
+
+        <span class="badge ${
+            map[status] || "badge-gray"
+        }">
+
+            ${escapeHTML(status)}
+
         </span>
+
     `;
 
 }
@@ -3427,37 +3868,39 @@ function priorityBadge(priority){
 
     const map={
 
-        "Darurat":
-            "badge-red",
+        "Darurat":"badge-red",
 
-        "Tinggi":
-            "badge-red",
+        "Tinggi":"badge-red",
 
-        "Sedang":
-            "badge-yellow",
+        "Sedang":"badge-yellow",
 
-        "Rendah":
-            "badge-green"
+        "Rendah":"badge-green"
 
     };
 
 
     return `
-        <span class="badge ${map[priority]}">
-            ${priority}
+
+        <span class="badge ${
+            map[priority] || "badge-gray"
+        }">
+
+            ${escapeHTML(priority)}
+
         </span>
+
     `;
 
 }
 
 
 /* =====================================================
-   REPORT DETAIL
+REPORT DETAIL
 ===================================================== */
 
 function showReportDetail(id){
 
-    const report =
+    const report=
         reports.find(
             x=>x.id===id
         );
@@ -3477,7 +3920,9 @@ function showReportDetail(id){
             </div>
 
             <div>
-                ${report.id}
+                <strong>
+                    ${escapeHTML(report.id)}
+                </strong>
             </div>
 
         </div>
@@ -3490,7 +3935,7 @@ function showReportDetail(id){
             </div>
 
             <div>
-                ${report.reporter}
+                ${escapeHTML(report.reporter)}
             </div>
 
         </div>
@@ -3503,7 +3948,7 @@ function showReportDetail(id){
             </div>
 
             <div>
-                ${report.room}
+                ${escapeHTML(report.room)}
             </div>
 
         </div>
@@ -3516,7 +3961,7 @@ function showReportDetail(id){
             </div>
 
             <div>
-                ${report.location}
+                ${escapeHTML(report.location)}
             </div>
 
         </div>
@@ -3529,7 +3974,7 @@ function showReportDetail(id){
             </div>
 
             <div>
-                ${report.category}
+                ${escapeHTML(report.category)}
             </div>
 
         </div>
@@ -3542,9 +3987,7 @@ function showReportDetail(id){
             </div>
 
             <div>
-                ${priorityBadge(
-                    report.priority
-                )}
+                ${priorityBadge(report.priority)}
             </div>
 
         </div>
@@ -3557,22 +4000,28 @@ function showReportDetail(id){
             </div>
 
             <div>
-                ${report.description}
+                ${escapeHTML(report.description)}
             </div>
 
         </div>
 
 
-        <div class="detail-row">
+        <div class="progress-box">
 
-            <div class="detail-label">
-                Status
-            </div>
+            <h3>
+                📌 Status Saat Ini
+            </h3>
 
-            <div>
-                ${statusBadge(
-                    report.status
-                )}
+            <div class="progress-current">
+
+                ${statusBadge(report.status)}
+
+                <span>
+                    ${report.status==="Selesai"
+                    ? "Laporan telah selesai ditangani."
+                    : "Laporan sedang dalam proses tindak lanjut."}
+                </span>
+
             </div>
 
         </div>
@@ -3583,65 +4032,206 @@ function showReportDetail(id){
     if(report.photoURL){
 
         html+=`
+
+            <h3 style="margin-top:20px">
+                📷 Foto Kondisi
+            </h3>
+
             <img
                 class="report-photo"
-                src="${report.photoURL}">
+                src="${report.photoURL}"
+                onclick="openImage('${report.photoURL}')"
+                style="cursor:pointer">
+
         `;
 
     }
 
 
-    if(currentUser &&
-       currentUser.role==="ADMIN_SARPRAS"){
+    /* =================================================
+       TIMELINE PROGRES
+    ================================================= */
+
+    html+=`
+
+        <div style="margin-top:25px">
+
+            <h3>
+                🕒 Riwayat Progres
+            </h3>
+
+            <div class="timeline">
+
+    `;
+
+
+    const history=
+        Array.isArray(
+            report.progressHistory
+        )
+        ? [...report.progressHistory]
+        : [
+
+            {
+                status:
+                    report.status,
+
+                note:
+                    "Belum ada catatan progres.",
+
+                date:
+                    report.createdAt ||
+                    report.date,
+
+                by:
+                    report.reporter
+            }
+
+        ];
+
+
+    history
+        .sort(function(a,b){
+
+            return new Date(a.date)-
+                   new Date(b.date);
+
+        })
+        .forEach(function(item){
+
+            html+=`
+
+                <div class="timeline-item">
+
+                    <div class="timeline-dot"></div>
+
+                    <div>
+
+                        ${statusBadge(item.status)}
+
+                        <strong style="
+                            display:block;
+                            margin-top:6px;
+                        ">
+                            ${escapeHTML(
+                                item.note ||
+                                "Status diperbarui."
+                            )}
+                        </strong>
+
+                        <small style="
+                            color:#6b7280;
+                            display:block;
+                            margin-top:5px;
+                        ">
+
+                            ${formatDateTime(item.date)}
+
+                            • oleh
+                            ${escapeHTML(
+                                item.by ||
+                                "Admin"
+                            )}
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+
+    html+=`
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    /* =================================================
+       ADMIN CONTROL
+    ================================================= */
+
+    if(
+        currentUser &&
+        currentUser.role==="ADMIN_SARPRAS"
+    ){
 
         html+=`
 
             <div
                 style="
-                    margin-top:20px;
+                    margin-top:25px;
                     padding-top:20px;
                     border-top:1px solid #e5e7eb;
                 ">
 
                 <h3>
-                    Ubah Status
+                    ⚙️ Kelola Progres Laporan
                 </h3>
 
-                <select
-                    id="changeStatus"
-                    style="margin-bottom:10px">
+                <div class="form-group">
 
-                    <option>
-                        Dilaporkan
-                    </option>
+                    <label>
+                        Status
+                    </label>
 
-                    <option>
-                        Diverifikasi
-                    </option>
+                    <select
+                        id="changeStatus">
 
-                    <option>
-                        Dalam Penanganan
-                    </option>
+                        <option value="Dilaporkan">
+                            Dilaporkan
+                        </option>
 
-                    <option>
-                        Selesai
-                    </option>
+                        <option value="Diverifikasi">
+                            Diverifikasi
+                        </option>
 
-                    <option>
-                        Ditutup
-                    </option>
+                        <option value="Dalam Penanganan">
+                            Dalam Penanganan
+                        </option>
 
-                    <option>
-                        Ditolak
-                    </option>
+                        <option value="Selesai">
+                            Selesai
+                        </option>
 
-                </select>
+                        <option value="Ditutup">
+                            Ditutup
+                        </option>
+
+                        <option value="Ditolak">
+                            Ditolak
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Catatan Progres
+                    </label>
+
+                    <textarea
+                        id="progressNote"
+                        placeholder="Contoh: Teknisi telah melakukan pengecekan dan menunggu penggantian komponen."></textarea>
+
+                </div>
 
 
                 <button
                     class="btn btn-primary"
                     onclick="updateReportStatus('${report.id}')">
-                    Simpan Status
+
+                    💾 Simpan Perkembangan
+
                 </button>
 
             </div>
@@ -3658,15 +4248,17 @@ function showReportDetail(id){
         .innerHTML=html;
 
 
-    const statusSelect =
+    const statusSelect=
         document.getElementById(
             "changeStatus"
         );
 
 
     if(statusSelect){
+
         statusSelect.value=
             report.status;
+
     }
 
 
@@ -3676,40 +4268,107 @@ function showReportDetail(id){
 
 
 /* =====================================================
-   UPDATE REPORT STATUS
+UPDATE STATUS + PROGRESS
 ===================================================== */
 
 function updateReportStatus(id){
 
-    const status =
+    if(
+        !currentUser ||
+        currentUser.role!=="ADMIN_SARPRAS"
+    ){
+
+        toast(
+            "Akses hanya untuk Admin Sarpras."
+        );
+
+        return;
+
+    }
+
+
+    const status=
         document
-        .getElementById(
-            "changeStatus"
-        )
+        .getElementById("changeStatus")
         .value;
+
+
+    const note=
+        document
+        .getElementById("progressNote")
+        .value
+        .trim();
+
+
+    const report=
+        reports.find(
+            x=>x.id===id
+        );
+
+
+    if(!report){
+        return;
+    }
+
+
+    const now=
+        new Date()
+        .toISOString();
+
+
+    const history=
+        Array.isArray(
+            report.progressHistory
+        )
+        ? [...report.progressHistory]
+        : [];
+
+
+    history.push({
+
+        status:status,
+
+        note:
+            note ||
+            `Status laporan diperbarui menjadi ${status}.`,
+
+        date:now,
+
+        by:currentUser.name
+
+    });
 
 
     db.collection("reports")
         .doc(id)
-        .update({ status:status })
+        .update({
+
+            status:status,
+
+            progressHistory:history,
+
+            lastUpdatedAt:now,
+
+            lastUpdatedBy:currentUser.name
+
+        })
+
         .then(function(){
 
             closeModal("detailModal");
 
             toast(
-                `Status ${id} menjadi ${status}`
+                `Progres ${id} berhasil diperbarui.`
             );
 
         })
+
         .catch(function(error){
 
-            console.error(
-                "Gagal mengubah status:",
-                error
-            );
+            console.error(error);
 
             toast(
-                "Gagal mengubah status. Coba lagi."
+                "Gagal memperbarui progres."
             );
 
         });
@@ -3718,12 +4377,12 @@ function updateReportStatus(id){
 
 
 /* =====================================================
-   CONDITION
+CONDITION
 ===================================================== */
 
 function renderCondition(){
 
-    const container =
+    const container=
         document.getElementById(
             "conditionGrid"
         );
@@ -3732,15 +4391,15 @@ function renderCondition(){
     container.innerHTML="";
 
 
-    rooms.forEach(room=>{
+    rooms.forEach(function(room){
 
-        const related =
+        const related=
             reports.filter(
                 x=>x.room===room.code
             );
 
 
-        const active =
+        const active=
             related.filter(
                 x=>
                     x.status!=="Selesai" &&
@@ -3748,13 +4407,13 @@ function renderCondition(){
             ).length;
 
 
-        const condition =
+        const condition=
             active>0
             ? "Perlu Perhatian"
             : "Baik";
 
 
-        const badge =
+        const badge=
             active>0
             ? "badge-yellow"
             : "badge-green";
@@ -3765,15 +4424,15 @@ function renderCondition(){
             <div class="card">
 
                 <h3>
-                    ${room.code}
+                    ${escapeHTML(room.code)}
                 </h3>
 
                 <p>
-                    ${room.name}
+                    ${escapeHTML(room.name)}
                 </p>
 
                 <p>
-                    📍 ${room.location}
+                    📍 ${escapeHTML(room.location)}
                 </p>
 
                 <span class="badge ${badge}">
@@ -3785,8 +4444,10 @@ function renderCondition(){
                     color:#6b7280;
                     margin-top:12px;
                 ">
+
                     ${active}
                     laporan aktif
+
                 </p>
 
             </div>
@@ -3795,40 +4456,368 @@ function renderCondition(){
 
     });
 
+
+    if(rooms.length===0){
+
+        container.innerHTML=`
+
+            <div class="card">
+
+                <p>
+                    Belum ada data ruangan.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
 }
 
 
 /* =====================================================
-   RECAP
+RECAP
 ===================================================== */
+
+function setupRecapYears(){
+
+    const select=
+        document.getElementById(
+            "recapYear"
+        );
+
+
+    const years=
+        new Set();
+
+
+    reports.forEach(function(report){
+
+        const date=
+            new Date(
+                report.date ||
+                report.createdAt
+            );
+
+
+        if(!isNaN(date)){
+
+            years.add(
+                date.getFullYear()
+            );
+
+        }
+
+    });
+
+
+    years.add(
+        new Date().getFullYear()
+    );
+
+
+    const sorted=
+        [...years]
+        .sort((a,b)=>b-a);
+
+
+    select.innerHTML="";
+
+
+    sorted.forEach(function(year){
+
+        select.innerHTML+=`
+
+            <option value="${year}">
+                ${year}
+            </option>
+
+        `;
+
+    });
+
+}
+
+
+function setDefaultRecapDates(){
+
+    const now=new Date();
+
+
+    const dateInput=
+        document.getElementById(
+            "recapDate"
+        );
+
+
+    const monthInput=
+        document.getElementById(
+            "recapMonth"
+        );
+
+
+    const yearSelect=
+        document.getElementById(
+            "recapYear"
+        );
+
+
+    if(dateInput){
+
+        dateInput.value=
+            formatInputDate(now);
+
+    }
+
+
+    if(monthInput){
+
+        monthInput.value=
+            `${now.getFullYear()}-${String(
+                now.getMonth()+1
+            ).padStart(2,"0")}`;
+
+    }
+
+
+    setupRecapYears();
+
+
+    if(yearSelect){
+
+        yearSelect.value=
+            now.getFullYear();
+
+    }
+
+}
+
+
+function changeRecapPeriod(){
+
+    const period=
+        document.getElementById(
+            "recapPeriod"
+        ).value;
+
+
+    document.getElementById(
+        "dailyFilter"
+    ).style.display=
+        period==="daily"
+        ? "block"
+        : "none";
+
+
+    document.getElementById(
+        "monthlyFilter"
+    ).style.display=
+        period==="monthly"
+        ? "block"
+        : "none";
+
+
+    document.getElementById(
+        "yearlyFilter"
+    ).style.display=
+        period==="yearly"
+        ? "block"
+        : "none";
+
+
+    renderRecap();
+
+}
+
+
+function getRecapReports(){
+
+    const period=
+        document.getElementById(
+            "recapPeriod"
+        ).value;
+
+
+    return reports.filter(function(report){
+
+        const date=
+            new Date(
+                report.date ||
+                report.createdAt
+            );
+
+
+        if(isNaN(date)){
+            return false;
+        }
+
+
+        if(period==="daily"){
+
+            const selected=
+                document
+                .getElementById("recapDate")
+                .value;
+
+
+            return (
+                formatInputDate(date)===
+                selected
+            );
+
+        }
+
+
+        if(period==="monthly"){
+
+            const selected=
+                document
+                .getElementById("recapMonth")
+                .value;
+
+
+            return (
+                `${date.getFullYear()}-${
+                    String(
+                        date.getMonth()+1
+                    ).padStart(2,"0")
+                }`
+                ===
+                selected
+            );
+
+        }
+
+
+        if(period==="yearly"){
+
+            const selected=
+                parseInt(
+                    document
+                    .getElementById("recapYear")
+                    .value
+                );
+
+
+            return (
+                date.getFullYear()===
+                selected
+            );
+
+        }
+
+
+        return true;
+
+    });
+
+}
+
 
 function renderRecap(){
 
+    if(!currentUser){
+        return;
+    }
+
+
+    setupRecapYears();
+
+
+    const list=
+        getRecapReports();
+
+
+    const total=
+        list.length;
+
+
+    const high=
+        list.filter(
+            x=>
+                x.priority==="Tinggi" ||
+                x.priority==="Darurat"
+        ).length;
+
+
+    const process=
+        list.filter(
+            x=>
+                x.status==="Dalam Penanganan"
+        ).length;
+
+
+    const done=
+        list.filter(
+            x=>
+                x.status==="Selesai" ||
+                x.status==="Ditutup"
+        ).length;
+
+
+    document.getElementById(
+        "recapTotal"
+    ).innerText=total;
+
+
+    document.getElementById(
+        "recapHigh"
+    ).innerText=high;
+
+
+    document.getElementById(
+        "recapProcess"
+    ).innerText=process;
+
+
+    document.getElementById(
+        "recapDone"
+    ).innerText=done;
+
+
     const statuses=[
+
         "Dilaporkan",
         "Diverifikasi",
         "Dalam Penanganan",
         "Selesai",
         "Ditutup",
         "Ditolak"
+
     ];
 
 
-    const table =
+    const table=
         document.getElementById(
             "recapTable"
         );
 
 
+    const statusCards=
+        document.getElementById(
+            "recapStatusCards"
+        );
+
+
     table.innerHTML="";
+    statusCards.innerHTML="";
 
 
-    statuses.forEach(status=>{
+    statuses.forEach(function(status){
 
-        const count =
-            reports.filter(
+        const count=
+            list.filter(
                 x=>x.status===status
             ).length;
+
+
+        const percent=
+            total
+            ? Math.round(
+                count/total*100
+            )
+            : 0;
 
 
         table.innerHTML+=`
@@ -3840,31 +4829,153 @@ function renderRecap(){
                 </td>
 
                 <td>
-                    <strong>
-                        ${count}
-                    </strong>
+                    <strong>${count}</strong>
+                </td>
+
+                <td>
+                    ${percent}%
                 </td>
 
             </tr>
 
         `;
 
+
+        statusCards.innerHTML+=`
+
+            <div class="recap-mini">
+
+                ${statusBadge(status)}
+
+                <div style="
+                    font-size:24px;
+                    font-weight:bold;
+                    margin-top:7px;
+                ">
+                    ${count}
+                </div>
+
+            </div>
+
+        `;
+
     });
+
+
+    renderRecapCategories(list);
+
+}
+
+
+function renderRecapCategories(list){
+
+    const container=
+        document.getElementById(
+            "recapCategory"
+        );
+
+
+    const counts={};
+
+
+    list.forEach(function(report){
+
+        counts[report.category]=
+            (counts[report.category] || 0)+1;
+
+    });
+
+
+    const entries=
+        Object.entries(counts)
+        .sort((a,b)=>b[1]-a[1]);
+
+
+    if(entries.length===0){
+
+        container.innerHTML=
+            "<p>Belum ada laporan pada periode ini.</p>";
+
+        return;
+
+    }
+
+
+    let html="";
+
+
+    entries.forEach(function(item){
+
+        const category=item[0];
+        const count=item[1];
+
+        const percentage=
+            list.length
+            ? Math.round(
+                count/list.length*100
+            )
+            : 0;
+
+
+        html+=`
+
+            <div style="margin-bottom:18px">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    margin-bottom:6px;
+                ">
+
+                    <span>
+                        ${escapeHTML(category)}
+                    </span>
+
+                    <strong>
+                        ${count}
+                    </strong>
+
+                </div>
+
+
+                <div style="
+                    height:9px;
+                    background:#e5e7eb;
+                    border-radius:10px;
+                ">
+
+                    <div style="
+                        width:${percentage}%;
+                        height:100%;
+                        background:#1769aa;
+                        border-radius:10px;
+                    "></div>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    container.innerHTML=html;
 
 }
 
 
 /* =====================================================
-   STATISTICS
+STATISTICS
 ===================================================== */
 
 function renderStatistics(){
 
-    const total =
+    const total=
         reports.length;
 
 
-    const high =
+    const high=
         reports.filter(
             x=>
                 x.priority==="Tinggi" ||
@@ -3872,7 +4983,7 @@ function renderStatistics(){
         ).length;
 
 
-    const completed =
+    const completed=
         reports.filter(
             x=>
                 x.status==="Selesai" ||
@@ -3880,7 +4991,7 @@ function renderStatistics(){
         ).length;
 
 
-    const percentage =
+    const percentage=
         total
         ? Math.round(
             completed/total*100
@@ -3958,9 +5069,9 @@ function renderCategoryStats(){
     const counts={};
 
 
-    reports.forEach(report=>{
+    reports.forEach(function(report){
 
-        counts[report.category] =
+        counts[report.category]=
             (counts[report.category] || 0)+1;
 
     });
@@ -3969,57 +5080,67 @@ function renderCategoryStats(){
     let html="";
 
 
-    Object
-        .entries(counts)
-        .forEach(
-            ([category,count])=>{
+    Object.entries(counts)
+        .forEach(function(item){
 
-                html+=`
+            const category=item[0];
+            const count=item[1];
+
+
+            const percentage=
+                reports.length
+                ? count/reports.length*100
+                : 0;
+
+
+            html+=`
+
+                <div style="
+                    margin-bottom:15px;
+                ">
 
                     <div style="
-                        margin-bottom:15px;
+                        display:flex;
+                        justify-content:space-between;
+                        margin-bottom:5px;
                     ">
 
-                        <div style="
-                            display:flex;
-                            justify-content:space-between;
-                            margin-bottom:5px;
-                        ">
+                        <span>
+                            ${escapeHTML(category)}
+                        </span>
 
-                            <span>
-                                ${category}
-                            </span>
-
-                            <strong>
-                                ${count}
-                            </strong>
-
-                        </div>
-
-                        <div style="
-                            height:9px;
-                            background:#e5e7eb;
-                            border-radius:10px;
-                        ">
-
-                            <div style="
-                                width:${Math.min(
-                                    count/reports.length*100,
-                                    100
-                                )}%;
-                                height:100%;
-                                background:#1769aa;
-                                border-radius:10px;
-                            "></div>
-
-                        </div>
+                        <strong>
+                            ${count}
+                        </strong>
 
                     </div>
 
-                `;
 
-            }
-        );
+                    <div style="
+                        height:9px;
+                        background:#e5e7eb;
+                        border-radius:10px;
+                    ">
+
+                        <div style="
+                            width:${Math.min(
+                                percentage,
+                                100
+                            )}%;
+
+                            height:100%;
+                            background:#1769aa;
+                            border-radius:10px;
+
+                        "></div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
 
 
     return html ||
@@ -4029,7 +5150,211 @@ function renderCategoryStats(){
 
 
 /* =====================================================
-   REFRESH
+GALLERY
+===================================================== */
+
+function renderGallery(){
+
+    const container=
+        document.getElementById(
+            "galleryGrid"
+        );
+
+
+    if(!container){
+        return;
+    }
+
+
+    const photos=
+        reports.filter(
+            x=>x.photoURL
+        );
+
+
+    container.innerHTML="";
+
+
+    if(photos.length===0){
+
+        container.innerHTML=`
+
+            <div class="card gallery-empty"
+                 style="grid-column:1/-1">
+
+                <div style="font-size:45px">
+                    🖼️
+                </div>
+
+                <h3>
+                    Belum ada dokumentasi foto
+                </h3>
+
+                <p>
+                    Foto akan muncul otomatis setelah
+                    pengguna mengirim laporan dengan
+                    melampirkan foto kondisi sarana.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    photos.forEach(function(report){
+
+        container.innerHTML+=`
+
+            <div class="card gallery-card">
+
+                <img
+                    src="${report.photoURL}"
+                    alt="Dokumentasi ${escapeHTML(report.id)}"
+                    onclick="showGalleryDetail('${report.id}')"
+                    style="cursor:pointer">
+
+                <div class="gallery-card-content">
+
+                    <strong>
+                        ${escapeHTML(report.room)}
+                    </strong>
+
+                    <div style="
+                        color:#6b7280;
+                        font-size:13px;
+                        margin:6px 0;
+                    ">
+
+                        ${escapeHTML(report.category)}
+                        •
+                        ${formatDate(report.date)}
+
+                    </div>
+
+                    ${statusBadge(report.status)}
+
+                    <button
+                        class="btn btn-light btn-sm"
+                        style="margin-top:10px"
+                        onclick="showGalleryDetail('${report.id}')">
+
+                        Lihat Detail
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+function showGalleryDetail(id){
+
+    const report=
+        reports.find(
+            x=>x.id===id
+        );
+
+
+    if(!report || !report.photoURL){
+        return;
+    }
+
+
+    document
+        .getElementById(
+            "galleryDetailContent"
+        )
+        .innerHTML=`
+
+            <img
+                src="${report.photoURL}"
+                style="
+                    width:100%;
+                    max-height:500px;
+                    object-fit:contain;
+                    border-radius:12px;
+                    background:#f3f4f6;
+                ">
+
+
+            <div style="margin-top:18px">
+
+                <h3>
+                    ${escapeHTML(report.room)}
+                </h3>
+
+                <p>
+                    <strong>Kategori:</strong>
+                    ${escapeHTML(report.category)}
+                </p>
+
+                <p>
+                    <strong>Lokasi:</strong>
+                    ${escapeHTML(report.location)}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    ${statusBadge(report.status)}
+                </p>
+
+                <p>
+                    <strong>Tanggal:</strong>
+                    ${formatDate(report.date)}
+                </p>
+
+                <p>
+                    <strong>Deskripsi:</strong><br>
+                    ${escapeHTML(report.description)}
+                </p>
+
+            </div>
+
+        `;
+
+
+    openModal("galleryModal");
+
+}
+
+
+function openImage(src){
+
+    document
+        .getElementById(
+            "galleryDetailContent"
+        )
+        .innerHTML=`
+
+            <img
+                src="${src}"
+                style="
+                    width:100%;
+                    max-height:600px;
+                    object-fit:contain;
+                    border-radius:12px;
+                ">
+
+        `;
+
+
+    openModal("galleryModal");
+
+}
+
+
+/* =====================================================
+REFRESH ALL
 ===================================================== */
 
 function refreshAll(){
@@ -4053,7 +5378,8 @@ function refreshAll(){
         )
         .innerText=
         reports.filter(
-            x=>x.status==="Dalam Penanganan"
+            x=>
+                x.status==="Dalam Penanganan"
         ).length;
 
 
@@ -4121,20 +5447,120 @@ function refreshAll(){
 
     renderCondition();
 
-    renderRecap();
-
     renderStatistics();
+
+    setupRecapYears();
 
 }
 
 
 /* =====================================================
-   TOAST
+UTILITIES
+===================================================== */
+
+function formatInputDate(date){
+
+    const d=new Date(date);
+
+
+    return (
+        d.getFullYear()+
+        "-"+
+        String(
+            d.getMonth()+1
+        ).padStart(2,"0")+
+        "-"+
+        String(
+            d.getDate()
+        ).padStart(2,"0")
+    );
+
+}
+
+
+function formatDate(date){
+
+    if(!date){
+        return "-";
+    }
+
+
+    const d=new Date(date);
+
+
+    if(isNaN(d)){
+        return date;
+    }
+
+
+    return d.toLocaleDateString(
+        "id-ID",
+        {
+            day:"2-digit",
+            month:"2-digit",
+            year:"numeric"
+        }
+    );
+
+}
+
+
+function formatDateTime(date){
+
+    if(!date){
+        return "-";
+    }
+
+
+    const d=new Date(date);
+
+
+    if(isNaN(d)){
+        return date;
+    }
+
+
+    return d.toLocaleString(
+        "id-ID",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
+
+}
+
+
+function escapeHTML(value){
+
+    if(value===null ||
+       value===undefined){
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+TOAST
 ===================================================== */
 
 function toast(message){
 
-    const element =
+    const element=
         document.getElementById(
             "toast"
         );
@@ -4145,9 +5571,11 @@ function toast(message){
     element.classList.add("show");
 
 
-    setTimeout(()=>{
+    setTimeout(function(){
 
-        element.classList.remove("show");
+        element.classList.remove(
+            "show"
+        );
 
     },3000);
 
@@ -4155,29 +5583,40 @@ function toast(message){
 
 
 /* =====================================================
-   INITIAL
+MODAL CLICK OUTSIDE
 ===================================================== */
 
 document
-    .querySelectorAll(".modal")
-    .forEach(modal=>{
+.querySelectorAll(".modal")
+.forEach(function(modal){
 
-        modal.addEventListener(
-            "click",
-            function(e){
+    modal.addEventListener(
+        "click",
+        function(e){
 
-                if(e.target===modal){
+            if(e.target===modal){
 
-                    modal.classList.remove(
-                        "show"
-                    );
-
-                }
+                modal.classList.remove(
+                    "show"
+                );
 
             }
-        );
 
-    });
+        }
+    );
+
+});
+
+
+/* =====================================================
+INITIAL DATE
+===================================================== */
+
+setTimeout(function(){
+
+    setDefaultRecapDates();
+
+},1000);
 
 </script>
 
