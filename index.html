@@ -225,6 +225,11 @@ button{
     font-size:12px;
 }
 
+.btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
 /* =========================
    PAGE
 ========================= */
@@ -708,14 +713,15 @@ LOGIN
         </div>
 
         <button
+            id="loginBtn"
             class="btn btn-primary"
             style="width:100%"
             onclick="login()">
             Masuk ke SIB CARE
         </button>
 
-        <p style="font-size:12px;margin-top:20px">
-            Prototype V2 • Data tersimpan di browser
+        <p id="loginStatus" style="font-size:12px;margin-top:20px">
+            Menghubungkan ke server...
         </p>
 
     </div>
@@ -1370,8 +1376,8 @@ TIMELINE
                 </h3>
 
                 <p>
-                    Sistem mulai menggunakan Data Master
-                    dan penyimpanan localStorage.
+                    Sistem mulai menggunakan Firebase Firestore
+                    sebagai basis data terpusat.
                 </p>
 
                 <small>
@@ -1631,6 +1637,7 @@ REPORT MODAL
                 </button>
 
                 <button
+                    id="reportSubmitBtn"
                     type="submit"
                     class="btn btn-primary">
                     Kirim Laporan
@@ -1759,10 +1766,45 @@ DETAIL REPORT MODAL
 <div id="toast" class="toast"></div>
 
 
+<!-- =========================================
+     FIREBASE SIB CARE V2
+     ========================================= -->
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyCoyWIYpu4eh_PEUJ_AchV56w2AEUaHmDM",
+    authDomain: "sekolah-care.firebaseapp.com",
+    projectId: "sekolah-care",
+    storageBucket: "sekolah-care.firebasestorage.app",
+    messagingSenderId: "119042005169",
+    appId: "1:119042005169:web:09f9406cf81b281eedaa90"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+const firebaseAuth = firebase.auth();
+
+/* Login Firebase dibuat otomatis tanpa password (anonim) */
+const firebaseReady = firebaseAuth.signInAnonymously()
+    .then(function () {
+        console.log("SIB CARE V2 terhubung ke Firebase");
+    })
+    .catch(function (error) {
+        console.error("Firebase Authentication gagal:", error);
+        throw error;
+    });
+</script>
+
+
 <script>
 
 /* =====================================================
-   DATA DEFAULT
+   DATA DEFAULT (dipakai untuk seeding awal Firestore)
 ===================================================== */
 
 const DEFAULT_ROOMS = [
@@ -1837,80 +1879,21 @@ const DEFAULT_LOCATIONS = [
 
 const DEFAULT_CATEGORIES = [
 
-    {
-        id:"CAT001",
-        name:"Listrik"
-    },
-
-    {
-        id:"CAT002",
-        name:"Lampu"
-    },
-
-    {
-        id:"CAT003",
-        name:"AC"
-    },
-
-    {
-        id:"CAT004",
-        name:"Air"
-    },
-
-    {
-        id:"CAT005",
-        name:"Toilet"
-    },
-
-    {
-        id:"CAT006",
-        name:"Meja"
-    },
-
-    {
-        id:"CAT007",
-        name:"Kursi"
-    },
-
-    {
-        id:"CAT008",
-        name:"Pintu"
-    },
-
-    {
-        id:"CAT009",
-        name:"Jendela"
-    },
-
-    {
-        id:"CAT010",
-        name:"Komputer"
-    },
-
-    {
-        id:"CAT011",
-        name:"Internet"
-    },
-
-    {
-        id:"CAT012",
-        name:"Kebersihan"
-    },
-
-    {
-        id:"CAT013",
-        name:"Bangunan"
-    },
-
-    {
-        id:"CAT014",
-        name:"Keamanan"
-    },
-
-    {
-        id:"CAT015",
-        name:"Fasilitas Lainnya"
-    }
+    { id:"CAT001", name:"Listrik" },
+    { id:"CAT002", name:"Lampu" },
+    { id:"CAT003", name:"AC" },
+    { id:"CAT004", name:"Air" },
+    { id:"CAT005", name:"Toilet" },
+    { id:"CAT006", name:"Meja" },
+    { id:"CAT007", name:"Kursi" },
+    { id:"CAT008", name:"Pintu" },
+    { id:"CAT009", name:"Jendela" },
+    { id:"CAT010", name:"Komputer" },
+    { id:"CAT011", name:"Internet" },
+    { id:"CAT012", name:"Kebersihan" },
+    { id:"CAT013", name:"Bangunan" },
+    { id:"CAT014", name:"Keamanan" },
+    { id:"CAT015", name:"Fasilitas Lainnya" }
 
 ];
 
@@ -1926,7 +1909,8 @@ const DEFAULT_REPORTS = [
         priority:"Tinggi",
         description:"AC tidak berfungsi dengan baik.",
         status:"Dalam Penanganan",
-        date:"2026-09-15"
+        date:"2026-09-15",
+        photoURL:null
     },
 
     {
@@ -1938,7 +1922,8 @@ const DEFAULT_REPORTS = [
         priority:"Sedang",
         description:"Lampu ruangan mati.",
         status:"Diverifikasi",
-        date:"2026-09-15"
+        date:"2026-09-15",
+        photoURL:null
     },
 
     {
@@ -1950,74 +1935,187 @@ const DEFAULT_REPORTS = [
         priority:"Rendah",
         description:"Kursi mengalami kerusakan.",
         status:"Selesai",
-        date:"2026-09-14"
+        date:"2026-09-14",
+        photoURL:null
     }
 
 ];
 
 
 /* =====================================================
-   STORAGE
+   GLOBAL DATA (disinkronkan dari Firestore secara realtime)
 ===================================================== */
 
-function getData(key, defaultData){
+let rooms = [];
+let locations = [];
+let categories = [];
+let reports = [];
 
-    const saved =
-        localStorage.getItem(key);
+let currentUser = null;
+let masterType = null;
+let editingId = null;
+let selectedPhotoFile = null;
 
-    if(saved){
+let listenersStarted = false;
 
-        try{
-            return JSON.parse(saved);
-        }
 
-        catch(e){
-            return defaultData;
-        }
+/* =====================================================
+   SEEDING AWAL (hanya berjalan kalau koleksi masih kosong)
+===================================================== */
 
-    }
+function seedCollectionIfEmpty(collectionName, defaultData){
 
-    localStorage.setItem(
-        key,
-        JSON.stringify(defaultData)
-    );
+    return db.collection(collectionName).limit(1).get()
+        .then(function(snapshot){
 
-    return defaultData;
+            if(!snapshot.empty){
+                return;
+            }
+
+            const batch = db.batch();
+
+            defaultData.forEach(function(item){
+
+                const ref =
+                    db.collection(collectionName).doc(item.id);
+
+                batch.set(ref, item);
+
+            });
+
+            return batch.commit();
+
+        })
+        .catch(function(error){
+
+            console.error(
+                "Gagal seeding " + collectionName + ":",
+                error
+            );
+
+        });
+
 }
 
 
-function saveData(key,data){
+function seedAllIfEmpty(){
 
-    localStorage.setItem(
-        key,
-        JSON.stringify(data)
-    );
+    return Promise.all([
+
+        seedCollectionIfEmpty("rooms", DEFAULT_ROOMS),
+        seedCollectionIfEmpty("locations", DEFAULT_LOCATIONS),
+        seedCollectionIfEmpty("categories", DEFAULT_CATEGORIES),
+        seedCollectionIfEmpty("reports", DEFAULT_REPORTS)
+
+    ]);
 
 }
 
 
 /* =====================================================
-   GLOBAL DATA
+   REALTIME LISTENERS FIRESTORE
 ===================================================== */
 
-let rooms =
-    getData("sibcare_rooms",DEFAULT_ROOMS);
+function startFirestoreListeners(){
 
-let locations =
-    getData("sibcare_locations",DEFAULT_LOCATIONS);
+    if(listenersStarted){
+        return;
+    }
 
-let categories =
-    getData("sibcare_categories",DEFAULT_CATEGORIES);
+    listenersStarted = true;
 
-let reports =
-    getData("sibcare_reports",DEFAULT_REPORTS);
+    db.collection("rooms").onSnapshot(function(snapshot){
+
+        rooms = snapshot.docs.map(function(doc){
+            return doc.data();
+        });
+
+        populateReportForm();
+        refreshAll();
+
+    }, function(error){
+        console.error("Listener rooms gagal:", error);
+    });
 
 
-let currentUser = null;
+    db.collection("locations").onSnapshot(function(snapshot){
 
-let masterType = null;
+        locations = snapshot.docs.map(function(doc){
+            return doc.data();
+        });
 
-let editingId = null;
+        populateReportForm();
+        refreshAll();
+
+    }, function(error){
+        console.error("Listener locations gagal:", error);
+    });
+
+
+    db.collection("categories").onSnapshot(function(snapshot){
+
+        categories = snapshot.docs.map(function(doc){
+            return doc.data();
+        });
+
+        populateReportForm();
+        refreshAll();
+
+    }, function(error){
+        console.error("Listener categories gagal:", error);
+    });
+
+
+    db.collection("reports")
+        .orderBy("date", "desc")
+        .onSnapshot(function(snapshot){
+
+            reports = snapshot.docs.map(function(doc){
+                return doc.data();
+            });
+
+            refreshAll();
+
+        }, function(error){
+            console.error("Listener reports gagal:", error);
+        });
+
+}
+
+
+/* =====================================================
+   BOOTSTRAP FIREBASE
+===================================================== */
+
+const loginBtn = document.getElementById("loginBtn");
+const loginStatus = document.getElementById("loginStatus");
+
+loginBtn.disabled = true;
+
+firebaseReady
+    .then(function(){
+
+        return seedAllIfEmpty();
+
+    })
+    .then(function(){
+
+        startFirestoreListeners();
+
+        loginBtn.disabled = false;
+
+        loginStatus.innerText =
+            "Prototype V2 • Data tersimpan di Firebase Firestore";
+
+    })
+    .catch(function(error){
+
+        loginStatus.innerText =
+            "Gagal terhubung ke Firebase. Periksa konfigurasi/API key.";
+
+        console.error(error);
+
+    });
 
 
 /* =====================================================
@@ -2196,6 +2294,8 @@ function openReportModal(){
         .getElementById("photoPreview")
         .style.display="none";
 
+    selectedPhotoFile = null;
+
     openModal("reportModal");
 
 }
@@ -2205,6 +2305,12 @@ function populateReportForm(){
 
     const roomSelect =
         document.getElementById("reportRoom");
+
+    if(!roomSelect){
+        return;
+    }
+
+    const prevRoom = roomSelect.value;
 
     roomSelect.innerHTML =
         `<option value="">Pilih Ruangan</option>`;
@@ -2218,9 +2324,13 @@ function populateReportForm(){
 
     });
 
+    roomSelect.value = prevRoom;
+
 
     const locSelect =
         document.getElementById("reportLocation");
+
+    const prevLoc = locSelect.value;
 
     locSelect.innerHTML =
         `<option value="">Pilih Lokasi</option>`;
@@ -2234,9 +2344,13 @@ function populateReportForm(){
 
     });
 
+    locSelect.value = prevLoc;
+
 
     const catSelect =
         document.getElementById("reportCategory");
+
+    const prevCat = catSelect.value;
 
     catSelect.innerHTML =
         `<option value="">Pilih Kategori</option>`;
@@ -2250,12 +2364,18 @@ function populateReportForm(){
 
     });
 
+    catSelect.value = prevCat;
+
 }
 
 
 /* =====================================================
-   PHOTO PREVIEW
+   PHOTO PREVIEW + KOMPRESI (disimpan sbg base64 di Firestore,
+   supaya tidak perlu Firebase Storage berbayar)
 ===================================================== */
+
+const PHOTO_MAX_WIDTH = 900;
+const PHOTO_JPEG_QUALITY = 0.6;
 
 function previewPhoto(event){
 
@@ -2263,6 +2383,7 @@ function previewPhoto(event){
         event.target.files[0];
 
     if(!file){
+        selectedPhotoFile = null;
         return;
     }
 
@@ -2271,14 +2392,66 @@ function previewPhoto(event){
 
     reader.onload=function(e){
 
-        const img =
-            document.getElementById(
-                "photoPreview"
-            );
+        const image = new Image();
 
-        img.src=e.target.result;
+        image.onload = function(){
 
-        img.style.display="block";
+            const canvas =
+                document.createElement("canvas");
+
+            let width = image.width;
+            let height = image.height;
+
+            if(width > PHOTO_MAX_WIDTH){
+
+                height =
+                    Math.round(
+                        height * (PHOTO_MAX_WIDTH / width)
+                    );
+
+                width = PHOTO_MAX_WIDTH;
+
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext("2d");
+
+            ctx.drawImage(image, 0, 0, width, height);
+
+            const compressed =
+                canvas.toDataURL(
+                    "image/jpeg",
+                    PHOTO_JPEG_QUALITY
+                );
+
+            selectedPhotoFile = compressed;
+
+            const img =
+                document.getElementById(
+                    "photoPreview"
+                );
+
+            img.src = compressed;
+
+            img.style.display="block";
+
+            const sizeKB =
+                Math.round(compressed.length * 0.75 / 1024);
+
+            if(sizeKB > 700){
+
+                toast(
+                    "Foto masih besar (~" + sizeKB +
+                    " KB). Pertimbangkan foto lain agar laporan tidak gagal tersimpan."
+                );
+
+            }
+
+        };
+
+        image.src = e.target.result;
 
     };
 
@@ -2339,6 +2512,14 @@ document
                 `SC-${year}-${number}`;
 
 
+            const submitBtn =
+                document.getElementById("reportSubmitBtn");
+
+            submitBtn.disabled = true;
+
+            submitBtn.innerText = "Mengirim...";
+
+
             const report = {
 
                 id:id,
@@ -2362,26 +2543,51 @@ document
 
                 date:
                     now.toISOString()
-                    .split("T")[0]
+                    .split("T")[0],
+
+                photoURL:null
 
             };
 
 
-            reports.unshift(report);
-
-            saveData(
-                "sibcare_reports",
-                reports
-            );
+            if(selectedPhotoFile){
+                report.photoURL = selectedPhotoFile;
+            }
 
 
-            closeModal("reportModal");
+            db.collection("reports")
+                .doc(id)
+                .set(report)
+                .then(function(){
 
-            refreshAll();
+                    closeModal("reportModal");
 
-            toast(
-                `Laporan ${id} berhasil dikirim`
-            );
+                    toast(
+                        `Laporan ${id} berhasil dikirim`
+                    );
+
+                })
+                .catch(function(error){
+
+                    console.error(
+                        "Gagal mengirim laporan:",
+                        error
+                    );
+
+                    toast(
+                        "Gagal mengirim laporan. Coba lagi."
+                    );
+
+                })
+                .finally(function(){
+
+                    submitBtn.disabled = false;
+
+                    submitBtn.innerText = "Kirim Laporan";
+
+                    selectedPhotoFile = null;
+
+                });
 
         }
     );
@@ -2800,6 +3006,17 @@ document
             }
 
 
+            const saveBtn =
+                e.target.querySelector(
+                    "button[type=submit]"
+                );
+
+            saveBtn.disabled = true;
+
+
+            let writePromise;
+
+
             if(masterType==="rooms"){
 
                 const code =
@@ -2823,6 +3040,8 @@ document
                         "Lengkapi data ruangan"
                     );
 
+                    saveBtn.disabled = false;
+
                     return;
 
                 }
@@ -2830,39 +3049,29 @@ document
 
                 if(editingId){
 
-                    const item =
-                        rooms.find(
-                            x=>x.id===editingId
-                        );
-
-                    item.code=code;
-
-                    item.name=name;
-
-                    item.location=location;
+                    writePromise =
+                        db.collection("rooms")
+                        .doc(editingId)
+                        .update({
+                            code:code,
+                            name:name,
+                            location:location
+                        });
 
                 }
                 else{
 
-                    rooms.push({
-
-                        id:code,
-
-                        code:code,
-
-                        name:name,
-
-                        location:location
-
-                    });
+                    writePromise =
+                        db.collection("rooms")
+                        .doc(code)
+                        .set({
+                            id:code,
+                            code:code,
+                            name:name,
+                            location:location
+                        });
 
                 }
-
-
-                saveData(
-                    "sibcare_rooms",
-                    rooms
-                );
 
             }
 
@@ -2871,33 +3080,22 @@ document
 
                 if(editingId){
 
-                    const item =
-                        locations.find(
-                            x=>x.id===editingId
-                        );
-
-                    item.name=name;
+                    writePromise =
+                        db.collection("locations")
+                        .doc(editingId)
+                        .update({ name:name });
 
                 }
                 else{
 
-                    locations.push({
+                    const newId = "LOC"+Date.now();
 
-                        id:
-                            "LOC"+
-                            Date.now(),
-
-                        name:name
-
-                    });
+                    writePromise =
+                        db.collection("locations")
+                        .doc(newId)
+                        .set({ id:newId, name:name });
 
                 }
-
-
-                saveData(
-                    "sibcare_locations",
-                    locations
-                );
 
             }
 
@@ -2906,56 +3104,61 @@ document
 
                 if(editingId){
 
-                    const item =
-                        categories.find(
-                            x=>x.id===editingId
-                        );
-
-                    item.name=name;
+                    writePromise =
+                        db.collection("categories")
+                        .doc(editingId)
+                        .update({ name:name });
 
                 }
                 else{
 
-                    categories.push({
+                    const newId = "CAT"+Date.now();
 
-                        id:
-                            "CAT"+
-                            Date.now(),
-
-                        name:name
-
-                    });
+                    writePromise =
+                        db.collection("categories")
+                        .doc(newId)
+                        .set({ id:newId, name:name });
 
                 }
-
-
-                saveData(
-                    "sibcare_categories",
-                    categories
-                );
 
             }
 
 
-            closeModal(
-                "masterFormModal"
-            );
+            writePromise
+                .then(function(){
 
+                    closeModal(
+                        "masterFormModal"
+                    );
 
-            renderMasterTable();
+                    renderMasterTable();
 
-            populateReportForm();
+                    toast(
+                        editingId
+                        ? "Data berhasil diperbarui"
+                        : "Data berhasil ditambahkan"
+                    );
 
-            refreshAll();
+                    editingId=null;
 
-            toast(
-                editingId
-                ? "Data berhasil diperbarui"
-                : "Data berhasil ditambahkan"
-            );
+                })
+                .catch(function(error){
 
+                    console.error(
+                        "Gagal menyimpan data master:",
+                        error
+                    );
 
-            editingId=null;
+                    toast(
+                        "Gagal menyimpan data. Coba lagi."
+                    );
+
+                })
+                .finally(function(){
+
+                    saveBtn.disabled = false;
+
+                });
 
         }
     );
@@ -2968,6 +3171,7 @@ document
 function deleteMaster(id){
 
     let item=null;
+    let collectionName=null;
 
 
     if(masterType==="rooms"){
@@ -2975,6 +3179,8 @@ function deleteMaster(id){
         item=rooms.find(
             x=>x.id===id
         );
+
+        collectionName="rooms";
 
     }
 
@@ -2984,6 +3190,8 @@ function deleteMaster(id){
             x=>x.id===id
         );
 
+        collectionName="locations";
+
     }
 
     if(masterType==="categories"){
@@ -2991,6 +3199,8 @@ function deleteMaster(id){
         item=categories.find(
             x=>x.id===id
         );
+
+        collectionName="categories";
 
     }
 
@@ -3011,60 +3221,30 @@ function deleteMaster(id){
     }
 
 
-    if(masterType==="rooms"){
+    db.collection(collectionName)
+        .doc(id)
+        .delete()
+        .then(function(){
 
-        rooms =
-            rooms.filter(
-                x=>x.id!==id
+            renderMasterTable();
+
+            toast(
+                "Data berhasil dihapus"
             );
 
-        saveData(
-            "sibcare_rooms",
-            rooms
-        );
+        })
+        .catch(function(error){
 
-    }
-
-
-    if(masterType==="locations"){
-
-        locations =
-            locations.filter(
-                x=>x.id!==id
+            console.error(
+                "Gagal menghapus data:",
+                error
             );
 
-        saveData(
-            "sibcare_locations",
-            locations
-        );
-
-    }
-
-
-    if(masterType==="categories"){
-
-        categories =
-            categories.filter(
-                x=>x.id!==id
+            toast(
+                "Gagal menghapus data. Coba lagi."
             );
 
-        saveData(
-            "sibcare_categories",
-            categories
-        );
-
-    }
-
-
-    renderMasterTable();
-
-    populateReportForm();
-
-    refreshAll();
-
-    toast(
-        "Data berhasil dihapus"
-    );
+        });
 
 }
 
@@ -3400,6 +3580,17 @@ function showReportDetail(id){
     `;
 
 
+    if(report.photoURL){
+
+        html+=`
+            <img
+                class="report-photo"
+                src="${report.photoURL}">
+        `;
+
+    }
+
+
     if(currentUser &&
        currentUser.role==="ADMIN_SARPRAS"){
 
@@ -3498,33 +3689,30 @@ function updateReportStatus(id){
         .value;
 
 
-    const report =
-        reports.find(
-            x=>x.id===id
-        );
+    db.collection("reports")
+        .doc(id)
+        .update({ status:status })
+        .then(function(){
 
+            closeModal("detailModal");
 
-    if(!report){
-        return;
-    }
+            toast(
+                `Status ${id} menjadi ${status}`
+            );
 
+        })
+        .catch(function(error){
 
-    report.status=status;
+            console.error(
+                "Gagal mengubah status:",
+                error
+            );
 
+            toast(
+                "Gagal mengubah status. Coba lagi."
+            );
 
-    saveData(
-        "sibcare_reports",
-        reports
-    );
-
-
-    closeModal("detailModal");
-
-    refreshAll();
-
-    toast(
-        `Status ${id} menjadi ${status}`
-    );
+        });
 
 }
 
@@ -3936,8 +4124,6 @@ function refreshAll(){
     renderRecap();
 
     renderStatistics();
-
-    populateReportForm();
 
 }
 
