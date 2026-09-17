@@ -1088,6 +1088,14 @@ tr:hover td{
             🗺️ Denah Sekolah
         </div>
 
+        <div class="nav-item"
+             id="navBorrow"
+             data-page="borrow"
+             onclick="showPage('borrow')"
+             style="display:none;">
+            🖥️ Peminjaman Sarana
+        </div>
+
 
         <div id="adminNav">
 
@@ -1143,70 +1151,55 @@ tr:hover td{
 
             <div class="grid grid-4">
 
-                <div class="card stat-card">
-                    <div class="stat-icon">📋</div>
-                    <div>
-                        <h3 id="homeTotal">0</h3>
-                        <p>Total Laporan</p>
-                    </div>
-                </div>
-
-                <div class="card stat-card">
-                    <div class="stat-icon">🔍</div>
-                    <div>
-                        <h3 id="homeVerification">0</h3>
-                        <p>Diverifikasi</p>
-                    </div>
-                </div>
-
-                <div class="card stat-card">
-                    <div class="stat-icon">🛠️</div>
-                    <div>
-                        <h3 id="homeProcess">0</h3>
-                        <p>Dalam Penanganan</p>
-                    </div>
-                </div>
-
-                <div class="card stat-card">
-                    <div class="stat-icon">✅</div>
-                    <div>
-                        <h3 id="homeDone">0</h3>
-                        <p>Selesai</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <br>
-
-            <div class="grid grid-2">
-
-                <div class="card">
-                    <h2 style="margin-bottom:8px;">
-                        📢 Sampaikan Kondisi Sarana
+                <div class="card"
+                     style="cursor:pointer;"
+                     onclick="openReportModal()">
+                    <div class="stat-icon" style="margin-bottom:10px;">📢</div>
+                    <h2 style="margin-bottom:8px;font-size:17px;">
+                        Sampaikan Kondisi
                     </h2>
-
-                    <p style="color:var(--muted);margin-bottom:15px;">
-                        Temukan fasilitas sekolah yang rusak,
-                        bermasalah, atau membutuhkan penanganan?
-                        Laporkan melalui SIB CARE.
+                    <p style="color:var(--muted);font-size:13px;">
+                        Laporkan fasilitas yang rusak atau
+                        bermasalah.
                     </p>
-
-                    <button class="btn btn-primary"
-                            onclick="openReportModal()">
-                        + Buat Laporan
-                    </button>
                 </div>
 
-                <div class="card">
-                    <h2 style="margin-bottom:8px;">
-                        🔄 Pemantauan Progres
+                <div class="card"
+                     style="cursor:pointer;"
+                     onclick="showPage('condition')">
+                    <div class="stat-icon" style="margin-bottom:10px;">🏫</div>
+                    <h2 style="margin-bottom:8px;font-size:17px;">
+                        Kondisi Sekolah
                     </h2>
+                    <p style="color:var(--muted);font-size:13px;">
+                        Lihat kondisi ruangan dan sarana
+                        prasarana terkini.
+                    </p>
+                </div>
 
-                    <p style="color:var(--muted);">
-                        Pelapor dapat memantau perkembangan
-                        laporan secara langsung melalui riwayat
-                        progres yang diperbarui oleh Admin Sarpras.
+                <div class="card"
+                     style="cursor:pointer;"
+                     onclick="showPage('denah')">
+                    <div class="stat-icon" style="margin-bottom:10px;">🗺️</div>
+                    <h2 style="margin-bottom:8px;font-size:17px;">
+                        Denah Sekolah
+                    </h2>
+                    <p style="color:var(--muted);font-size:13px;">
+                        Jelajahi denah dan lokasi ruangan
+                        sekolah.
+                    </p>
+                </div>
+
+                <div class="card"
+                     style="cursor:pointer;"
+                     onclick="showPage('myreports')">
+                    <div class="stat-icon" style="margin-bottom:10px;">🔄</div>
+                    <h2 style="margin-bottom:8px;font-size:17px;">
+                        Pemantauan Progres
+                    </h2>
+                    <p style="color:var(--muted);font-size:13px;">
+                        Pantau perkembangan laporan yang telah
+                        Anda sampaikan.
                     </p>
                 </div>
 
@@ -1246,11 +1239,29 @@ tr:hover td{
         ================================================= -->
         <section id="page-condition" class="page">
 
-            <div class="page-header">
-                <h1>Kondisi Sekolah</h1>
-                <p>
-                    Gambaran laporan kondisi sarana sekolah.
-                </p>
+            <div class="page-header" style="
+                display:flex;
+                justify-content:space-between;
+                align-items:flex-start;
+                gap:15px;
+                flex-wrap:wrap;
+            ">
+                <div>
+                    <h1>Kondisi Sekolah</h1>
+                    <p>
+                        Informasi kondisi ruangan, sarana MCK, dan
+                        prasarana (iPad, laptop, kamera, TV, dll)
+                        terkini di sekolah.
+                    </p>
+                </div>
+
+                <button
+                    id="conditionAddBtn"
+                    class="btn btn-primary"
+                    style="display:none;"
+                    onclick="openConditionForm()">
+                    + Tambah Data Kondisi
+                </button>
             </div>
 
             <div id="conditionContent"></div>
@@ -1477,6 +1488,187 @@ tr:hover td{
         <!-- =================================================
              DASHBOARD ADMIN
         ================================================= -->
+        <!-- =================================================
+             PEMINJAMAN SARANA (IPAD / LAPTOP)
+        ================================================= -->
+        <section id="page-borrow" class="page">
+
+            <div class="page-header">
+                <h1>Peminjaman Sarana</h1>
+                <p>
+                    Sirkulasi peminjaman iPad / laptop untuk
+                    kebutuhan pembelajaran di jam pelajaran.
+                </p>
+            </div>
+
+            <div class="grid grid-3" style="margin-bottom:18px;">
+
+                <div class="card stat-card">
+                    <div class="stat-icon">💻</div>
+                    <div>
+                        <h3 id="borrowStatTotal">0</h3>
+                        <p>Total Perangkat</p>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div>
+                        <h3 id="borrowStatAvailable">0</h3>
+                        <p>Tersedia</p>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-icon">📤</div>
+                    <div>
+                        <h3 id="borrowStatActive">0</h3>
+                        <p>Sedang Dipinjam</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div id="borrowFormCard" class="card" style="margin-bottom:18px;">
+
+                <h2 style="margin-bottom:15px;">
+                    📥 Form Peminjaman
+                </h2>
+
+                <form id="borrowForm" onsubmit="submitBorrow(event)">
+
+                    <div class="grid grid-2">
+
+                        <div class="form-group">
+                            <label>Nama Peminjam (Guru/Staf)</label>
+                            <input
+                                type="text"
+                                id="borrowName"
+                                class="form-control"
+                                placeholder="Nama lengkap"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Perangkat</label>
+                            <select id="borrowDevice"
+                                    class="form-control"
+                                    required>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Kelas</label>
+                            <input
+                                type="text"
+                                id="borrowClass"
+                                class="form-control"
+                                placeholder="Contoh: VII-A"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Mata Pelajaran</label>
+                            <input
+                                type="text"
+                                id="borrowSubject"
+                                class="form-control"
+                                placeholder="Contoh: IPA"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Jam Pelajaran</label>
+                            <input
+                                type="text"
+                                id="borrowPeriod"
+                                class="form-control"
+                                placeholder="Contoh: Jam ke-3 (08.30-09.15)"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Keperluan (opsional)</label>
+                            <input
+                                type="text"
+                                id="borrowPurpose"
+                                class="form-control"
+                                placeholder="Contoh: Presentasi tugas kelompok"
+                            >
+                        </div>
+
+                    </div>
+
+                    <div style="display:flex;justify-content:flex-end;">
+                        <button type="submit" class="btn btn-primary">
+                            📤 Pinjam Sekarang
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <div class="card" style="margin-bottom:18px;">
+
+                <h2 style="margin-bottom:15px;">
+                    📱 Sedang Dipinjam
+                </h2>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Perangkat</th>
+                                <th>Peminjam</th>
+                                <th>Kelas / Mapel</th>
+                                <th>Jam Pelajaran</th>
+                                <th>Waktu Pinjam</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="borrowActiveTable"></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2 style="margin-bottom:15px;">
+                    🕒 Riwayat Peminjaman
+                </h2>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Perangkat</th>
+                                <th>Peminjam</th>
+                                <th>Kelas / Mapel</th>
+                                <th>Jam Pelajaran</th>
+                                <th>Pinjam</th>
+                                <th>Kembali</th>
+                                <th>Kondisi</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="borrowHistoryTable"></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </section>
+
+
         <section id="page-dashboard" class="page">
 
             <div class="page-header">
@@ -1628,6 +1820,28 @@ tr:hover td{
                     <div id="masterCategories"></div>
                 </div>
 
+            </div>
+
+            <br>
+
+            <div class="card">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                ">
+                    <h2>💻 Perangkat (iPad / Laptop)</h2>
+
+                    <button
+                        class="btn btn-primary btn-sm"
+                        onclick="openMasterForm('device')">
+                        + Tambah
+                    </button>
+                </div>
+
+                <br>
+                <div id="masterDevices"></div>
             </div>
 
         </section>
@@ -2055,6 +2269,152 @@ tr:hover td{
 
 
 <!-- =========================================================
+     RETURN BORROW MODAL
+========================================================= -->
+<div id="returnBorrowModal" class="modal">
+
+    <div class="modal-content" style="max-width:420px;">
+
+        <div class="modal-header">
+            <h2>Kembalikan Perangkat</h2>
+            <div class="close"
+                 onclick="closeModal('returnBorrowModal')">
+                ×
+            </div>
+        </div>
+
+        <form id="returnBorrowForm" onsubmit="submitReturnBorrow(event)">
+
+            <input type="hidden" id="returnBorrowId">
+
+            <div class="form-group">
+                <label>Kondisi Saat Dikembalikan</label>
+                <select id="returnCondition"
+                        class="form-control"
+                        required>
+                    <option value="Baik">Baik</option>
+                    <option value="Rusak">Rusak</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Catatan Pengembalian (opsional)</label>
+                <textarea
+                    id="returnNote"
+                    class="form-control"
+                    placeholder="Contoh: baterai lemah, layar baret, dll."
+                ></textarea>
+            </div>
+
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+                <button type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal('returnBorrowModal')">
+                    Batal
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    ✅ Konfirmasi Kembali
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CONDITION (KONDISI SEKOLAH) FORM MODAL
+========================================================= -->
+<div id="conditionFormModal" class="modal">
+
+    <div class="modal-content" style="max-width:460px;">
+
+        <div class="modal-header">
+            <h2 id="conditionFormTitle">Tambah Data Kondisi</h2>
+            <div class="close"
+                 onclick="closeModal('conditionFormModal')">
+                ×
+            </div>
+        </div>
+
+        <form id="conditionForm" onsubmit="submitConditionForm(event)">
+
+            <input type="hidden" id="editConditionId">
+
+            <div class="form-group">
+                <label>Kategori</label>
+                <input
+                    type="text"
+                    id="conditionCategory"
+                    class="form-control"
+                    list="conditionCategoryOptions"
+                    placeholder="Contoh: Ruangan, Sarana MCK, iPad, Laptop, Kamera, TV"
+                    required
+                >
+                <datalist id="conditionCategoryOptions">
+                    <option value="Ruangan">
+                    <option value="Sarana MCK">
+                    <option value="iPad">
+                    <option value="Laptop">
+                    <option value="Kamera">
+                    <option value="TV">
+                    <option value="Proyektor">
+                    <option value="Lainnya">
+                </datalist>
+            </div>
+
+            <div class="form-group">
+                <label>Nama / Item</label>
+                <input
+                    type="text"
+                    id="conditionName"
+                    class="form-control"
+                    placeholder="Contoh: Ruang R101, MCK Lantai 1 Putra, iPad Air 1"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Kondisi</label>
+                <select id="conditionStatus" class="form-control" required>
+                    <option value="Baik">Baik</option>
+                    <option value="Rusak">Rusak</option>
+                    <option value="Perbaikan">Dalam Perbaikan</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Catatan (opsional)</label>
+                <textarea
+                    id="conditionNote"
+                    class="form-control"
+                    placeholder="Keterangan tambahan mengenai kondisi..."
+                ></textarea>
+            </div>
+
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+                <button type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal('conditionFormModal')">
+                    Batal
+                </button>
+                <button type="submit"
+                        id="conditionFormSubmitBtn"
+                        class="btn btn-primary">
+                    Simpan
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
      DETAIL MODAL
 ========================================================= -->
 <div id="detailModal" class="modal">
@@ -2176,6 +2536,24 @@ const defaultCategories = [
     {id:"CAT15",name:"Fasilitas Lainnya"}
 ];
 
+const defaultDevices = [
+    {id:"IPAD-01",name:"iPad Air 1",type:"iPad",status:"Baik"},
+    {id:"IPAD-02",name:"iPad Air 2",type:"iPad",status:"Baik"},
+    {id:"IPAD-03",name:"iPad Air 3",type:"iPad",status:"Baik"},
+    {id:"LAPTOP-01",name:"Laptop 1",type:"Laptop",status:"Baik"},
+    {id:"LAPTOP-02",name:"Laptop 2",type:"Laptop",status:"Baik"},
+    {id:"LAPTOP-03",name:"Laptop 3",type:"Laptop",status:"Baik"}
+];
+
+const defaultFacilityConditions = [
+    {id:"COND-001",category:"Ruangan",name:"Ruang Kelas (Umum)",status:"Baik",note:"",updatedAt:"",updatedBy:""},
+    {id:"COND-002",category:"Sarana MCK",name:"MCK Lantai 1",status:"Baik",note:"",updatedAt:"",updatedBy:""},
+    {id:"COND-003",category:"iPad",name:"iPad Lab Komputer",status:"Baik",note:"",updatedAt:"",updatedBy:""},
+    {id:"COND-004",category:"Laptop",name:"Laptop Guru",status:"Baik",note:"",updatedAt:"",updatedBy:""},
+    {id:"COND-005",category:"Kamera",name:"CCTV Area Lobi",status:"Baik",note:"",updatedAt:"",updatedBy:""},
+    {id:"COND-006",category:"TV",name:"TV Ruang Guru",status:"Baik",note:"",updatedAt:"",updatedBy:""}
+];
+
 const defaultReports = [
     {
         id:"SC-2026-0001",
@@ -2278,6 +2656,10 @@ let locations = [];
 let categories = [];
 let reports = [];
 let galleryDocs = [];
+let devices = [];
+let borrowings = [];
+let facilityConditions = [];
+let conditionFilterCategory = "";
 
 let firebaseReady = false;
 
@@ -2811,6 +3193,85 @@ function listenToData(){
             }
         );
 
+
+    db.collection("devices")
+        .onSnapshot(
+            snapshot=>{
+
+                devices = snapshot.docs.map(
+                    doc=>({
+                        id:doc.id,
+                        ...doc.data()
+                    })
+                );
+
+                if(!devices.length){
+                    devices = defaultDevices;
+                    seedCollectionIfEmpty("devices", defaultDevices);
+                }
+
+                refreshAll();
+
+            },
+            error=>{
+                console.error("devices:",error);
+                devices = defaultDevices;
+                refreshAll();
+            }
+        );
+
+
+    db.collection("borrowings")
+        .orderBy("borrowDate","desc")
+        .onSnapshot(
+            snapshot=>{
+
+                borrowings = snapshot.docs.map(
+                    doc=>({
+                        id:doc.id,
+                        ...doc.data()
+                    })
+                );
+
+                refreshAll();
+
+            },
+            error=>{
+                console.error("borrowings:",error);
+                refreshAll();
+            }
+        );
+
+
+    db.collection("facilityConditions")
+        .onSnapshot(
+            snapshot=>{
+
+                facilityConditions = snapshot.docs.map(
+                    doc=>({
+                        id:doc.id,
+                        ...doc.data()
+                    })
+                );
+
+                if(!facilityConditions.length){
+                    facilityConditions = defaultFacilityConditions;
+                    seedCollectionIfEmpty(
+                        "facilityConditions",
+                        defaultFacilityConditions
+                    );
+                }
+
+                refreshAll();
+
+            },
+            error=>{
+                console.error("facilityConditions:",error);
+                facilityConditions = defaultFacilityConditions;
+                refreshAll();
+            }
+        );
+
 }
 
 
@@ -2950,11 +3411,26 @@ async function login(){
 
         document.getElementById("galleryAddBtn").style.display="inline-flex";
 
+        document.getElementById("conditionAddBtn").style.display="inline-flex";
+
     }else{
 
         document.getElementById("adminNav").style.display="none";
 
         document.getElementById("galleryAddBtn").style.display="none";
+
+        document.getElementById("conditionAddBtn").style.display="none";
+
+    }
+
+
+    if(currentUser.role === "SISWA"){
+
+        document.getElementById("navBorrow").style.display="none";
+
+    }else{
+
+        document.getElementById("navBorrow").style.display="flex";
 
     }
 
@@ -3153,6 +3629,418 @@ function generateReportId(){
 
 
     return `SC-${year}-${String(maxNumber+1).padStart(4,"0")}`;
+
+}
+
+
+/* =========================================================
+   PEMINJAMAN SARANA (IPAD / LAPTOP)
+========================================================= */
+
+function generateBorrowId(){
+
+    return "PJM-" + Date.now();
+
+}
+
+
+function currentTimeHM(){
+
+    const d = new Date();
+
+    const h = String(d.getHours()).padStart(2,"0");
+    const m = String(d.getMinutes()).padStart(2,"0");
+
+    return `${h}:${m}`;
+
+}
+
+
+function borrowStatusBadge(status){
+
+    let cls = status === "Dipinjam"
+        ? "badge-warning"
+        : "badge-success";
+
+    return `<span class="badge ${cls}">
+                ${escapeHTML(status)}
+            </span>`;
+
+}
+
+
+function conditionBadge(condition){
+
+    if(!condition){
+        return "-";
+    }
+
+    const cls = condition === "Baik"
+        ? "badge-success"
+        : "badge-danger";
+
+    return `<span class="badge ${cls}">
+                ${escapeHTML(condition)}
+            </span>`;
+
+}
+
+
+function renderBorrowPage(){
+
+    const formCard =
+        document.getElementById("borrowFormCard");
+
+    if(formCard){
+
+        formCard.style.display =
+            (currentUser && currentUser.role === "GURU_STAF")
+                ? "block"
+                : "none";
+
+    }
+
+
+    const activeBorrowings =
+        borrowings.filter(b=>b.status === "Dipinjam");
+
+    const borrowedDeviceIds =
+        activeBorrowings.map(b=>b.deviceId);
+
+
+    const deviceSelect =
+        document.getElementById("borrowDevice");
+
+    if(deviceSelect){
+
+        const availableDevices =
+            devices.filter(d=>
+                d.status === "Baik" &&
+                !borrowedDeviceIds.includes(d.id)
+            );
+
+        deviceSelect.innerHTML =
+            `<option value="">Pilih perangkat</option>` +
+            availableDevices.map(d=>
+                `<option value="${escapeHTML(d.id)}">
+                    ${escapeHTML(d.id)} -
+                    ${escapeHTML(d.name)}
+                </option>`
+            ).join("");
+
+    }
+
+
+    document.getElementById("borrowStatTotal").textContent =
+        devices.length;
+
+    document.getElementById("borrowStatActive").textContent =
+        activeBorrowings.length;
+
+    document.getElementById("borrowStatAvailable").textContent =
+        devices.filter(d=>
+            d.status === "Baik" &&
+            !borrowedDeviceIds.includes(d.id)
+        ).length;
+
+
+    const activeTable =
+        document.getElementById("borrowActiveTable");
+
+    if(activeTable){
+
+        activeTable.innerHTML =
+            activeBorrowings.length
+            ? activeBorrowings.map(b=>`
+                <tr>
+                    <td>
+                        <strong>${escapeHTML(b.deviceId)}</strong>
+                        <br>
+                        <small style="color:var(--muted);">
+                            ${escapeHTML(b.deviceName || "")}
+                        </small>
+                    </td>
+                    <td>${escapeHTML(b.borrowerName)}</td>
+                    <td>
+                        ${escapeHTML(b.className)}
+                        <br>
+                        <small style="color:var(--muted);">
+                            ${escapeHTML(b.subject)}
+                        </small>
+                    </td>
+                    <td>${escapeHTML(b.period)}</td>
+                    <td>
+                        ${escapeHTML(b.borrowDate)}
+                        ${b.borrowTime ? " · "+escapeHTML(b.borrowTime) : ""}
+                    </td>
+                    <td>
+                        <button
+                            class="btn btn-primary btn-sm"
+                            onclick="openReturnBorrowModal('${b.id}')">
+                            ✅ Kembalikan
+                        </button>
+                    </td>
+                </tr>
+            `).join("")
+            : `<tr>
+                    <td colspan="6">
+                        <div class="empty">
+                            Tidak ada perangkat yang sedang dipinjam.
+                        </div>
+                    </td>
+                </tr>`;
+
+    }
+
+
+    const historyTable =
+        document.getElementById("borrowHistoryTable");
+
+    if(historyTable){
+
+        const historyList =
+            borrowings.slice(0,100);
+
+        historyTable.innerHTML =
+            historyList.length
+            ? historyList.map(b=>`
+                <tr>
+                    <td>
+                        <strong>${escapeHTML(b.deviceId)}</strong>
+                        <br>
+                        <small style="color:var(--muted);">
+                            ${escapeHTML(b.deviceName || "")}
+                        </small>
+                    </td>
+                    <td>${escapeHTML(b.borrowerName)}</td>
+                    <td>
+                        ${escapeHTML(b.className)}
+                        <br>
+                        <small style="color:var(--muted);">
+                            ${escapeHTML(b.subject)}
+                        </small>
+                    </td>
+                    <td>${escapeHTML(b.period)}</td>
+                    <td>
+                        ${escapeHTML(b.borrowDate)}
+                        ${b.borrowTime ? " · "+escapeHTML(b.borrowTime) : ""}
+                    </td>
+                    <td>
+                        ${b.returnDate
+                            ? escapeHTML(b.returnDate) +
+                              (b.returnTime ? " · "+escapeHTML(b.returnTime) : "")
+                            : "-"
+                        }
+                    </td>
+                    <td>${conditionBadge(b.conditionOnReturn)}</td>
+                    <td>${borrowStatusBadge(b.status)}</td>
+                </tr>
+            `).join("")
+            : `<tr>
+                    <td colspan="8">
+                        <div class="empty">
+                            Belum ada riwayat peminjaman.
+                        </div>
+                    </td>
+                </tr>`;
+
+    }
+
+}
+
+
+async function submitBorrow(event){
+
+    event.preventDefault();
+
+    if(!currentUser || currentUser.role !== "GURU_STAF"){
+
+        showToast(
+            "Hanya Guru/Staf yang dapat mengajukan peminjaman."
+        );
+
+        return;
+    }
+
+
+    const borrowerName =
+        document.getElementById("borrowName").value.trim();
+
+    const deviceId =
+        document.getElementById("borrowDevice").value;
+
+    const className =
+        document.getElementById("borrowClass").value.trim();
+
+    const subject =
+        document.getElementById("borrowSubject").value.trim();
+
+    const period =
+        document.getElementById("borrowPeriod").value.trim();
+
+    const purpose =
+        document.getElementById("borrowPurpose").value.trim();
+
+
+    if(!borrowerName ||
+       !deviceId ||
+       !className ||
+       !subject ||
+       !period){
+
+        showToast("Lengkapi data peminjaman.");
+
+        return;
+    }
+
+
+    const device =
+        devices.find(d=>d.id === deviceId);
+
+    if(!device){
+
+        showToast("Perangkat tidak ditemukan.");
+
+        return;
+    }
+
+
+    try{
+
+        const id = generateBorrowId();
+
+        const borrowing = {
+
+            id:id,
+
+            deviceId:device.id,
+            deviceName:device.name,
+
+            borrowerName:borrowerName,
+            borrowerRole:currentUser.role,
+            borrowerUid:currentUser.uid || null,
+
+            className:className,
+            subject:subject,
+            period:period,
+            purpose:purpose,
+
+            status:"Dipinjam",
+
+            borrowDate:todayISO(),
+            borrowTime:currentTimeHM(),
+
+            returnDate:null,
+            returnTime:null,
+            conditionOnReturn:null,
+            returnNote:""
+
+        };
+
+
+        await db
+            .collection("borrowings")
+            .doc(id)
+            .set(borrowing);
+
+
+        document.getElementById("borrowForm").reset();
+
+        showToast(
+            "Peminjaman "+device.id+" berhasil dicatat."
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast("Gagal mencatat peminjaman.");
+
+    }
+
+}
+
+
+function openReturnBorrowModal(id){
+
+    document.getElementById("returnBorrowForm").reset();
+
+    document.getElementById("returnBorrowId").value = id;
+
+    document.getElementById("returnBorrowModal")
+        .classList.add("show");
+
+}
+
+
+async function submitReturnBorrow(event){
+
+    event.preventDefault();
+
+    const id =
+        document.getElementById("returnBorrowId").value;
+
+    const condition =
+        document.getElementById("returnCondition").value;
+
+    const note =
+        document.getElementById("returnNote").value.trim();
+
+
+    const borrowing =
+        borrowings.find(b=>b.id === id);
+
+    if(!borrowing){
+
+        showToast("Data peminjaman tidak ditemukan.");
+
+        return;
+    }
+
+
+    try{
+
+        await db
+            .collection("borrowings")
+            .doc(id)
+            .update({
+                status:"Dikembalikan",
+                returnDate:todayISO(),
+                returnTime:currentTimeHM(),
+                conditionOnReturn:condition,
+                returnNote:note
+            });
+
+
+        if(condition === "Rusak"){
+
+            await db
+                .collection("devices")
+                .doc(borrowing.deviceId)
+                .update({ status:"Rusak" });
+
+            showToast(
+                "Perangkat dikembalikan. Status diubah menjadi Rusak, mohon ditindaklanjuti Admin Sarpras."
+            );
+
+        }else{
+
+            showToast("Perangkat berhasil dikembalikan.");
+
+        }
+
+
+        closeModal("returnBorrowModal");
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast("Gagal memproses pengembalian.");
+
+    }
 
 }
 
@@ -4633,61 +5521,371 @@ function renderHomeGallery(){
    CONDITION
 ========================================================= */
 
+function conditionStatusBadge(status){
+
+    const cls = status === "Baik"
+        ? "badge-success"
+        : status === "Perbaikan"
+            ? "badge-warning"
+            : "badge-danger";
+
+    const label = status === "Perbaikan"
+        ? "Dalam Perbaikan"
+        : (status || "-");
+
+    return `<span class="badge ${cls}">
+                ${escapeHTML(label)}
+            </span>`;
+
+}
+
+
+function filterConditionCategory(value){
+
+    conditionFilterCategory = value;
+
+    renderCondition();
+
+}
+
+
 function renderCondition(){
 
     const container =
         document.getElementById("conditionContent");
 
+    if(!container){
+        return;
+    }
 
-    const statusCount = {};
 
-    reports.forEach(report=>{
+    const statusCount = {
+        Baik:0,
+        Rusak:0,
+        Perbaikan:0
+    };
 
-        statusCount[report.status] =
-            (statusCount[report.status] || 0) + 1;
-
+    facilityConditions.forEach(item=>{
+        statusCount[item.status] =
+            (statusCount[item.status] || 0) + 1;
     });
+
+
+    const categories =
+        [...new Set(
+            facilityConditions.map(item=>item.category)
+        )].sort();
+
+
+    const filtered =
+        conditionFilterCategory
+            ? facilityConditions.filter(
+                item=>item.category === conditionFilterCategory
+              )
+            : facilityConditions;
+
+
+    const sorted =
+        [...filtered].sort((a,b)=>{
+
+            if(a.category === b.category){
+                return (a.name||"").localeCompare(b.name||"");
+            }
+
+            return (a.category||"").localeCompare(b.category||"");
+
+        });
+
+
+    const admin = isAdmin();
 
 
     container.innerHTML = `
 
-        <div class="grid grid-4">
+        <div class="grid grid-4" style="margin-bottom:18px;">
 
             <div class="card stat-card">
-                <div class="stat-icon">📋</div>
+                <div class="stat-icon">🗂️</div>
                 <div>
-                    <h3>${reports.length}</h3>
-                    <p>Total Laporan</p>
-                </div>
-            </div>
-
-            <div class="card stat-card">
-                <div class="stat-icon">🆕</div>
-                <div>
-                    <h3>${statusCount["Dilaporkan"] || 0}</h3>
-                    <p>Dilaporkan</p>
-                </div>
-            </div>
-
-            <div class="card stat-card">
-                <div class="stat-icon">🛠️</div>
-                <div>
-                    <h3>${statusCount["Dalam Penanganan"] || 0}</h3>
-                    <p>Dalam Penanganan</p>
+                    <h3>${facilityConditions.length}</h3>
+                    <p>Total Item</p>
                 </div>
             </div>
 
             <div class="card stat-card">
                 <div class="stat-icon">✅</div>
                 <div>
-                    <h3>${statusCount["Selesai"] || 0}</h3>
-                    <p>Selesai</p>
+                    <h3>${statusCount.Baik || 0}</h3>
+                    <p>Kondisi Baik</p>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">⚠️</div>
+                <div>
+                    <h3>${statusCount.Rusak || 0}</h3>
+                    <p>Rusak</p>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">🛠️</div>
+                <div>
+                    <h3>${statusCount.Perbaikan || 0}</h3>
+                    <p>Dalam Perbaikan</p>
                 </div>
             </div>
 
         </div>
 
+
+        <div class="card">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                flex-wrap:wrap;
+                gap:10px;
+                margin-bottom:15px;
+            ">
+
+                <h2>Daftar Kondisi</h2>
+
+                <div class="form-group" style="margin:0;min-width:220px;">
+                    <select
+                        class="form-control"
+                        onchange="filterConditionCategory(this.value)">
+                        <option value="">Semua Kategori</option>
+                        ${categories.map(cat=>`
+                            <option value="${escapeHTML(cat)}"
+                                ${conditionFilterCategory===cat ? "selected" : ""}>
+                                ${escapeHTML(cat)}
+                            </option>
+                        `).join("")}
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Nama / Item</th>
+                            <th>Kondisi</th>
+                            <th>Catatan</th>
+                            <th>Diperbarui</th>
+                            ${admin ? "<th>Aksi</th>" : ""}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${
+                            sorted.length
+                            ? sorted.map(item=>`
+                                <tr>
+                                    <td>${escapeHTML(item.category)}</td>
+                                    <td><strong>${escapeHTML(item.name)}</strong></td>
+                                    <td>${conditionStatusBadge(item.status)}</td>
+                                    <td>${item.note ? escapeHTML(item.note) : "-"}</td>
+                                    <td>
+                                        ${item.updatedAt ? escapeHTML(item.updatedAt) : "-"}
+                                        ${item.updatedBy ? "<br><small style='color:var(--muted);'>"+escapeHTML(item.updatedBy)+"</small>" : ""}
+                                    </td>
+                                    ${admin ? `
+                                        <td>
+                                            <div style="display:flex;gap:5px;">
+                                                <button
+                                                    class="btn btn-secondary btn-sm"
+                                                    onclick="openConditionForm('${item.id}')">
+                                                    ✏️
+                                                </button>
+                                                <button
+                                                    class="btn btn-danger btn-sm"
+                                                    onclick="deleteConditionItem('${item.id}')">
+                                                    🗑️
+                                                </button>
+                                            </div>
+                                        </td>
+                                    ` : ""}
+                                </tr>
+                            `).join("")
+                            : `<tr>
+                                    <td colspan="${admin ? 6 : 5}">
+                                        <div class="empty">
+                                            Belum ada data kondisi.
+                                        </div>
+                                    </td>
+                                </tr>`
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
     `;
+
+}
+
+
+let conditionFormEditingId = null;
+
+
+function openConditionForm(id){
+
+    if(!isAdmin()){
+
+        showToast(
+            "Hanya Admin Sarpras yang dapat mengubah data kondisi."
+        );
+
+        return;
+    }
+
+    conditionFormEditingId = id || null;
+
+    const item =
+        id ? facilityConditions.find(c=>c.id===id) : null;
+
+    document.getElementById("conditionForm").reset();
+
+    document.getElementById("editConditionId").value = id || "";
+
+    document.getElementById("conditionFormTitle").textContent =
+        id ? "Edit Data Kondisi" : "Tambah Data Kondisi";
+
+    if(item){
+
+        document.getElementById("conditionCategory").value =
+            item.category || "";
+
+        document.getElementById("conditionName").value =
+            item.name || "";
+
+        document.getElementById("conditionStatus").value =
+            item.status || "Baik";
+
+        document.getElementById("conditionNote").value =
+            item.note || "";
+
+    }
+
+    document.getElementById("conditionFormModal")
+        .classList.add("show");
+
+}
+
+
+async function submitConditionForm(event){
+
+    event.preventDefault();
+
+    if(!isAdmin()){
+
+        showToast(
+            "Hanya Admin Sarpras yang dapat mengubah data kondisi."
+        );
+
+        return;
+    }
+
+    const submitBtn =
+        document.getElementById("conditionFormSubmitBtn");
+
+    const category =
+        document.getElementById("conditionCategory").value.trim();
+
+    const name =
+        document.getElementById("conditionName").value.trim();
+
+    const status =
+        document.getElementById("conditionStatus").value;
+
+    const note =
+        document.getElementById("conditionNote").value.trim();
+
+
+    if(!category || !name){
+
+        showToast("Kategori dan nama/item wajib diisi.");
+
+        return;
+    }
+
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Menyimpan...";
+
+    try{
+
+        const id =
+            conditionFormEditingId ||
+            "COND-" + Date.now();
+
+        await db.collection("facilityConditions")
+            .doc(id)
+            .set({
+                id:id,
+                category:category,
+                name:name,
+                status:status,
+                note:note,
+                updatedAt:todayISO(),
+                updatedBy:currentUser ? currentUser.name : ""
+            });
+
+        closeModal("conditionFormModal");
+
+        showToast("Data kondisi berhasil disimpan.");
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast("Gagal menyimpan data kondisi.");
+
+    }finally{
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Simpan";
+
+    }
+
+}
+
+
+async function deleteConditionItem(id){
+
+    if(!isAdmin()){
+
+        showToast(
+            "Hanya Admin Sarpras yang dapat menghapus data kondisi."
+        );
+
+        return;
+    }
+
+    if(!confirm("Hapus data kondisi ini?")){
+        return;
+    }
+
+    try{
+
+        await db.collection("facilityConditions")
+            .doc(id)
+            .delete();
+
+        showToast("Data kondisi berhasil dihapus.");
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast("Gagal menghapus data kondisi.");
+
+    }
 
 }
 
@@ -4741,29 +5939,11 @@ function renderDashboard(){
 
 function renderHome(){
 
-    document.getElementById("homeTotal")
-        .textContent=reports.length;
-
-
-    document.getElementById("homeVerification")
-        .textContent=
-            reports.filter(
-                r=>r.status==="Diverifikasi"
-            ).length;
-
-
-    document.getElementById("homeProcess")
-        .textContent=
-            reports.filter(
-                r=>r.status==="Dalam Penanganan"
-            ).length;
-
-
-    document.getElementById("homeDone")
-        .textContent=
-            reports.filter(
-                r=>r.status==="Selesai"
-            ).length;
+    // Statistik laporan di Beranda sudah dihapus.
+    // Beranda kini hanya menampilkan kartu akses cepat
+    // (Sampaikan Kondisi, Kondisi Sekolah, Denah Sekolah,
+    // Pemantauan Progres) yang bersifat statis di HTML,
+    // jadi tidak perlu render data di sini.
 
 }
 
@@ -4861,6 +6041,56 @@ function renderMaster(){
             </div>
         `).join("");
 
+
+    document.getElementById("masterDevices").innerHTML =
+        devices.map(device=>`
+            <div style="
+                padding:9px 0;
+                border-bottom:1px solid #eee;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:8px;
+            ">
+                <div>
+                    <strong>${escapeHTML(device.id)}</strong>
+                    <br>
+                    <small style="color:#6c757d;">
+                        ${escapeHTML(device.name)}
+                        · ${escapeHTML(device.type || "")}
+                    </small>
+                </div>
+                <div style="display:flex;gap:5px;align-items:center;flex-shrink:0;">
+                    ${statusBadgeSimple(device.status)}
+                    <button
+                        class="btn btn-secondary btn-sm"
+                        onclick="openMasterForm('device','${device.id}')">
+                        ✏️
+                    </button>
+                    <button
+                        class="btn btn-danger btn-sm"
+                        onclick="deleteMasterItem('device','${device.id}')">
+                        🗑️
+                    </button>
+                </div>
+            </div>
+        `).join("");
+
+}
+
+
+function statusBadgeSimple(status){
+
+    const cls = status === "Baik"
+        ? "badge-success"
+        : status === "Perbaikan"
+            ? "badge-warning"
+            : "badge-danger";
+
+    return `<span class="badge ${cls}">
+                ${escapeHTML(status || "-")}
+            </span>`;
+
 }
 
 
@@ -4874,7 +6104,8 @@ let masterFormEditingId = null;
 const masterCollectionMap = {
     room:"rooms",
     location:"locations",
-    category:"categories"
+    category:"categories",
+    device:"devices"
 };
 
 function isAdmin(){
@@ -4910,6 +6141,8 @@ function openMasterForm(type, id){
             item = locations.find(r=>r.id === id);
         }else if(type === "category"){
             item = categories.find(r=>r.id === id);
+        }else if(type === "device"){
+            item = devices.find(r=>r.id === id);
         }
 
     }
@@ -4917,7 +6150,8 @@ function openMasterForm(type, id){
     const titles = {
         room: id ? "Edit Ruangan" : "Tambah Ruangan",
         location: id ? "Edit Lokasi" : "Tambah Lokasi",
-        category: id ? "Edit Kategori" : "Tambah Kategori"
+        category: id ? "Edit Kategori" : "Tambah Kategori",
+        device: id ? "Edit Perangkat" : "Tambah Perangkat"
     };
 
     document.getElementById("masterFormTitle").textContent =
@@ -4965,6 +6199,55 @@ function openMasterForm(type, id){
                     placeholder="Contoh: Gedung 2"
                     value="${item && item.building ? escapeHTML(item.building) : ""}"
                 >
+            </div>
+
+        `;
+
+    }else if(type === "device"){
+
+        fields.innerHTML = `
+
+            <div class="form-group">
+                <label>Kode Inventaris</label>
+                <input
+                    type="text"
+                    id="masterDeviceId"
+                    class="form-control"
+                    placeholder="Contoh: IPAD-04"
+                    value="${item ? escapeHTML(item.id) : ""}"
+                    ${id ? "disabled" : ""}
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Nama Perangkat</label>
+                <input
+                    type="text"
+                    id="masterDeviceName"
+                    class="form-control"
+                    placeholder="Contoh: iPad Air 4"
+                    value="${item ? escapeHTML(item.name) : ""}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Tipe</label>
+                <select id="masterDeviceType" class="form-control" required>
+                    <option value="iPad" ${item && item.type==="iPad" ? "selected" : ""}>iPad</option>
+                    <option value="Laptop" ${item && item.type==="Laptop" ? "selected" : ""}>Laptop</option>
+                    <option value="Lainnya" ${item && item.type==="Lainnya" ? "selected" : ""}>Lainnya</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select id="masterDeviceStatus" class="form-control" required>
+                    <option value="Baik" ${!item || item.status==="Baik" ? "selected" : ""}>Baik</option>
+                    <option value="Rusak" ${item && item.status==="Rusak" ? "selected" : ""}>Rusak</option>
+                    <option value="Perbaikan" ${item && item.status==="Perbaikan" ? "selected" : ""}>Dalam Perbaikan</option>
+                </select>
             </div>
 
         `;
@@ -5055,6 +6338,44 @@ async function submitMasterForm(event){
                     building: roomBuilding || ""
                 });
 
+        }else if(type === "device"){
+
+            const deviceId =
+                document.getElementById("masterDeviceId")
+                    .value.trim().toUpperCase();
+
+            const deviceName =
+                document.getElementById("masterDeviceName")
+                    .value.trim();
+
+            const deviceType =
+                document.getElementById("masterDeviceType").value;
+
+            const deviceStatus =
+                document.getElementById("masterDeviceStatus").value;
+
+            if(!deviceId || !deviceName){
+                showToast("Kode dan nama perangkat wajib diisi.");
+                return;
+            }
+
+            if(
+                !masterFormEditingId &&
+                devices.some(d=>d.id === deviceId)
+            ){
+                showToast("Kode perangkat sudah digunakan.");
+                return;
+            }
+
+            await db.collection("devices")
+                .doc(masterFormEditingId || deviceId)
+                .set({
+                    id: masterFormEditingId || deviceId,
+                    name: deviceName,
+                    type: deviceType,
+                    status: deviceStatus
+                });
+
         }else{
 
             const name =
@@ -5111,7 +6432,8 @@ async function deleteMasterItem(type, id){
     const labels = {
         room:"ruangan",
         location:"lokasi",
-        category:"kategori"
+        category:"kategori",
+        device:"perangkat"
     };
 
     if(!confirm(`Hapus ${labels[type]} "${id}"?`)){
@@ -5719,6 +7041,8 @@ function refreshAll(){
     renderGalleryDocs();
 
     renderDenah();
+
+    renderBorrowPage();
 
     renderDashboard();
 
