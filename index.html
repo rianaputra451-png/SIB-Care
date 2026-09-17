@@ -1569,19 +1569,61 @@ tr:hover td{
             <div class="grid grid-3">
 
                 <div class="card">
-                    <h2>🚪 Ruangan</h2>
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                    ">
+                        <h2>🚪 Ruangan</h2>
+
+                        <button
+                            class="btn btn-primary btn-sm"
+                            onclick="openMasterForm('room')">
+                            + Tambah
+                        </button>
+                    </div>
+
                     <br>
                     <div id="masterRooms"></div>
                 </div>
 
                 <div class="card">
-                    <h2>📍 Lokasi</h2>
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                    ">
+                        <h2>📍 Lokasi</h2>
+
+                        <button
+                            class="btn btn-primary btn-sm"
+                            onclick="openMasterForm('location')">
+                            + Tambah
+                        </button>
+                    </div>
+
                     <br>
                     <div id="masterLocations"></div>
                 </div>
 
                 <div class="card">
-                    <h2>🔧 Kategori</h2>
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                    ">
+                        <h2>🔧 Kategori</h2>
+
+                        <button
+                            class="btn btn-primary btn-sm"
+                            onclick="openMasterForm('category')">
+                            + Tambah
+                        </button>
+                    </div>
+
                     <br>
                     <div id="masterCategories"></div>
                 </div>
@@ -1959,6 +2001,53 @@ tr:hover td{
         </div>
 
         <div id="denahInfoContent"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MASTER FORM MODAL
+========================================================= -->
+<div id="masterFormModal" class="modal">
+
+    <div class="modal-content" style="max-width:420px;">
+
+        <div class="modal-header">
+
+            <h2 id="masterFormTitle">
+                Tambah Data
+            </h2>
+
+            <div class="close"
+                 onclick="closeModal('masterFormModal')">
+                ×
+            </div>
+
+        </div>
+
+        <form id="masterForm" onsubmit="submitMasterForm(event)">
+
+            <div id="masterFormFields"></div>
+
+            <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:15px;">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal('masterFormModal')">
+                    Batal
+                </button>
+
+                <button type="submit"
+                        id="masterFormSubmitBtn"
+                        class="btn btn-primary">
+                    Simpan
+                </button>
+
+            </div>
+
+        </form>
 
     </div>
 
@@ -2540,6 +2629,50 @@ async function initializeFirebase(){
 
 
 /* =========================================================
+   SEEDING AWAL (supaya data default tersimpan permanen di
+   Firestore begitu Admin mulai menambah/mengubah data,
+   bukan cuma tampil sementara di memori)
+========================================================= */
+
+const seededCollections = {};
+
+function seedCollectionIfEmpty(collectionName, defaultData){
+
+    if(seededCollections[collectionName]){
+        return;
+    }
+
+    seededCollections[collectionName] = true;
+
+    db.collection(collectionName).limit(1).get()
+        .then(snapshot=>{
+
+            if(!snapshot.empty){
+                return;
+            }
+
+            const batch = db.batch();
+
+            defaultData.forEach(item=>{
+
+                const ref =
+                    db.collection(collectionName).doc(item.id);
+
+                batch.set(ref, item);
+
+            });
+
+            return batch.commit();
+
+        })
+        .catch(error=>{
+            console.error("seed "+collectionName+":", error);
+        });
+
+}
+
+
+/* =========================================================
    LISTEN FIRESTORE
 ========================================================= */
 
@@ -2558,6 +2691,7 @@ function listenToData(){
 
                 if(!rooms.length){
                     rooms = defaultRooms;
+                    seedCollectionIfEmpty("rooms", defaultRooms);
                 }
 
                 refreshAll();
@@ -2584,6 +2718,7 @@ function listenToData(){
 
                 if(!locations.length){
                     locations = defaultLocations;
+                    seedCollectionIfEmpty("locations", defaultLocations);
                 }
 
                 refreshAll();
@@ -2610,6 +2745,7 @@ function listenToData(){
 
                 if(!categories.length){
                     categories = defaultCategories;
+                    seedCollectionIfEmpty("categories", defaultCategories);
                 }
 
                 refreshAll();
@@ -4643,12 +4779,31 @@ function renderMaster(){
             <div style="
                 padding:9px 0;
                 border-bottom:1px solid #eee;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:8px;
             ">
-                <strong>${escapeHTML(room.id)}</strong>
-                <br>
-                <small style="color:#6c757d;">
-                    ${escapeHTML(room.name)}
-                </small>
+                <div>
+                    <strong>${escapeHTML(room.id)}</strong>
+                    <br>
+                    <small style="color:#6c757d;">
+                        ${escapeHTML(room.name)}
+                        ${room.building ? " · " + escapeHTML(room.building) : ""}
+                    </small>
+                </div>
+                <div style="display:flex;gap:5px;flex-shrink:0;">
+                    <button
+                        class="btn btn-secondary btn-sm"
+                        onclick="openMasterForm('room','${room.id}')">
+                        ✏️
+                    </button>
+                    <button
+                        class="btn btn-danger btn-sm"
+                        onclick="deleteMasterItem('room','${room.id}')">
+                        🗑️
+                    </button>
+                </div>
             </div>
         `).join("");
 
@@ -4658,8 +4813,24 @@ function renderMaster(){
             <div style="
                 padding:9px 0;
                 border-bottom:1px solid #eee;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:8px;
             ">
-                📍 ${escapeHTML(location.name)}
+                <div>📍 ${escapeHTML(location.name)}</div>
+                <div style="display:flex;gap:5px;flex-shrink:0;">
+                    <button
+                        class="btn btn-secondary btn-sm"
+                        onclick="openMasterForm('location','${location.id}')">
+                        ✏️
+                    </button>
+                    <button
+                        class="btn btn-danger btn-sm"
+                        onclick="deleteMasterItem('location','${location.id}')">
+                        🗑️
+                    </button>
+                </div>
             </div>
         `).join("");
 
@@ -4669,10 +4840,299 @@ function renderMaster(){
             <div style="
                 padding:9px 0;
                 border-bottom:1px solid #eee;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:8px;
             ">
-                🔧 ${escapeHTML(category.name)}
+                <div>🔧 ${escapeHTML(category.name)}</div>
+                <div style="display:flex;gap:5px;flex-shrink:0;">
+                    <button
+                        class="btn btn-secondary btn-sm"
+                        onclick="openMasterForm('category','${category.id}')">
+                        ✏️
+                    </button>
+                    <button
+                        class="btn btn-danger btn-sm"
+                        onclick="deleteMasterItem('category','${category.id}')">
+                        🗑️
+                    </button>
+                </div>
             </div>
         `).join("");
+
+}
+
+
+/* =========================================================
+   MASTER DATA — TAMBAH / EDIT / HAPUS
+========================================================= */
+
+let masterFormType = null;
+let masterFormEditingId = null;
+
+const masterCollectionMap = {
+    room:"rooms",
+    location:"locations",
+    category:"categories"
+};
+
+function isAdmin(){
+
+    return !!(
+        currentUser &&
+        currentUser.role === "ADMIN_SARPRAS"
+    );
+
+}
+
+function openMasterForm(type, id){
+
+    if(!isAdmin()){
+
+        showToast(
+            "Hanya Admin Sarpras yang dapat mengubah Data Master."
+        );
+
+        return;
+    }
+
+    masterFormType = type;
+    masterFormEditingId = id || null;
+
+    let item = null;
+
+    if(id){
+
+        if(type === "room"){
+            item = rooms.find(r=>r.id === id);
+        }else if(type === "location"){
+            item = locations.find(r=>r.id === id);
+        }else if(type === "category"){
+            item = categories.find(r=>r.id === id);
+        }
+
+    }
+
+    const titles = {
+        room: id ? "Edit Ruangan" : "Tambah Ruangan",
+        location: id ? "Edit Lokasi" : "Tambah Lokasi",
+        category: id ? "Edit Kategori" : "Tambah Kategori"
+    };
+
+    document.getElementById("masterFormTitle").textContent =
+        titles[type];
+
+
+    const fields =
+        document.getElementById("masterFormFields");
+
+    if(type === "room"){
+
+        fields.innerHTML = `
+
+            <div class="form-group">
+                <label>Kode Ruangan</label>
+                <input
+                    type="text"
+                    id="masterRoomId"
+                    class="form-control"
+                    placeholder="Contoh: R123"
+                    value="${item ? escapeHTML(item.id) : ""}"
+                    ${id ? "disabled" : ""}
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Nama Ruangan</label>
+                <input
+                    type="text"
+                    id="masterRoomName"
+                    class="form-control"
+                    placeholder="Contoh: Ruang Multimedia"
+                    value="${item ? escapeHTML(item.name) : ""}"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Gedung / Bangunan (opsional)</label>
+                <input
+                    type="text"
+                    id="masterRoomBuilding"
+                    class="form-control"
+                    placeholder="Contoh: Gedung 2"
+                    value="${item && item.building ? escapeHTML(item.building) : ""}"
+                >
+            </div>
+
+        `;
+
+    }else{
+
+        const label =
+            type === "location" ? "Nama Lokasi" : "Nama Kategori";
+
+        fields.innerHTML = `
+
+            <div class="form-group">
+                <label>${label}</label>
+                <input
+                    type="text"
+                    id="masterSimpleName"
+                    class="form-control"
+                    value="${item ? escapeHTML(item.name) : ""}"
+                    required
+                >
+            </div>
+
+        `;
+
+    }
+
+    document.getElementById("masterFormModal")
+        .classList.add("show");
+
+}
+
+
+async function submitMasterForm(event){
+
+    event.preventDefault();
+
+    if(!isAdmin()){
+
+        showToast(
+            "Hanya Admin Sarpras yang dapat mengubah Data Master."
+        );
+
+        return;
+    }
+
+    const type = masterFormType;
+    const collectionName = masterCollectionMap[type];
+    const submitBtn =
+        document.getElementById("masterFormSubmitBtn");
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Menyimpan...";
+
+    try{
+
+        if(type === "room"){
+
+            const roomId =
+                document.getElementById("masterRoomId")
+                    .value.trim().toUpperCase();
+
+            const roomName =
+                document.getElementById("masterRoomName")
+                    .value.trim();
+
+            const roomBuilding =
+                document.getElementById("masterRoomBuilding")
+                    .value.trim();
+
+            if(!roomId || !roomName){
+                showToast("Kode dan nama ruangan wajib diisi.");
+                return;
+            }
+
+            if(
+                !masterFormEditingId &&
+                rooms.some(r=>r.id === roomId)
+            ){
+                showToast("Kode ruangan sudah digunakan.");
+                return;
+            }
+
+            await db.collection("rooms")
+                .doc(masterFormEditingId || roomId)
+                .set({
+                    id: masterFormEditingId || roomId,
+                    name: roomName,
+                    building: roomBuilding || ""
+                });
+
+        }else{
+
+            const name =
+                document.getElementById("masterSimpleName")
+                    .value.trim();
+
+            if(!name){
+                showToast("Nama wajib diisi.");
+                return;
+            }
+
+            const id =
+                masterFormEditingId ||
+                (type === "location" ? "LOC-" : "CAT-") +
+                Date.now();
+
+            await db.collection(collectionName)
+                .doc(id)
+                .set({ id:id, name:name });
+
+        }
+
+        closeModal("masterFormModal");
+
+        showToast("Data berhasil disimpan.");
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast("Gagal menyimpan data. Coba lagi.");
+
+    }finally{
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Simpan";
+
+    }
+
+}
+
+
+async function deleteMasterItem(type, id){
+
+    if(!isAdmin()){
+
+        showToast(
+            "Hanya Admin Sarpras yang dapat menghapus Data Master."
+        );
+
+        return;
+    }
+
+    const labels = {
+        room:"ruangan",
+        location:"lokasi",
+        category:"kategori"
+    };
+
+    if(!confirm(`Hapus ${labels[type]} "${id}"?`)){
+        return;
+    }
+
+    try{
+
+        await db.collection(masterCollectionMap[type])
+            .doc(id)
+            .delete();
+
+        showToast("Data berhasil dihapus.");
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast("Gagal menghapus data.");
+
+    }
 
 }
 
