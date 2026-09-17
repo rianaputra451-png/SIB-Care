@@ -929,6 +929,138 @@ tr:hover td{
         grid-template-columns:1fr;
     }
 }
+
+/* =========================================================
+   KERANJANG PEMINJAMAN (MULTI UNIT)
+========================================================= */
+.borrow-picker{
+    border:1px dashed var(--border);
+    border-radius:var(--radius);
+    padding:16px;
+    margin:6px 0 18px;
+    background:#fbfcff;
+}
+.borrow-picker h3{
+    font-size:16px;
+    margin-bottom:12px;
+}
+.borrow-picker-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    align-items:flex-end;
+    margin-bottom:10px;
+}
+.borrow-picker-row .form-group{
+    flex:1 1 200px;
+    margin-bottom:0;
+}
+.borrow-picker-row .picker-action{
+    flex:0 0 auto;
+}
+.cart-item{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px 14px;
+    background:var(--white);
+    margin-bottom:10px;
+}
+.cart-item-main{
+    flex:1 1 260px;
+}
+.cart-units{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-top:8px;
+}
+.unit-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:var(--secondary);
+    color:var(--primary-dark);
+    border-radius:999px;
+    padding:4px 10px;
+    font-size:12px;
+    font-weight:bold;
+}
+.unit-chip button{
+    border:none;
+    background:transparent;
+    color:var(--danger);
+    cursor:pointer;
+    font-size:13px;
+    line-height:1;
+    padding:0;
+}
+.qty-control{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.qty-btn{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--white);
+    cursor:pointer;
+    font-size:18px;
+    font-weight:bold;
+    color:var(--primary);
+}
+.qty-btn:hover{
+    background:var(--secondary);
+}
+.qty-btn.danger{
+    color:var(--danger);
+    font-size:14px;
+}
+.qty-value{
+    min-width:34px;
+    text-align:center;
+    font-weight:bold;
+}
+.cart-summary{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:space-between;
+    align-items:center;
+    border-top:1px solid var(--border);
+    padding-top:10px;
+    margin-top:4px;
+    font-size:14px;
+}
+.device-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+.device-row{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:3px 8px;
+    font-size:12px;
+}
+.device-row .mini-btn{
+    border:none;
+    background:var(--success);
+    color:#fff;
+    border-radius:999px;
+    padding:2px 8px;
+    font-size:11px;
+    cursor:pointer;
+}
 </style>
 </head>
 
@@ -1552,14 +1684,6 @@ tr:hover td{
                         </div>
 
                         <div class="form-group">
-                            <label>Perangkat</label>
-                            <select id="borrowDevice"
-                                    class="form-control"
-                                    required>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
                             <label>Kelas</label>
                             <input
                                 type="text"
@@ -1600,6 +1724,68 @@ tr:hover td{
                                 class="form-control"
                                 placeholder="Contoh: Presentasi tugas kelompok"
                             >
+                        </div>
+
+                    </div>
+
+                    <div class="borrow-picker">
+
+                        <h3>🧺 Daftar Barang / Unit yang Dipinjam</h3>
+
+                        <div class="borrow-picker-row">
+
+                            <div class="form-group">
+                                <label>Jenis Perangkat</label>
+                                <select id="borrowType" class="form-control"></select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Jumlah Unit</label>
+                                <input type="number"
+                                       id="borrowQty"
+                                       class="form-control"
+                                       value="1"
+                                       min="1">
+                            </div>
+
+                            <div class="picker-action">
+                                <button type="button"
+                                        class="btn btn-primary"
+                                        onclick="addTypeToCart()">
+                                    ➕ Tambah
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <div class="borrow-picker-row">
+
+                            <div class="form-group">
+                                <label>Atau pilih unit tertentu</label>
+                                <select id="borrowDevice" class="form-control"></select>
+                            </div>
+
+                            <div class="picker-action">
+                                <button type="button"
+                                        class="btn btn-secondary"
+                                        onclick="addDeviceToCart()">
+                                    ➕ Tambah Unit
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <div id="borrowCartList"></div>
+
+                        <div class="cart-summary">
+                            <div id="borrowCartSummary">
+                                Belum ada barang dipilih.
+                            </div>
+                            <button type="button"
+                                    class="btn btn-secondary btn-sm"
+                                    onclick="clearBorrowCart()">
+                                🧹 Kosongkan Daftar
+                            </button>
                         </div>
 
                     </div>
@@ -2287,6 +2473,14 @@ tr:hover td{
 
             <input type="hidden" id="returnBorrowId">
 
+            <div id="returnBorrowInfo"
+                 style="background:var(--secondary);
+                        border-radius:10px;
+                        padding:10px 12px;
+                        margin-bottom:14px;
+                        font-size:13px;">
+            </div>
+
             <div class="form-group">
                 <label>Kondisi Saat Dikembalikan</label>
                 <select id="returnCondition"
@@ -2658,6 +2852,7 @@ let reports = [];
 let galleryDocs = [];
 let devices = [];
 let borrowings = [];
+let borrowCart = [];   /* daftar id perangkat yang akan dipinjam (multi unit) */
 let facilityConditions = [];
 let conditionFilterCategory = "";
 
@@ -3658,9 +3853,13 @@ function currentTimeHM(){
 
 function borrowStatusBadge(status){
 
-    let cls = status === "Dipinjam"
-        ? "badge-warning"
-        : "badge-success";
+    let cls = "badge-success";
+
+    if(status === "Dipinjam"){
+        cls = "badge-warning";
+    }else if(String(status).indexOf("Sebagian") === 0){
+        cls = "badge-info";
+    }
 
     return `<span class="badge ${cls}">
                 ${escapeHTML(status)}
@@ -3682,6 +3881,455 @@ function conditionBadge(condition){
     return `<span class="badge ${cls}">
                 ${escapeHTML(condition)}
             </span>`;
+
+}
+
+
+/* ---------------------------------------------------------
+   HELPER KETERSEDIAAN PERANGKAT
+--------------------------------------------------------- */
+
+function getBorrowedDeviceIds(){
+
+    return borrowings
+        .filter(b=>b.status === "Dipinjam")
+        .map(b=>b.deviceId);
+
+}
+
+
+function getAvailableDevices(){
+
+    const borrowedIds = getBorrowedDeviceIds();
+
+    return devices.filter(d=>
+        d.status === "Baik" &&
+        !borrowedIds.includes(d.id)
+    );
+
+}
+
+
+function getSelectableDevices(){
+
+    return getAvailableDevices()
+        .filter(d=>!borrowCart.includes(d.id));
+
+}
+
+
+function deviceTypeOf(device){
+
+    return device.type || "Lainnya";
+
+}
+
+
+/* ---------------------------------------------------------
+   KERANJANG PEMINJAMAN (TAMBAH / KURANG / HAPUS)
+--------------------------------------------------------- */
+
+function addDeviceToCart(deviceId){
+
+    const select =
+        document.getElementById("borrowDevice");
+
+    const id = deviceId || (select ? select.value : "");
+
+    if(!id){
+        showToast("Pilih unit perangkat terlebih dahulu.");
+        return;
+    }
+
+    if(borrowCart.includes(id)){
+        showToast("Unit tersebut sudah ada di daftar.");
+        return;
+    }
+
+    const available =
+        getAvailableDevices().some(d=>d.id === id);
+
+    if(!available){
+        showToast("Unit tersebut tidak tersedia.");
+        renderBorrowPage();
+        return;
+    }
+
+    borrowCart.push(id);
+
+    renderBorrowPage();
+
+}
+
+
+function addTypeToCart(){
+
+    const typeSelect =
+        document.getElementById("borrowType");
+
+    const qtyInput =
+        document.getElementById("borrowQty");
+
+    const type = typeSelect ? typeSelect.value : "";
+
+    let qty = parseInt(qtyInput ? qtyInput.value : "1", 10);
+
+    if(!type){
+        showToast("Pilih jenis perangkat terlebih dahulu.");
+        return;
+    }
+
+    if(isNaN(qty) || qty < 1){
+        qty = 1;
+    }
+
+    const candidates =
+        getSelectableDevices()
+            .filter(d=>deviceTypeOf(d) === type);
+
+    if(!candidates.length){
+        showToast("Stok "+type+" sudah habis / sudah dipilih semua.");
+        return;
+    }
+
+    const taken = candidates.slice(0, qty);
+
+    taken.forEach(d=>borrowCart.push(d.id));
+
+    if(taken.length < qty){
+
+        showToast(
+            "Hanya tersedia "+taken.length+" unit "+type+
+            ", ditambahkan semua."
+        );
+
+    }
+
+    if(qtyInput){
+        qtyInput.value = 1;
+    }
+
+    renderBorrowPage();
+
+}
+
+
+function increaseCartType(type){
+
+    const candidate =
+        getSelectableDevices()
+            .find(d=>deviceTypeOf(d) === type);
+
+    if(!candidate){
+        showToast("Stok "+type+" sudah habis.");
+        return;
+    }
+
+    borrowCart.push(candidate.id);
+
+    renderBorrowPage();
+
+}
+
+
+function decreaseCartType(type){
+
+    const idsOfType =
+        borrowCart.filter(id=>{
+
+            const device =
+                devices.find(d=>d.id === id);
+
+            return device && deviceTypeOf(device) === type;
+
+        });
+
+    if(!idsOfType.length){
+        return;
+    }
+
+    const lastId = idsOfType[idsOfType.length - 1];
+
+    borrowCart =
+        borrowCart.filter(id=>id !== lastId);
+
+    renderBorrowPage();
+
+}
+
+
+function removeCartType(type){
+
+    borrowCart =
+        borrowCart.filter(id=>{
+
+            const device =
+                devices.find(d=>d.id === id);
+
+            return !(device && deviceTypeOf(device) === type);
+
+        });
+
+    renderBorrowPage();
+
+}
+
+
+function removeCartUnit(deviceId){
+
+    borrowCart =
+        borrowCart.filter(id=>id !== deviceId);
+
+    renderBorrowPage();
+
+}
+
+
+function clearBorrowCart(){
+
+    if(!borrowCart.length){
+        return;
+    }
+
+    borrowCart = [];
+
+    renderBorrowPage();
+
+}
+
+
+function renderBorrowCart(){
+
+    /* buang unit yang sudah tidak tersedia
+       (misal dipinjam user lain / rusak) */
+
+    const availableIds =
+        getAvailableDevices().map(d=>d.id);
+
+    borrowCart =
+        borrowCart.filter(id=>availableIds.includes(id));
+
+
+    /* ---- opsi jenis perangkat ---- */
+
+    const typeSelect =
+        document.getElementById("borrowType");
+
+    if(typeSelect){
+
+        const stock = {};
+
+        getSelectableDevices().forEach(d=>{
+
+            const type = deviceTypeOf(d);
+
+            stock[type] = (stock[type] || 0) + 1;
+
+        });
+
+        const types = Object.keys(stock).sort();
+
+        const previous = typeSelect.value;
+
+        typeSelect.innerHTML =
+            `<option value="">Pilih jenis perangkat</option>` +
+            types.map(type=>
+                `<option value="${escapeHTML(type)}">
+                    ${escapeHTML(type)} (tersedia ${stock[type]})
+                </option>`
+            ).join("");
+
+        if(types.includes(previous)){
+            typeSelect.value = previous;
+        }
+
+    }
+
+
+    /* ---- opsi unit tertentu ---- */
+
+    const deviceSelect =
+        document.getElementById("borrowDevice");
+
+    if(deviceSelect){
+
+        const selectable = getSelectableDevices();
+
+        deviceSelect.innerHTML =
+            `<option value="">Pilih unit perangkat</option>` +
+            selectable.map(d=>
+                `<option value="${escapeHTML(d.id)}">
+                    ${escapeHTML(d.id)} - ${escapeHTML(d.name)}
+                </option>`
+            ).join("");
+
+    }
+
+
+    /* ---- daftar keranjang (dikelompokkan per jenis) ---- */
+
+    const list =
+        document.getElementById("borrowCartList");
+
+    const summary =
+        document.getElementById("borrowCartSummary");
+
+    if(!list){
+        return;
+    }
+
+    if(!borrowCart.length){
+
+        list.innerHTML =
+            `<div class="empty">
+                Belum ada barang dipilih. Tambahkan minimal 1 unit.
+            </div>`;
+
+        if(summary){
+            summary.textContent = "Belum ada barang dipilih.";
+        }
+
+        return;
+    }
+
+
+    const groups = {};
+
+    borrowCart.forEach(id=>{
+
+        const device =
+            devices.find(d=>d.id === id);
+
+        if(!device){
+            return;
+        }
+
+        const type = deviceTypeOf(device);
+
+        if(!groups[type]){
+            groups[type] = [];
+        }
+
+        groups[type].push(device);
+
+    });
+
+
+    list.innerHTML =
+        Object.keys(groups).sort().map(type=>{
+
+            const items = groups[type];
+
+            const stockLeft =
+                getSelectableDevices()
+                    .filter(d=>deviceTypeOf(d) === type).length;
+
+            return `
+                <div class="cart-item">
+
+                    <div class="cart-item-main">
+
+                        <strong>${escapeHTML(type)}</strong>
+                        <span class="badge badge-info">
+                            ${items.length} unit
+                        </span>
+                        <small style="color:var(--muted);">
+                            · sisa stok ${stockLeft}
+                        </small>
+
+                        <div class="cart-units">
+                            ${items.map(d=>`
+                                <span class="unit-chip">
+                                    ${escapeHTML(d.id)}
+                                    <button type="button"
+                                            title="Hapus unit ini"
+                                            onclick="removeCartUnit('${escapeHTML(d.id)}')">
+                                        ✕
+                                    </button>
+                                </span>
+                            `).join("")}
+                        </div>
+
+                    </div>
+
+                    <div class="qty-control">
+
+                        <button type="button"
+                                class="qty-btn"
+                                title="Kurangi jumlah"
+                                onclick="decreaseCartType('${escapeHTML(type)}')">
+                            −
+                        </button>
+
+                        <span class="qty-value">${items.length}</span>
+
+                        <button type="button"
+                                class="qty-btn"
+                                title="Tambah jumlah"
+                                onclick="increaseCartType('${escapeHTML(type)}')">
+                            +
+                        </button>
+
+                        <button type="button"
+                                class="qty-btn danger"
+                                title="Hapus semua unit jenis ini"
+                                onclick="removeCartType('${escapeHTML(type)}')">
+                            🗑
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+
+    if(summary){
+
+        const detail =
+            Object.keys(groups).sort()
+                .map(type=>`${groups[type].length} ${type}`)
+                .join(" + ");
+
+        summary.innerHTML =
+            `<strong>Total: ${borrowCart.length} unit</strong>
+             <span style="color:var(--muted);"> (${escapeHTML(detail)})</span>`;
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   PENGELOMPOKAN TRANSAKSI PEMINJAMAN
+--------------------------------------------------------- */
+
+function groupKeyOf(borrowing){
+
+    return borrowing.groupId || borrowing.id;
+
+}
+
+
+function groupBorrowings(list){
+
+    const map = new Map();
+
+    list.forEach(b=>{
+
+        const key = groupKeyOf(b);
+
+        if(!map.has(key)){
+            map.set(key, []);
+        }
+
+        map.get(key).push(b);
+
+    });
+
+    return Array.from(map.entries())
+        .map(([key,items])=>({ key:key, items:items }));
 
 }
 
@@ -3708,27 +4356,7 @@ function renderBorrowPage(){
         activeBorrowings.map(b=>b.deviceId);
 
 
-    const deviceSelect =
-        document.getElementById("borrowDevice");
-
-    if(deviceSelect){
-
-        const availableDevices =
-            devices.filter(d=>
-                d.status === "Baik" &&
-                !borrowedDeviceIds.includes(d.id)
-            );
-
-        deviceSelect.innerHTML =
-            `<option value="">Pilih perangkat</option>` +
-            availableDevices.map(d=>
-                `<option value="${escapeHTML(d.id)}">
-                    ${escapeHTML(d.id)} -
-                    ${escapeHTML(d.name)}
-                </option>`
-            ).join("");
-
-    }
+    renderBorrowCart();
 
 
     document.getElementById("borrowStatTotal").textContent =
@@ -3744,44 +4372,68 @@ function renderBorrowPage(){
         ).length;
 
 
+    /* ---------------- SEDANG DIPINJAM ---------------- */
+
     const activeTable =
         document.getElementById("borrowActiveTable");
 
     if(activeTable){
 
+        const activeGroups =
+            groupBorrowings(activeBorrowings);
+
         activeTable.innerHTML =
-            activeBorrowings.length
-            ? activeBorrowings.map(b=>`
-                <tr>
-                    <td>
-                        <strong>${escapeHTML(b.deviceId)}</strong>
-                        <br>
-                        <small style="color:var(--muted);">
-                            ${escapeHTML(b.deviceName || "")}
-                        </small>
-                    </td>
-                    <td>${escapeHTML(b.borrowerName)}</td>
-                    <td>
-                        ${escapeHTML(b.className)}
-                        <br>
-                        <small style="color:var(--muted);">
-                            ${escapeHTML(b.subject)}
-                        </small>
-                    </td>
-                    <td>${escapeHTML(b.period)}</td>
-                    <td>
-                        ${escapeHTML(b.borrowDate)}
-                        ${b.borrowTime ? " · "+escapeHTML(b.borrowTime) : ""}
-                    </td>
-                    <td>
-                        <button
-                            class="btn btn-primary btn-sm"
-                            onclick="openReturnBorrowModal('${b.id}')">
-                            ✅ Kembalikan
-                        </button>
-                    </td>
-                </tr>
-            `).join("")
+            activeGroups.length
+            ? activeGroups.map(group=>{
+
+                const first = group.items[0];
+
+                const devicesCell =
+                    `<div class="device-list">
+                        ${group.items.map(b=>`
+                            <span class="device-row">
+                                <strong>${escapeHTML(b.deviceId)}</strong>
+                                <button class="mini-btn"
+                                        title="Kembalikan unit ini saja"
+                                        onclick="openReturnBorrowModal('single:${escapeHTML(b.id)}')">
+                                    ✅
+                                </button>
+                            </span>
+                        `).join("")}
+                     </div>
+                     <small style="color:var(--muted);">
+                        ${group.items.length} unit dipinjam
+                     </small>`;
+
+                return `
+                    <tr>
+                        <td>${devicesCell}</td>
+                        <td>${escapeHTML(first.borrowerName)}</td>
+                        <td>
+                            ${escapeHTML(first.className)}
+                            <br>
+                            <small style="color:var(--muted);">
+                                ${escapeHTML(first.subject)}
+                            </small>
+                        </td>
+                        <td>${escapeHTML(first.period)}</td>
+                        <td>
+                            ${escapeHTML(first.borrowDate)}
+                            ${first.borrowTime ? " · "+escapeHTML(first.borrowTime) : ""}
+                        </td>
+                        <td>
+                            <button
+                                class="btn btn-primary btn-sm"
+                                onclick="openReturnBorrowModal('group:${escapeHTML(group.key)}')">
+                                ✅ Kembalikan${group.items.length > 1
+                                    ? " Semua ("+group.items.length+")"
+                                    : ""}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+
+            }).join("")
             : `<tr>
                     <td colspan="6">
                         <div class="empty">
@@ -3793,49 +4445,91 @@ function renderBorrowPage(){
     }
 
 
+    /* ---------------- RIWAYAT ---------------- */
+
     const historyTable =
         document.getElementById("borrowHistoryTable");
 
     if(historyTable){
 
-        const historyList =
-            borrowings.slice(0,100);
+        const historyGroups =
+            groupBorrowings(borrowings).slice(0,100);
 
         historyTable.innerHTML =
-            historyList.length
-            ? historyList.map(b=>`
-                <tr>
-                    <td>
-                        <strong>${escapeHTML(b.deviceId)}</strong>
-                        <br>
-                        <small style="color:var(--muted);">
-                            ${escapeHTML(b.deviceName || "")}
-                        </small>
-                    </td>
-                    <td>${escapeHTML(b.borrowerName)}</td>
-                    <td>
-                        ${escapeHTML(b.className)}
-                        <br>
-                        <small style="color:var(--muted);">
-                            ${escapeHTML(b.subject)}
-                        </small>
-                    </td>
-                    <td>${escapeHTML(b.period)}</td>
-                    <td>
-                        ${escapeHTML(b.borrowDate)}
-                        ${b.borrowTime ? " · "+escapeHTML(b.borrowTime) : ""}
-                    </td>
-                    <td>
-                        ${b.returnDate
-                            ? escapeHTML(b.returnDate) +
-                              (b.returnTime ? " · "+escapeHTML(b.returnTime) : "")
-                            : "-"
-                        }
-                    </td>
-                    <td>${conditionBadge(b.conditionOnReturn)}</td>
-                    <td>${borrowStatusBadge(b.status)}</td>
-                </tr>
-            `).join("")
+            historyGroups.length
+            ? historyGroups.map(group=>{
+
+                const first = group.items[0];
+
+                const returned =
+                    group.items.filter(b=>b.status === "Dikembalikan");
+
+                const statusText =
+                    returned.length === 0
+                        ? "Dipinjam"
+                        : (returned.length === group.items.length
+                            ? "Dikembalikan"
+                            : "Sebagian ("+returned.length+"/"+group.items.length+")");
+
+                const lastReturned =
+                    returned[returned.length - 1];
+
+                const damaged =
+                    group.items.filter(b=>b.conditionOnReturn === "Rusak");
+
+                let conditionCell = "-";
+
+                if(returned.length){
+
+                    conditionCell =
+                        damaged.length
+                            ? conditionBadge("Rusak") +
+                              `<br><small style="color:var(--muted);">
+                                    ${damaged.map(b=>escapeHTML(b.deviceId)).join(", ")}
+                               </small>`
+                            : conditionBadge("Baik");
+
+                }
+
+                return `
+                    <tr>
+                        <td>
+                            <strong>
+                                ${group.items.map(b=>escapeHTML(b.deviceId)).join(", ")}
+                            </strong>
+                            <br>
+                            <small style="color:var(--muted);">
+                                ${group.items.length} unit
+                            </small>
+                        </td>
+                        <td>${escapeHTML(first.borrowerName)}</td>
+                        <td>
+                            ${escapeHTML(first.className)}
+                            <br>
+                            <small style="color:var(--muted);">
+                                ${escapeHTML(first.subject)}
+                            </small>
+                        </td>
+                        <td>${escapeHTML(first.period)}</td>
+                        <td>
+                            ${escapeHTML(first.borrowDate)}
+                            ${first.borrowTime ? " · "+escapeHTML(first.borrowTime) : ""}
+                        </td>
+                        <td>
+                            ${lastReturned && lastReturned.returnDate
+                                ? escapeHTML(lastReturned.returnDate) +
+                                  (lastReturned.returnTime
+                                    ? " · "+escapeHTML(lastReturned.returnTime)
+                                    : "")
+                                : "-"
+                            }
+                        </td>
+                        <td>${conditionCell}</td>
+                        <td>${borrowStatusBadge(statusText)}</td>
+                    </tr>
+                `;
+
+            }).join("")
             : `<tr>
                     <td colspan="8">
                         <div class="empty">
@@ -3866,9 +4560,6 @@ async function submitBorrow(event){
     const borrowerName =
         document.getElementById("borrowName").value.trim();
 
-    const deviceId =
-        document.getElementById("borrowDevice").value;
-
     const className =
         document.getElementById("borrowClass").value.trim();
 
@@ -3883,7 +4574,6 @@ async function submitBorrow(event){
 
 
     if(!borrowerName ||
-       !deviceId ||
        !className ||
        !subject ||
        !period){
@@ -3894,12 +4584,30 @@ async function submitBorrow(event){
     }
 
 
-    const device =
-        devices.find(d=>d.id === deviceId);
+    if(!borrowCart.length){
 
-    if(!device){
+        showToast("Tambahkan minimal 1 unit barang yang dipinjam.");
 
-        showToast("Perangkat tidak ditemukan.");
+        return;
+    }
+
+
+    const availableIds =
+        getAvailableDevices().map(d=>d.id);
+
+    const selectedDevices =
+        borrowCart
+            .filter(id=>availableIds.includes(id))
+            .map(id=>devices.find(d=>d.id === id))
+            .filter(Boolean);
+
+    if(selectedDevices.length !== borrowCart.length){
+
+        showToast(
+            "Sebagian unit sudah tidak tersedia. Daftar diperbarui."
+        );
+
+        renderBorrowPage();
 
         return;
     }
@@ -3907,47 +4615,67 @@ async function submitBorrow(event){
 
     try{
 
-        const id = generateBorrowId();
+        const groupId = generateBorrowId();
 
-        const borrowing = {
+        const batch = db.batch();
 
-            id:id,
+        selectedDevices.forEach((device,index)=>{
 
-            deviceId:device.id,
-            deviceName:device.name,
+            const docId =
+                groupId + "-" + String(index+1).padStart(2,"0");
 
-            borrowerName:borrowerName,
-            borrowerRole:currentUser.role,
-            borrowerUid:currentUser.uid || null,
+            const borrowing = {
 
-            className:className,
-            subject:subject,
-            period:period,
-            purpose:purpose,
+                id:docId,
 
-            status:"Dipinjam",
+                groupId:groupId,
+                groupSize:selectedDevices.length,
 
-            borrowDate:todayISO(),
-            borrowTime:currentTimeHM(),
+                deviceId:device.id,
+                deviceName:device.name,
+                deviceType:deviceTypeOf(device),
 
-            returnDate:null,
-            returnTime:null,
-            conditionOnReturn:null,
-            returnNote:""
+                borrowerName:borrowerName,
+                borrowerRole:currentUser.role,
+                borrowerUid:currentUser.uid || null,
 
-        };
+                className:className,
+                subject:subject,
+                period:period,
+                purpose:purpose,
+
+                status:"Dipinjam",
+
+                borrowDate:todayISO(),
+                borrowTime:currentTimeHM(),
+
+                returnDate:null,
+                returnTime:null,
+                conditionOnReturn:null,
+                returnNote:""
+
+            };
+
+            batch.set(
+                db.collection("borrowings").doc(docId),
+                borrowing
+            );
+
+        });
+
+        await batch.commit();
 
 
-        await db
-            .collection("borrowings")
-            .doc(id)
-            .set(borrowing);
+        const total = selectedDevices.length;
 
+        borrowCart = [];
 
         document.getElementById("borrowForm").reset();
 
+        renderBorrowPage();
+
         showToast(
-            "Peminjaman "+device.id+" berhasil dicatat."
+            "Peminjaman "+total+" unit berhasil dicatat."
         );
 
 
@@ -3962,11 +4690,57 @@ async function submitBorrow(event){
 }
 
 
-function openReturnBorrowModal(id){
+function getReturnTargets(key){
+
+    if(!key){
+        return [];
+    }
+
+    if(key.indexOf("group:") === 0){
+
+        const groupId = key.slice(6);
+
+        return borrowings.filter(b=>
+            groupKeyOf(b) === groupId &&
+            b.status === "Dipinjam"
+        );
+
+    }
+
+    const id = key.replace(/^single:/,"");
+
+    const found =
+        borrowings.find(b=>
+            b.id === id &&
+            b.status === "Dipinjam"
+        );
+
+    return found ? [found] : [];
+
+}
+
+
+function openReturnBorrowModal(key){
 
     document.getElementById("returnBorrowForm").reset();
 
-    document.getElementById("returnBorrowId").value = id;
+    document.getElementById("returnBorrowId").value = key;
+
+
+    const targets = getReturnTargets(key);
+
+    const info =
+        document.getElementById("returnBorrowInfo");
+
+    if(info){
+
+        info.innerHTML = targets.length
+            ? `<strong>${targets.length} unit akan dikembalikan:</strong><br>
+               ${targets.map(b=>escapeHTML(b.deviceId)).join(", ")}`
+            : "Data peminjaman tidak ditemukan.";
+
+    }
+
 
     document.getElementById("returnBorrowModal")
         .classList.add("show");
@@ -3978,7 +4752,7 @@ async function submitReturnBorrow(event){
 
     event.preventDefault();
 
-    const id =
+    const key =
         document.getElementById("returnBorrowId").value;
 
     const condition =
@@ -3988,10 +4762,9 @@ async function submitReturnBorrow(event){
         document.getElementById("returnNote").value.trim();
 
 
-    const borrowing =
-        borrowings.find(b=>b.id === id);
+    const targets = getReturnTargets(key);
 
-    if(!borrowing){
+    if(!targets.length){
 
         showToast("Data peminjaman tidak ditemukan.");
 
@@ -4001,32 +4774,47 @@ async function submitReturnBorrow(event){
 
     try{
 
-        await db
-            .collection("borrowings")
-            .doc(id)
-            .update({
-                status:"Dikembalikan",
-                returnDate:todayISO(),
-                returnTime:currentTimeHM(),
-                conditionOnReturn:condition,
-                returnNote:note
-            });
+        const batch = db.batch();
+
+        targets.forEach(b=>{
+
+            batch.update(
+                db.collection("borrowings").doc(b.id),
+                {
+                    status:"Dikembalikan",
+                    returnDate:todayISO(),
+                    returnTime:currentTimeHM(),
+                    conditionOnReturn:condition,
+                    returnNote:note
+                }
+            );
+
+            if(condition === "Rusak"){
+
+                batch.set(
+                    db.collection("devices").doc(b.deviceId),
+                    { status:"Rusak" },
+                    { merge:true }
+                );
+
+            }
+
+        });
+
+        await batch.commit();
 
 
         if(condition === "Rusak"){
 
-            await db
-                .collection("devices")
-                .doc(borrowing.deviceId)
-                .update({ status:"Rusak" });
-
             showToast(
-                "Perangkat dikembalikan. Status diubah menjadi Rusak, mohon ditindaklanjuti Admin Sarpras."
+                targets.length+" unit dikembalikan. Status diubah menjadi Rusak, mohon ditindaklanjuti Admin Sarpras."
             );
 
         }else{
 
-            showToast("Perangkat berhasil dikembalikan.");
+            showToast(
+                targets.length+" unit berhasil dikembalikan."
+            );
 
         }
 
