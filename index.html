@@ -74,7 +74,7 @@ body{
     width:75px;
     height:75px;
     border-radius:50%;
-    background:#eaf3ff;
+    background:white;
     color:var(--primary);
     display:flex;
     align-items:center;
@@ -82,6 +82,14 @@ body{
     margin:auto;
     font-size:34px;
     font-weight:bold;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+.login-logo .logo-circle img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
 }
 
 .login-logo h1{
@@ -185,13 +193,21 @@ body{
 .brand-logo{
     width:42px;
     height:42px;
-    background:var(--primary);
+    background:white;
+    border:1px solid var(--border);
     color:white;
     border-radius:10px;
     display:flex;
     align-items:center;
     justify-content:center;
     font-weight:bold;
+    overflow:hidden;
+}
+
+.brand-logo img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
 }
 
 .brand h2{
@@ -859,7 +875,7 @@ tr:hover td{
     <div class="login-card">
 
         <div class="login-logo">
-            <div class="logo-circle">SC</div>
+            <div class="logo-circle"><img id="logoLogin" alt="Logo SIB"></div>
             <h1>SIB CARE</h1>
             <p>Sistem Informasi Kondisi, Aduan, Respons, dan Evaluasi Sarana Sekolah</p>
         </div>
@@ -934,7 +950,7 @@ tr:hover td{
     <div class="topbar">
 
         <div class="brand">
-            <div class="brand-logo">SC</div>
+            <div class="brand-logo"><img id="logoHeader" alt="Logo SIB"></div>
 
             <div>
                 <h2>SIB CARE</h2>
@@ -1123,6 +1139,32 @@ tr:hover td{
 
             </div>
 
+            <br>
+
+            <div class="card">
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    margin-bottom:15px;
+                ">
+
+                    <h2>
+                        🖼️ Dokumentasi Kegiatan
+                    </h2>
+
+                    <button class="btn btn-secondary btn-sm"
+                            onclick="showPage('gallery')">
+                        Lihat Semua
+                    </button>
+
+                </div>
+
+                <div id="homeGalleryPreview"></div>
+
+            </div>
+
         </section>
 
 
@@ -1206,12 +1248,43 @@ tr:hover td{
         ================================================= -->
         <section id="page-gallery" class="page">
 
-            <div class="page-header">
-                <h1>Galeri Kondisi Sarana</h1>
-                <p>
-                    Dokumentasi foto yang dilampirkan pada laporan.
-                </p>
+            <div class="page-header" style="
+                display:flex;
+                justify-content:space-between;
+                align-items:flex-start;
+                gap:15px;
+                flex-wrap:wrap;
+            ">
+
+                <div>
+                    <h1>Galeri</h1>
+                    <p>
+                        Dokumentasi kegiatan dan foto laporan
+                        kondisi sarana sekolah.
+                    </p>
+                </div>
+
+                <button
+                    id="galleryAddBtn"
+                    class="btn btn-primary"
+                    style="display:none"
+                    onclick="openGalleryModal()">
+                    + Tambah Dokumentasi
+                </button>
+
             </div>
+
+            <h2 style="margin-bottom:12px;">
+                📸 Dokumentasi Kegiatan
+            </h2>
+
+            <div id="galleryDocsContent"></div>
+
+            <br>
+
+            <h2 style="margin-bottom:12px;">
+                🗂️ Galeri dari Laporan
+            </h2>
 
             <div id="galleryContent"></div>
 
@@ -1589,6 +1662,100 @@ tr:hover td{
 
 
 <!-- =========================================================
+     GALLERY MODAL
+========================================================= -->
+<div id="galleryModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>
+                Tambah Dokumentasi Galeri
+            </h2>
+
+            <div class="close"
+                 onclick="closeModal('galleryModal')">
+                ×
+            </div>
+
+        </div>
+
+
+        <form id="galleryForm"
+              onsubmit="submitGalleryDoc(event)">
+
+            <div class="form-group">
+
+                <label>Judul</label>
+
+                <input
+                    type="text"
+                    id="galleryTitle"
+                    class="form-control"
+                    placeholder="Contoh: Kerja Bakti Lapangan"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Keterangan</label>
+
+                <textarea
+                    id="galleryDescription"
+                    class="form-control"
+                    placeholder="Ceritakan sedikit tentang foto ini..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Foto</label>
+
+                <input
+                    type="file"
+                    id="galleryPhoto"
+                    class="form-control"
+                    accept="image/*"
+                    required
+                >
+
+                <small style="color:var(--muted);">
+                    Foto akan dikompresi sebelum disimpan.
+                </small>
+
+            </div>
+
+
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        onclick="closeModal('galleryModal')">
+                    Batal
+                </button>
+
+                <button type="submit"
+                        id="gallerySubmitBtn"
+                        class="btn btn-primary">
+                    📤 Simpan Dokumentasi
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
      DETAIL MODAL
 ========================================================= -->
 <div id="detailModal" class="modal">
@@ -1790,8 +1957,14 @@ let rooms = [];
 let locations = [];
 let categories = [];
 let reports = [];
+let galleryDocs = [];
 
 let firebaseReady = false;
+
+const LOGO_DATA_URI = "data:image/jpeg;base64,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";
+
+document.getElementById("logoLogin").src = LOGO_DATA_URI;
+document.getElementById("logoHeader").src = LOGO_DATA_URI;
 
 
 /* =========================================================
@@ -2096,6 +2269,28 @@ function listenToData(){
             }
         );
 
+
+    db.collection("gallery")
+        .orderBy("date","desc")
+        .onSnapshot(
+            snapshot=>{
+
+                galleryDocs = snapshot.docs.map(
+                    doc=>({
+                        id:doc.id,
+                        ...doc.data()
+                    })
+                );
+
+                refreshAll();
+
+            },
+            error=>{
+                console.error("gallery:",error);
+                refreshAll();
+            }
+        );
+
 }
 
 
@@ -2233,9 +2428,13 @@ async function login(){
 
         document.getElementById("adminNav").style.display="block";
 
+        document.getElementById("galleryAddBtn").style.display="inline-flex";
+
     }else{
 
         document.getElementById("adminNav").style.display="none";
+
+        document.getElementById("galleryAddBtn").style.display="none";
 
     }
 
@@ -3442,6 +3641,55 @@ function renderTimeline(){
    GALLERY
 ========================================================= */
 
+async function removeReportPhoto(id){
+
+    if(
+        !currentUser ||
+        currentUser.role !== "ADMIN_SARPRAS"
+    ){
+
+        showToast(
+            "Hanya Admin Sarpras yang dapat menghapus foto ini."
+        );
+
+        return;
+    }
+
+
+    const confirmed = confirm(
+        "Hapus foto ini dari Galeri?\n\n" +
+        "Catatan: laporan dan riwayat progresnya tidak " +
+        "akan terhapus, hanya fotonya saja."
+    );
+
+
+    if(!confirmed){
+        return;
+    }
+
+
+    try{
+
+        await db
+            .collection("reports")
+            .doc(id)
+            .update({
+                photoURL:""
+            });
+
+        showToast("Foto berhasil dihapus dari Galeri.");
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast("Gagal menghapus foto. Coba lagi.");
+
+    }
+
+}
+
+
 function renderGallery(){
 
     const container =
@@ -3519,13 +3767,30 @@ function renderGallery(){
                                 ${statusBadge(report.status)}
                             </div>
 
-                            <div style="margin-top:10px;">
+                            <div style="
+                                margin-top:10px;
+                                display:flex;
+                                gap:8px;
+                                flex-wrap:wrap;
+                            ">
 
                                 <button
                                     class="btn btn-primary btn-sm"
                                     onclick="showReportDetail('${report.id}')">
                                     Lihat Detail
                                 </button>
+
+                                ${
+                                    currentUser && currentUser.role === "ADMIN_SARPRAS"
+                                    ? `
+                                        <button
+                                            class="btn btn-danger btn-sm"
+                                            onclick="removeReportPhoto('${report.id}')">
+                                            🗑️ Hapus dari Galeri
+                                        </button>
+                                    `
+                                    : ""
+                                }
 
                             </div>
 
@@ -3538,6 +3803,299 @@ function renderGallery(){
 
         </div>
 
+    `;
+
+}
+
+
+/* =========================================================
+   GALLERY DOCS (DOKUMENTASI, DIKELOLA ADMIN)
+========================================================= */
+
+function openGalleryModal(){
+
+    if(
+        !currentUser ||
+        currentUser.role !== "ADMIN_SARPRAS"
+    ){
+
+        showToast(
+            "Hanya Admin Sarpras yang dapat menambah dokumentasi."
+        );
+
+        return;
+    }
+
+
+    document.getElementById("galleryForm").reset();
+
+    document.getElementById("galleryModal")
+        .classList.add("show");
+
+}
+
+
+async function submitGalleryDoc(event){
+
+    event.preventDefault();
+
+
+    if(
+        !currentUser ||
+        currentUser.role !== "ADMIN_SARPRAS"
+    ){
+
+        showToast(
+            "Hanya Admin Sarpras yang dapat menambah dokumentasi."
+        );
+
+        return;
+    }
+
+
+    const title =
+        document.getElementById("galleryTitle")
+            .value.trim();
+
+    const description =
+        document.getElementById("galleryDescription")
+            .value.trim();
+
+    const fileInput =
+        document.getElementById("galleryPhoto");
+
+    const file =
+        fileInput.files[0];
+
+
+    if(!file){
+
+        showToast("Silakan pilih foto terlebih dahulu.");
+
+        return;
+    }
+
+
+    const submitBtn =
+        document.getElementById("gallerySubmitBtn");
+
+    submitBtn.disabled = true;
+
+    submitBtn.textContent = "Menyimpan...";
+
+
+    try{
+
+        const photoURL = await compressImage(file);
+
+        const id = "GAL-" + Date.now();
+
+        await db.collection("gallery")
+            .doc(id)
+            .set({
+                title:title,
+                description:description,
+                photoURL:photoURL,
+                uploader:currentUser.name,
+                date:new Date().toISOString()
+            });
+
+        closeModal("galleryModal");
+
+        showToast("Dokumentasi berhasil ditambahkan.");
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast("Gagal menyimpan dokumentasi. Coba lagi.");
+
+    }finally{
+
+        submitBtn.disabled = false;
+
+        submitBtn.textContent = "📤 Simpan Dokumentasi";
+
+    }
+
+}
+
+
+async function deleteGalleryDoc(id){
+
+    if(
+        !currentUser ||
+        currentUser.role !== "ADMIN_SARPRAS"
+    ){
+
+        showToast(
+            "Hanya Admin Sarpras yang dapat menghapus dokumentasi."
+        );
+
+        return;
+    }
+
+
+    if(!confirm("Hapus dokumentasi ini?")){
+        return;
+    }
+
+
+    try{
+
+        await db.collection("gallery")
+            .doc(id)
+            .delete();
+
+        showToast("Dokumentasi berhasil dihapus.");
+
+    }catch(error){
+
+        console.error(error);
+
+        showToast("Gagal menghapus dokumentasi.");
+
+    }
+
+}
+
+
+function galleryDocCard(item, compact){
+
+    return `
+
+        <div class="gallery-card">
+
+            <div class="gallery-image-wrap">
+
+                <img
+                    src="${item.photoURL}"
+                    class="gallery-image"
+                    alt="${escapeHTML(item.title || '')}"
+                >
+
+            </div>
+
+            <div class="gallery-info">
+
+                <h3>
+                    ${escapeHTML(item.title || "Tanpa judul")}
+                </h3>
+
+                ${
+                    item.description
+                    ? `<p>${escapeHTML(item.description)}</p>`
+                    : ""
+                }
+
+                <small style="color:var(--muted);">
+                    ${formatDate(item.date)}
+                    ${item.uploader ? " · " + escapeHTML(item.uploader) : ""}
+                </small>
+
+                ${
+                    (!compact && currentUser && currentUser.role === "ADMIN_SARPRAS")
+                    ? `
+                        <div style="margin-top:10px;">
+                            <button
+                                class="btn btn-danger btn-sm"
+                                onclick="deleteGalleryDoc('${item.id}')">
+                                🗑️ Hapus
+                            </button>
+                        </div>
+                    `
+                    : ""
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+function renderGalleryDocs(){
+
+    const container =
+        document.getElementById("galleryDocsContent");
+
+    if(!container){
+        return;
+    }
+
+
+    if(!galleryDocs.length){
+
+        container.innerHTML = `
+
+            <div class="card empty">
+
+                <div class="empty-icon">
+                    📸
+                </div>
+
+                <h3>
+                    Belum ada dokumentasi
+                </h3>
+
+                <p style="margin-top:7px;">
+                    Admin Sarpras dapat menambahkan foto
+                    dokumentasi kegiatan melalui tombol
+                    "Tambah Dokumentasi" di atas.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = `
+        <div class="gallery-grid">
+            ${galleryDocs.map(item=>galleryDocCard(item,false)).join("")}
+        </div>
+    `;
+
+}
+
+
+function renderHomeGallery(){
+
+    const container =
+        document.getElementById("homeGalleryPreview");
+
+    if(!container){
+        return;
+    }
+
+
+    if(!galleryDocs.length){
+
+        container.innerHTML = `
+            <p style="color:var(--muted);">
+                Belum ada dokumentasi kegiatan.
+                ${
+                    currentUser && currentUser.role === "ADMIN_SARPRAS"
+                    ? " Tambahkan dari menu Galeri."
+                    : ""
+                }
+            </p>
+        `;
+
+        return;
+    }
+
+
+    const preview = galleryDocs.slice(0,3);
+
+    container.innerHTML = `
+        <div class="gallery-grid">
+            ${preview.map(item=>galleryDocCard(item,true)).join("")}
+        </div>
     `;
 
 }
@@ -4296,6 +4854,8 @@ function refreshAll(){
 
     renderHome();
 
+    renderHomeGallery();
+
     renderCondition();
 
     renderMyReports();
@@ -4303,6 +4863,8 @@ function refreshAll(){
     renderTimeline();
 
     renderGallery();
+
+    renderGalleryDocs();
 
     renderDashboard();
 
