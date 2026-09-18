@@ -1281,7 +1281,7 @@ tr:hover td{
                 </p>
             </div>
 
-            <div class="grid grid-4">
+            <div class="grid grid-3">
 
                 <div class="card"
                      style="cursor:pointer;"
@@ -1293,6 +1293,20 @@ tr:hover td{
                     <p style="color:var(--muted);font-size:13px;">
                         Laporkan fasilitas yang rusak atau
                         bermasalah.
+                    </p>
+                </div>
+
+                <div class="card"
+                     id="homeBorrowCard"
+                     style="cursor:pointer;"
+                     onclick="showPage('borrow')">
+                    <div class="stat-icon" style="margin-bottom:10px;">🖥️</div>
+                    <h2 style="margin-bottom:8px;font-size:17px;">
+                        Peminjaman Sarana
+                    </h2>
+                    <p style="color:var(--muted);font-size:13px;">
+                        Pinjam dan kembalikan iPad/laptop untuk
+                        kebutuhan jam pelajaran.
                     </p>
                 </div>
 
@@ -3623,9 +3637,13 @@ async function login(){
 
         document.getElementById("navBorrow").style.display="none";
 
+        document.getElementById("homeBorrowCard").style.display="none";
+
     }else{
 
         document.getElementById("navBorrow").style.display="flex";
+
+        document.getElementById("homeBorrowCard").style.display="block";
 
     }
 
