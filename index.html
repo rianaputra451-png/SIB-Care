@@ -12,6 +12,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <style>
 *{
@@ -1258,6 +1259,12 @@ tr:hover td{
             </div>
 
             <div class="nav-item"
+                 data-page="recap-borrow"
+                 onclick="showPage('recap-borrow')">
+                📥 Rekap Peminjaman
+            </div>
+
+            <div class="nav-item"
                  data-page="statistics"
                  onclick="showPage('statistics')">
                 📈 Statistik
@@ -2116,7 +2123,128 @@ tr:hover td{
 
                 </div>
 
+                <div style="
+                    display:flex;
+                    gap:10px;
+                    flex-wrap:wrap;
+                    margin:15px 0 5px;
+                ">
+
+                    <button class="btn btn-secondary btn-sm"
+                            onclick="exportRecapReportCSV()">
+                        📄 Unduh CSV
+                    </button>
+
+                    <button class="btn btn-secondary btn-sm"
+                            onclick="exportRecapReportExcel()">
+                        📊 Unduh Excel
+                    </button>
+
+                    <button class="btn btn-secondary btn-sm"
+                            onclick="printRecapReport()">
+                        🖨️ Unduh PDF / Cetak
+                    </button>
+
+                </div>
+
                 <div id="recapContent"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             RECAP PEMINJAMAN SARANA
+        ================================================= -->
+        <section id="page-recap-borrow" class="page">
+
+            <div class="page-header">
+                <h1>Rekap Peminjaman Sarana</h1>
+                <p>
+                    Rekap peminjaman iPad/laptop berdasarkan
+                    periode harian, bulanan, atau tahunan —
+                    dapat diunduh dalam berbagai format.
+                </p>
+            </div>
+
+            <div class="card">
+
+                <div class="recap-filter">
+
+                    <div class="form-group" style="margin:0;">
+                        <label>Periode</label>
+
+                        <select id="recapBorrowPeriod"
+                                class="form-control"
+                                onchange="updateRecapBorrowControls()">
+
+                            <option value="daily">
+                                Harian
+                            </option>
+
+                            <option value="monthly">
+                                Bulanan
+                            </option>
+
+                            <option value="yearly">
+                                Tahunan
+                            </option>
+
+                        </select>
+                    </div>
+
+
+                    <div id="recapBorrowDateWrap"
+                         class="form-group"
+                         style="margin:0;">
+
+                        <label>
+                            Tanggal
+                        </label>
+
+                        <input
+                            type="date"
+                            id="recapBorrowDate"
+                            class="form-control"
+                            onchange="renderRecapBorrow()"
+                        >
+
+                    </div>
+
+
+                    <button class="btn btn-primary"
+                            onclick="renderRecapBorrow()">
+                        🔎 Tampilkan Rekap
+                    </button>
+
+                </div>
+
+                <div style="
+                    display:flex;
+                    gap:10px;
+                    flex-wrap:wrap;
+                    margin:15px 0 5px;
+                ">
+
+                    <button class="btn btn-secondary btn-sm"
+                            onclick="exportRecapBorrowCSV()">
+                        📄 Unduh CSV
+                    </button>
+
+                    <button class="btn btn-secondary btn-sm"
+                            onclick="exportRecapBorrowExcel()">
+                        📊 Unduh Excel
+                    </button>
+
+                    <button class="btn btn-secondary btn-sm"
+                            onclick="printRecapBorrow()">
+                        🖨️ Unduh PDF / Cetak
+                    </button>
+
+                </div>
+
+                <div id="recapBorrowContent"></div>
 
             </div>
 
@@ -7715,6 +7843,882 @@ function renderRecap(){
 
 
 /* =========================================================
+   RECAP LAPORAN — EXPORT (CSV / EXCEL / PRINT)
+========================================================= */
+
+function getRecapReportPeriodLabel(){
+
+    const period =
+        document.getElementById("recapPeriod").value;
+
+    const value =
+        document.getElementById("recapDate").value;
+
+
+    if(period === "daily"){
+
+        return "Tanggal " + formatDate(value);
+
+    }
+
+
+    if(period === "monthly"){
+
+        const parts = value.split("-");
+
+        const date = new Date(
+            Number(parts[0]),
+            Number(parts[1])-1,
+            1
+        );
+
+        return "Bulan " + date.toLocaleDateString(
+            "id-ID",
+            { month:"long", year:"numeric" }
+        );
+
+    }
+
+
+    if(period === "yearly"){
+
+        return "Tahun " + value;
+
+    }
+
+
+    return "";
+
+}
+
+
+function buildRecapReportRows(){
+
+    const filtered = getRecapReports();
+
+    const header = [
+        "Tanggal",
+        "Pelapor",
+        "Lokasi",
+        "Kategori",
+        "Prioritas",
+        "Status",
+        "Deskripsi"
+    ];
+
+    const rows = filtered.map(r=>[
+        r.date || "",
+        r.reporter || "",
+        r.location || "",
+        r.category || "",
+        r.priority || "",
+        r.status || "",
+        r.description || ""
+    ]);
+
+    return { header, rows };
+
+}
+
+
+function exportRecapReportCSV(){
+
+    const dateInput =
+        document.getElementById("recapDate");
+
+    if(!dateInput || !dateInput.value){
+        showToast("Pilih periode rekap terlebih dahulu.");
+        return;
+    }
+
+    const { header, rows } =
+        buildRecapReportRows();
+
+    if(!rows.length){
+        showToast("Tidak ada data untuk diunduh.");
+        return;
+    }
+
+    const escapeCsv = value => {
+        const str = String(value ?? "");
+        if(/[",\n]/.test(str)){
+            return '"' + str.replace(/"/g,'""') + '"';
+        }
+        return str;
+    };
+
+    const lines = [header, ...rows].map(
+        row => row.map(escapeCsv).join(",")
+    );
+
+    const csvContent =
+        "\uFEFF" + lines.join("\r\n");
+
+    const blob = new Blob(
+        [csvContent],
+        { type:"text/csv;charset=utf-8;" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download =
+        "rekap-laporan-" + todayISO() + ".csv";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+function exportRecapReportExcel(){
+
+    const dateInput =
+        document.getElementById("recapDate");
+
+    if(!dateInput || !dateInput.value){
+        showToast("Pilih periode rekap terlebih dahulu.");
+        return;
+    }
+
+    if(typeof XLSX === "undefined"){
+        showToast(
+            "Gagal memuat pustaka Excel. Periksa koneksi internet."
+        );
+        return;
+    }
+
+    const { header, rows } =
+        buildRecapReportRows();
+
+    if(!rows.length){
+        showToast("Tidak ada data untuk diunduh.");
+        return;
+    }
+
+    const worksheet =
+        XLSX.utils.aoa_to_sheet([header, ...rows]);
+
+    const workbook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Rekap Laporan"
+    );
+
+    XLSX.writeFile(
+        workbook,
+        "rekap-laporan-" + todayISO() + ".xlsx"
+    );
+
+}
+
+
+function printRecapReport(){
+
+    const dateInput =
+        document.getElementById("recapDate");
+
+    if(!dateInput || !dateInput.value){
+        showToast("Pilih periode rekap terlebih dahulu.");
+        return;
+    }
+
+    const { header, rows } =
+        buildRecapReportRows();
+
+    const periodLabel =
+        getRecapReportPeriodLabel();
+
+    const printWindow =
+        window.open("", "_blank");
+
+    if(!printWindow){
+        showToast(
+            "Popup diblokir browser. Izinkan popup untuk mencetak."
+        );
+        return;
+    }
+
+    const tableRows =
+        rows.length
+        ? rows.map(
+            row => "<tr>" +
+                row.map(
+                    cell => "<td>" + escapeHTML(String(cell ?? "")) + "</td>"
+                ).join("") +
+                "</tr>"
+        ).join("")
+        : `<tr><td colspan="${header.length}">Tidak ada data.</td></tr>`;
+
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Rekap Laporan</title>
+            <meta charset="utf-8">
+            <style>
+                body{
+                    font-family: Arial, sans-serif;
+                    padding: 24px;
+                    color: #172033;
+                }
+                h1{
+                    font-size: 18px;
+                    margin-bottom: 4px;
+                }
+                p{
+                    margin-top: 0;
+                    color: #555;
+                    font-size: 13px;
+                }
+                table{
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 16px;
+                    font-size: 12px;
+                }
+                th, td{
+                    border: 1px solid #ccc;
+                    padding: 6px 8px;
+                    text-align: left;
+                }
+                th{
+                    background: #f1f3f5;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Rekap Laporan</h1>
+            <p>${escapeHTML(periodLabel)}</p>
+            <table>
+                <thead>
+                    <tr>
+                        ${header.map(h=>"<th>"+escapeHTML(h)+"</th>").join("")}
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableRows}
+                </tbody>
+            </table>
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+
+    printWindow.onload = () => {
+        printWindow.focus();
+        printWindow.print();
+    };
+
+}
+
+
+/* =========================================================
+   RECAP PEMINJAMAN SARANA — CONTROLS
+========================================================= */
+
+function updateRecapBorrowControls(){
+
+    const period =
+        document.getElementById("recapBorrowPeriod").value;
+
+
+    const wrap =
+        document.getElementById("recapBorrowDateWrap");
+
+
+    if(period === "daily"){
+
+        wrap.innerHTML = `
+
+            <label>
+                Tanggal
+            </label>
+
+            <input
+                type="date"
+                id="recapBorrowDate"
+                class="form-control"
+                value="${todayISO()}"
+                onchange="renderRecapBorrow()"
+            >
+
+        `;
+
+    }
+
+
+    if(period === "monthly"){
+
+        wrap.innerHTML = `
+
+            <label>
+                Bulan
+            </label>
+
+            <input
+                type="month"
+                id="recapBorrowDate"
+                class="form-control"
+                value="${currentMonth()}"
+                onchange="renderRecapBorrow()"
+            >
+
+        `;
+
+    }
+
+
+    if(period === "yearly"){
+
+        wrap.innerHTML = `
+
+            <label>
+                Tahun
+            </label>
+
+            <input
+                type="number"
+                id="recapBorrowDate"
+                class="form-control"
+                value="${currentYear()}"
+                min="2020"
+                max="2100"
+                onchange="renderRecapBorrow()"
+            >
+
+        `;
+
+    }
+
+
+    renderRecapBorrow();
+
+}
+
+
+function getRecapBorrowPeriodLabel(){
+
+    const period =
+        document.getElementById("recapBorrowPeriod").value;
+
+    const value =
+        document.getElementById("recapBorrowDate").value;
+
+
+    if(period === "daily"){
+
+        return "Tanggal " + formatDate(value);
+
+    }
+
+
+    if(period === "monthly"){
+
+        const parts = value.split("-");
+
+        const date = new Date(
+            Number(parts[0]),
+            Number(parts[1])-1,
+            1
+        );
+
+        return "Bulan " + date.toLocaleDateString(
+            "id-ID",
+            { month:"long", year:"numeric" }
+        );
+
+    }
+
+
+    if(period === "yearly"){
+
+        return "Tahun " + value;
+
+    }
+
+
+    return "";
+
+}
+
+
+function getRecapBorrowings(){
+
+    const period =
+        document.getElementById("recapBorrowPeriod").value;
+
+
+    const dateInput =
+        document.getElementById("recapBorrowDate");
+
+    if(!dateInput){
+        return [];
+    }
+
+    const value =
+        dateInput.value;
+
+    if(!value){
+        return [];
+    }
+
+
+    if(period === "daily"){
+
+        return borrowings.filter(
+            b => b.borrowDate === value
+        );
+
+    }
+
+
+    if(period === "monthly" || period === "yearly"){
+
+        return borrowings.filter(
+            b => String(b.borrowDate || "")
+                    .startsWith(value)
+        );
+
+    }
+
+
+    return [];
+
+}
+
+
+/* =========================================================
+   RENDER RECAP PEMINJAMAN SARANA
+========================================================= */
+
+function renderRecapBorrow(){
+
+    const container =
+        document.getElementById("recapBorrowContent");
+
+    const dateInput =
+        document.getElementById("recapBorrowDate");
+
+    if(!container || !dateInput || !dateInput.value){
+        return;
+    }
+
+
+    const filtered =
+        getRecapBorrowings();
+
+    const periodLabel =
+        getRecapBorrowPeriodLabel();
+
+
+    const totalCount = filtered.length;
+
+    const activeCount =
+        filtered.filter(b=>b.status==="Dipinjam").length;
+
+    const returnedCount =
+        filtered.filter(b=>b.status==="Dikembalikan").length;
+
+    const damagedCount =
+        filtered.filter(b=>b.conditionOnReturn==="Rusak").length;
+
+
+    const deviceCount = {};
+
+    filtered.forEach(b=>{
+        deviceCount[b.deviceId] =
+            (deviceCount[b.deviceId] || 0) + 1;
+    });
+
+    const deviceRows =
+        Object.keys(deviceCount)
+            .sort((a,b)=>deviceCount[b]-deviceCount[a]);
+
+
+    container.innerHTML = `
+
+        <div style="
+            margin-bottom:18px;
+            color:#6c757d;
+            font-size:14px;
+        ">
+            Rekap:
+            <strong style="color:#172033;">
+                ${escapeHTML(periodLabel)}
+            </strong>
+        </div>
+
+
+        <div class="recap-summary">
+
+            <div class="recap-box">
+                <span>Total Peminjaman</span>
+                <strong>${totalCount}</strong>
+            </div>
+
+            <div class="recap-box">
+                <span>Sedang Dipinjam</span>
+                <strong>${activeCount}</strong>
+            </div>
+
+            <div class="recap-box">
+                <span>Dikembalikan</span>
+                <strong>${returnedCount}</strong>
+            </div>
+
+            <div class="recap-box">
+                <span>Kembali Rusak</span>
+                <strong>${damagedCount}</strong>
+            </div>
+
+        </div>
+
+
+        <h3 style="margin:20px 0 10px;">
+            Peminjaman per Perangkat
+        </h3>
+
+        <div class="table-wrap" style="margin-bottom:20px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Perangkat</th>
+                        <th>Jumlah Dipinjam</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${
+                        deviceRows.length
+                        ? deviceRows.map(id=>`
+                            <tr>
+                                <td>${escapeHTML(id)}</td>
+                                <td>${deviceCount[id]}</td>
+                            </tr>
+                        `).join("")
+                        : `<tr>
+                                <td colspan="2">
+                                    <div class="empty">
+                                        Tidak ada data pada periode ini.
+                                    </div>
+                                </td>
+                            </tr>`
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+        <h3 style="margin:20px 0 10px;">
+            Detail Peminjaman
+        </h3>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Perangkat</th>
+                        <th>Peminjam</th>
+                        <th>Kelas / Mapel</th>
+                        <th>Jam Pelajaran</th>
+                        <th>Pinjam</th>
+                        <th>Kembali</th>
+                        <th>Kondisi</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${
+                        filtered.length
+                        ? filtered.map(b=>`
+                            <tr>
+                                <td>${escapeHTML(b.deviceId)}</td>
+                                <td>${escapeHTML(b.borrowerName)}</td>
+                                <td>
+                                    ${escapeHTML(b.className)} /
+                                    ${escapeHTML(b.subject)}
+                                </td>
+                                <td>${escapeHTML(b.period)}</td>
+                                <td>
+                                    ${escapeHTML(b.borrowDate)}
+                                    ${b.borrowTime ? " · "+escapeHTML(b.borrowTime) : ""}
+                                </td>
+                                <td>
+                                    ${b.returnDate
+                                        ? escapeHTML(b.returnDate) +
+                                          (b.returnTime ? " · "+escapeHTML(b.returnTime) : "")
+                                        : "-"
+                                    }
+                                </td>
+                                <td>${conditionBadge(b.conditionOnReturn)}</td>
+                                <td>${borrowStatusBadge(b.status)}</td>
+                            </tr>
+                        `).join("")
+                        : `<tr>
+                                <td colspan="8">
+                                    <div class="empty">
+                                        Tidak ada data pada periode ini.
+                                    </div>
+                                </td>
+                            </tr>`
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   RECAP PEMINJAMAN — EXPORT (CSV / EXCEL / PRINT)
+========================================================= */
+
+function buildRecapBorrowRows(){
+
+    const filtered = getRecapBorrowings();
+
+    const header = [
+        "Perangkat",
+        "Peminjam",
+        "Kelas",
+        "Mata Pelajaran",
+        "Jam Pelajaran",
+        "Tanggal Pinjam",
+        "Waktu Pinjam",
+        "Tanggal Kembali",
+        "Waktu Kembali",
+        "Kondisi Saat Kembali",
+        "Status"
+    ];
+
+    const rows = filtered.map(b=>[
+        b.deviceId || "",
+        b.borrowerName || "",
+        b.className || "",
+        b.subject || "",
+        b.period || "",
+        b.borrowDate || "",
+        b.borrowTime || "",
+        b.returnDate || "",
+        b.returnTime || "",
+        b.conditionOnReturn || "",
+        b.status || ""
+    ]);
+
+    return { header, rows };
+
+}
+
+
+function exportRecapBorrowCSV(){
+
+    const dateInput =
+        document.getElementById("recapBorrowDate");
+
+    if(!dateInput || !dateInput.value){
+        showToast("Pilih periode rekap terlebih dahulu.");
+        return;
+    }
+
+    const { header, rows } =
+        buildRecapBorrowRows();
+
+    if(!rows.length){
+        showToast("Tidak ada data untuk diunduh.");
+        return;
+    }
+
+    const escapeCsv = value => {
+        const str = String(value ?? "");
+        if(/[",\n]/.test(str)){
+            return '"' + str.replace(/"/g,'""') + '"';
+        }
+        return str;
+    };
+
+    const lines = [header, ...rows].map(
+        row => row.map(escapeCsv).join(",")
+    );
+
+    const csvContent =
+        "\uFEFF" + lines.join("\r\n");
+
+    const blob = new Blob(
+        [csvContent],
+        { type:"text/csv;charset=utf-8;" }
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download =
+        "rekap-peminjaman-" + todayISO() + ".csv";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+function exportRecapBorrowExcel(){
+
+    const dateInput =
+        document.getElementById("recapBorrowDate");
+
+    if(!dateInput || !dateInput.value){
+        showToast("Pilih periode rekap terlebih dahulu.");
+        return;
+    }
+
+    if(typeof XLSX === "undefined"){
+        showToast(
+            "Gagal memuat pustaka Excel. Periksa koneksi internet."
+        );
+        return;
+    }
+
+    const { header, rows } =
+        buildRecapBorrowRows();
+
+    if(!rows.length){
+        showToast("Tidak ada data untuk diunduh.");
+        return;
+    }
+
+    const worksheet =
+        XLSX.utils.aoa_to_sheet([header, ...rows]);
+
+    const workbook =
+        XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Rekap Peminjaman"
+    );
+
+    XLSX.writeFile(
+        workbook,
+        "rekap-peminjaman-" + todayISO() + ".xlsx"
+    );
+
+}
+
+
+function printRecapBorrow(){
+
+    const dateInput =
+        document.getElementById("recapBorrowDate");
+
+    if(!dateInput || !dateInput.value){
+        showToast("Pilih periode rekap terlebih dahulu.");
+        return;
+    }
+
+    const { header, rows } =
+        buildRecapBorrowRows();
+
+    const periodLabel =
+        getRecapBorrowPeriodLabel();
+
+    const printWindow =
+        window.open("", "_blank");
+
+    if(!printWindow){
+        showToast(
+            "Popup diblokir browser. Izinkan popup untuk mencetak."
+        );
+        return;
+    }
+
+    const tableRows =
+        rows.length
+        ? rows.map(
+            row => "<tr>" +
+                row.map(
+                    cell => "<td>" + escapeHTML(String(cell ?? "")) + "</td>"
+                ).join("") +
+                "</tr>"
+        ).join("")
+        : `<tr><td colspan="${header.length}">Tidak ada data.</td></tr>`;
+
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Rekap Peminjaman Sarana</title>
+            <meta charset="utf-8">
+            <style>
+                body{
+                    font-family: Arial, sans-serif;
+                    padding: 24px;
+                    color: #172033;
+                }
+                h1{
+                    font-size: 18px;
+                    margin-bottom: 4px;
+                }
+                p{
+                    margin-top: 0;
+                    color: #555;
+                    font-size: 13px;
+                }
+                table{
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 16px;
+                    font-size: 12px;
+                }
+                th, td{
+                    border: 1px solid #ccc;
+                    padding: 6px 8px;
+                    text-align: left;
+                }
+                th{
+                    background: #f1f3f5;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Rekap Peminjaman Sarana</h1>
+            <p>${escapeHTML(periodLabel)}</p>
+            <table>
+                <thead>
+                    <tr>
+                        ${header.map(h=>"<th>"+escapeHTML(h)+"</th>").join("")}
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableRows}
+                </tbody>
+            </table>
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+
+    printWindow.onload = () => {
+        printWindow.focus();
+        printWindow.print();
+    };
+
+}
+
+
+/* =========================================================
    STATISTICS
 ========================================================= */
 
@@ -7926,6 +8930,17 @@ setTimeout(()=>{
     if(recapDate){
 
         recapDate.value =
+            todayISO();
+
+    }
+
+
+    const recapBorrowDate =
+        document.getElementById("recapBorrowDate");
+
+    if(recapBorrowDate){
+
+        recapBorrowDate.value =
             todayISO();
 
     }
